@@ -96,9 +96,15 @@
                   <v-layout row>
                     <v-flex xs12 :style="{ paddingLeft: '25%' }">
                       <VueRecaptcha
-                        sitekey="6LecZAEVAAAAAGGh-f_XFHFIFK3GjHbk3GDYDq67"
+                        sitekey="6LfdMMwZAAAAAFLzRip24CL5f9-s7E1oovlHjeGT"
                         @verify="checkCaptcha"
                       />
+                      <!-- <recaptcha:RecaptchaControl
+                        ID="recaptcha"
+                        runat="server"
+                        PublicKey="6LfdMMwZAAAAAFLzRip24CL5f9-s7E1oovlHjeGT"
+                        PrivateKey="6LfdMMwZAAAAAKGACgJ-I8MEgQalR912xdp4VR7e"
+                      /> -->
                     </v-flex>
                   </v-layout>
                   <v-layout row :style="{ paddingTop: '20px' }">
