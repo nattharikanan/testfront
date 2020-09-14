@@ -9,11 +9,7 @@
           <v-list rounded>
             <v-subheader>หน้าการจัดการของผู้ดูแลระบบ</v-subheader>
             <v-list-item-group v-model="item" color="primary">
-              <v-list-item
-                v-for="(item, i) in items"
-                :key="i"
-                @click="select(item.number)"
-              >
+              <v-list-item v-for="(item, i) in items" :key="i" @click="select(item.number)">
                 <v-list-item-icon>
                   <v-icon v-text="item.icon"></v-icon>
                 </v-list-item-icon>
@@ -37,7 +33,9 @@
         <div v-else-if="menu === 2">
           <showorder />
         </div>
-        <div v-else-if="menu === 3"></div>
+        <div v-else-if="menu === 3">
+          <showqua />
+        </div>
         <div v-else-if="menu === 4">
           <showpayment />
         </div>
@@ -46,6 +44,9 @@
         </div>
         <div v-else-if="menu === 6">
           <showbank />
+        </div>
+        <div v-else-if="menu === 7">
+          <showuser />
         </div>
       </v-flex>
     </v-layout>
@@ -59,6 +60,8 @@ import showorder from "../../components/showorder/showorder";
 import addcategory from "../../components/category/addcategory";
 import showpayment from "../../components/payment/showpayment";
 import showbank from "../../components/bank/showbank";
+import showqua from "../../components/showqua/showqua";
+import showuser from "../../components/showuser/showuser";
 
 export default {
   props: ["m"],
@@ -70,7 +73,9 @@ export default {
     showorder,
     addcategory,
     showpayment,
-    showbank
+    showbank,
+    showqua,
+    showuser,
   },
   middleware: ["auth-admin"],
   data() {
@@ -81,23 +86,28 @@ export default {
         {
           text: "ข้อมูลใบเสนอสินค้า",
           icon: "mdi-view-list-outline",
-          number: 3
+          number: 3,
         },
         {
           text: "แจ้งการชำระเงิน",
           icon: "mdi-cash-usd-outline",
-          number: 4
+          number: 4,
         },
         {
           text: "ประเภทสินค้า",
           icon: "mdi-basket-unfill",
-          number: 5
+          number: 5,
         },
         {
           text: "ธนาคาร",
           icon: "mdi-bank",
-          number: 6
-        }
+          number: 6,
+        },
+        {
+          text: "จัดการสมาชิก",
+          icon: "mdi-account",
+          number: 7,
+        },
       ],
       item: 0,
       menu: "",
@@ -119,7 +129,7 @@ export default {
           text: "ชื่อสินค้า",
           align: "start",
           sortable: false,
-          value: "productname"
+          value: "productname",
         },
         { text: "รหัสสินค้า", value: "productid" },
         { text: "ประเภทสินค้า", value: "categoryname" },
@@ -127,8 +137,8 @@ export default {
         { text: "หมายเหตุ", value: "notation" },
         { text: "สถานะสินค้า", value: "productstatus" },
         { text: "ภาพสินค้า", value: "productimage" },
-        { text: "แก้ไขสินค้า", value: "edit" }
-      ]
+        { text: "แก้ไขสินค้า", value: "edit" },
+      ],
     };
   },
   watch: {
@@ -150,24 +160,24 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid }
+        params: { categoryid: this.categoryid },
       });
 
       this.show = res.data.products;
-    }
+    },
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
     let res = await this.$http.get("/categories");
     // console.log(res.data);
     let temp = res.data.categories;
-    this.categories = temp.map(c => ({
+    this.categories = temp.map((c) => ({
       name: c.categoryname,
-      id: c.categoryid
+      id: c.categoryid,
     }));
 
     this.getProduct();
-  }
+  },
 };
 </script>
 

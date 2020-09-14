@@ -42,7 +42,12 @@
                   </b-form-group>
 
                   <v-row class="ml-1">
-                    <b-form-group id="input-group-1" label="จำนวนที่ต้องการ" label-for="input-1"></b-form-group>
+                    <b-form-group
+                      class="w"
+                      id="input-group-1"
+                      label="จำนวนที่ต้องการ"
+                      label-for="input-1"
+                    ></b-form-group>
                     <b-form-input
                       class="ml-10"
                       id="input-1"
@@ -53,12 +58,27 @@
                       oninput="validity.valid||(value='');"
                       required
                     ></b-form-input>
-                    <b-dropdown id="dropdown-1" text="หน่วย" >
-                      <b-dropdown-item :item="unit"></b-dropdown-item>
-                    </b-dropdown>
+                    <div>
+                      <v-flex xs6>
+                        <v-select
+                          class="ml-4"
+                          height="1"
+                          v-model="form.unittype"
+                          :items="unit"
+                          item-text="text"
+                          item-value="text"
+                          solo
+                          filled
+                          label="เลือก"
+                          :rules="[(v) => !!v || 'กรุณาเลือกหน่วย']"
+                          required
+                        ></v-select>
+                      </v-flex>
+                    </div>
                   </v-row>
                   <v-row class="ml-1">
                     <b-form-group
+                      class="w"
                       id="input-group-1"
                       label="หรือขนาดพื้นที่ที่ต้องการใช้สินค้า"
                       label-for="input-1"
@@ -72,6 +92,12 @@
                       oninput="validity.valid||(value='');"
                       required
                     ></b-form-input>
+                    <b-form-group
+                      class="space"
+                      id="input-group-1"
+                      label="ตารางเมตร"
+                      label-for="input-1"
+                    ></b-form-group>
                   </v-row>
                 </v-container>
               </v-card>
@@ -81,7 +107,7 @@
                   <v-btn text>ยกเลิก</v-btn>
                 </v-flex>
                 <v-flex xs6 class="text-right" :style="{paddingRight:'20px'}">
-                  <div v-if="form.square != '' || form.quantity != ''">
+                  <div v-if="form.square != '' || form.quantity != '' || form.unittype !='' ">
                     <v-btn color="primary" @click="(e1 = 2)">ถัดไป</v-btn>
                   </div>
                   <div v-else>
@@ -160,6 +186,7 @@
                           <b-form-input
                             v-model="form.phone"
                             placeholder="กรอกเบอร์โทรศัพท์"
+                            maxlength="10"
                             id="input-1"
                             @keypress="onlyNumber"
                             required
@@ -255,6 +282,7 @@ export default {
   props: ["quatationid"],
   data() {
     return {
+      lastquaid: 0,
       checkbox1: false,
       date: parseISO(new Date().toISOString()),
       q_date: "",
@@ -273,8 +301,19 @@ export default {
         square: "",
         quantity: "",
         cardid: "",
+        unittype: "",
       },
-      unit: ["หน่วย", "ชิ้น", "อัน"],
+      unit: [
+        {
+          text: "หน่วย",
+        },
+        {
+          text: "ชิ้น",
+        },
+        {
+          text: "อัน",
+        },
+      ],
 
       e1: 1,
       items: [
@@ -340,18 +379,22 @@ export default {
         this.form.productid == null ||
         this.form.productname == "" ||
         this.form.productname == undefined ||
-        this.form.productname == null
+        this.form.productname == null ||
+        this.form.unittype == "" ||
+        this.form.unittype == undefined ||
+        this.form.unittype == null
       ) {
         this.e1 = 1;
       } else {
         if (this.checkbox1 == true) {
-          this.addressq = this.addressd;
+          this.form.addressq = this.form.addressd;
         }
         this.status = "กำลังดำเนินการ";
         this.q_date = moment(this.date).format("dddd,DD-MMMM-YYYY");
         this.q_time = moment(this.date).format("HH.mm.ss");
         let res = await this.$http.post("/q_personal/insert", {
           qPersonalName: this.form.name,
+          qPersonalUserid: this.$nuxt.$auth.user[0].userid,
           qPersonalLast: this.form.lastname,
           qPersonalPhone: this.form.phone,
           qPersonalEmail: this.form.email,
@@ -361,6 +404,7 @@ export default {
           qPersonalProductname: this.form.productname,
           qPersonalProductid: this.form.productid,
           qPersonalQuantity: this.form.quantity,
+          qPeronalUnittype: this.form.unittype,
           qPersonalSquaremetre: this.form.square,
           qPersonalDate: this.q_date,
           qPersonalTime: this.q_time,
@@ -370,9 +414,13 @@ export default {
           console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
           window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
         } else {
+          this.lastquaid = res.data.lastid[0];
           console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
-          <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
           window.alert("Insert Successful!");
+          this.$router.push({
+            name: "quatation-detail-quap",
+            params: { quaid: this.lastquaid },
+          });
         }
       }
     },
@@ -403,4 +451,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.ml-10 {
+  height: 57px;
+}
+.w {
+  padding-top: 15px;
+}
+.space {
+  padding-top: 15px;
+  padding-left: 20px;
+}
+</style>

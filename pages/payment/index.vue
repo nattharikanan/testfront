@@ -1,63 +1,61 @@
 <template>
   <div class="payment" ref="content">
     <v-snackbar border="top" :color="coloralert" dark :value="regisstatus">{{ alertMessage }}</v-snackbar>
-    <v-container class="text-center">
-      <v-flex xs12>
-        <h2>ข้อมูลการชำระเงิน</h2>
-      </v-flex>
-    </v-container>
     <v-snackbar :color="coloralert" dark v-model="regisstatus">{{ alertMessage }}</v-snackbar>
+    <v-flex xs12 class="text-center">
+      <h2 :style="{paddingTop:'15px',color:'#3498DB '}">ข้อมูลการชำระเงิน</h2>
+    </v-flex>
 
     <v-layout>
-      <v-flex xs4></v-flex>
-      <v-flex xs4>
-        <v-row>
-          <v-text-field
-            v-model="orderid"
-            @change="checkorderid()"
-            outlined
-            dense
-            label="หมายเลขคำสั่งซื้อ"
-          ></v-text-field>
-        </v-row>
-
-        <v-row>
-          <v-text-field
-            v-model="transferName"
-            :rules="nameRules"
-            outlined
-            dense
-            label="ชื่อผู้โอน"
-            required
-          ></v-text-field>
-        </v-row>
-      </v-flex>
-      <v-flex xs4></v-flex>
+      <v-container>
+        <v-layout row>
+          <v-col :style="{paddinTop:'15px'}" cols="4" class="text-right">หมายเลขคำสั่งซื้อ :</v-col>
+          <v-col cols="6">
+            <v-text-field
+              background-color="white"
+              v-model="orderid"
+              @change="checkorderid()"
+              outlined
+              dense
+              label="หมายเลขคำสั่งซื้อ"
+            ></v-text-field>
+          </v-col>
+        </v-layout>
+        <v-layout row>
+          <v-col :style="{paddinTop:'15px'}" cols="4" class="text-right">ชื่อผู้โอน :</v-col>
+          <v-col cols="6">
+            <v-text-field
+              background-color="white"
+              v-model="transferName"
+              :rules="nameRules"
+              outlined
+              dense
+              label="ชื่อผู้โอน"
+              required
+            ></v-text-field>
+          </v-col>
+        </v-layout>
+      </v-container>
     </v-layout>
-    <v-layout>
-      <v-flex xs4></v-flex>
-      <v-flex xs4>
-        ธนาคารที่โอนเข้า
-        <v-col>
+
+    <v-container>
+      <v-layout :style="{marginLeft:'30%'}">
+        <u :style="{color:'#3498DB '}">
+          <h5>ธนาคารที่โอนเข้า</h5>
+        </u>
+        <v-col class="text-center">
           <v-radio-group v-for="(item, idx) in bank" :key="idx" v-model="radios" :mandatory="false">
             <h6>ธนาคาร{{ item.bankName }} ชื่อบัญชี{{ item.owner }}</h6>
 
             <v-radio :label="item.bankAcc" :value="item.bankNum"></v-radio>
           </v-radio-group>
         </v-col>
-
-        <v-row>
-          <v-text-field
-            class="input"
-            outlined
-            dense
-            required
-            label="จำนวนเงินที่โอน (บาท)"
-            v-model="price"
-            @blur="formatPrice(price)"
-          />
-        </v-row>
-        <v-row>
+      </v-layout>
+    </v-container>
+    <v-container>
+      <v-layout row>
+        <v-col :style="{paddinTop:'15px'}" cols="4" class="text-right">วันที่โอน :</v-col>
+        <v-col cols="6">
           <v-menu
             ref="menu1"
             v-model="menu1"
@@ -69,6 +67,7 @@
           >
             <template v-slot:activator="{ on, attrs }">
               <v-text-field
+                background-color="white"
                 dense
                 outlined
                 v-model="date"
@@ -82,8 +81,11 @@
             </template>
             <v-date-picker locale="th" v-model="date" no-title @input="menu1 = false"></v-date-picker>
           </v-menu>
-        </v-row>
-        <v-row>
+        </v-col>
+      </v-layout>
+      <v-layout row>
+        <v-col :style="{paddinTop:'15px'}" cols="4" class="text-right">เวลาที่โอน :</v-col>
+        <v-col cols="6">
           <b-form-timepicker
             v-bind="labels['TH']"
             v-model="time"
@@ -92,20 +94,23 @@
             locale="TH"
             label="เวลาที่โอน"
           ></b-form-timepicker>
-        </v-row>
-        <v-row :style="{paddingTop:'10px'}">
+        </v-col>
+      </v-layout>
+      <v-layout row>
+        <v-col :style="{paddinTop:'20'}" cols="4" class="text-right">รูปภาพหลักฐานการโอน :</v-col>
+        <v-col cols="6">
           <v-file-input
+            background-color="white"
             label="เลือกรูปภาพ"
             prepend-icon="mdi-camera"
             v-model="image"
             accept="image/*"
             @change="onFileUpload"
           ></v-file-input>
-        </v-row>
-        <v-row :style="{paddingLeft:'150px'}"></v-row>
-      </v-flex>
-      <v-flex xs4></v-flex>
-    </v-layout>
+        </v-col>
+      </v-layout>
+    </v-container>
+
     <v-layout row>
       <v-flex xs12 class="text-center">
         <v-btn
@@ -344,6 +349,7 @@ export default {
 /* @import url("../../uploadimage/ImgurUpload/css/style.css"); */
 .payment {
   color: black;
+  background-color: #d6eaf8;
 }
 .input:invalid ~ .currency-symbol {
   opacity: 0.5;

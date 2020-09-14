@@ -8,18 +8,19 @@
 
         <v-card-text>
           <v-container>
-            แก้ไขประเภทสินค้า
+            <u>
+              <h5 :style="{color:'blue'}">อัพเดตสถานะ</h5>
+            </u>
             <v-row>
-              <v-col cols="12">
-                <v-text-field v-model="form.categoryname" required label="ชื่อประเภทสินค้า"></v-text-field>
+              <v-col cols="12" sm="6" md="6">
+                <v-select :items="status" label="สถานะสินค้า" v-model="form.Status"></v-select>
               </v-col>
             </v-row>
           </v-container>
         </v-card-text>
-
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="updateCategory()">บันทึก</v-btn>
+          <v-btn color="blue darken-1" text @click="update()">บันทึก</v-btn>
           <v-btn
             color="blue darken-1"
             rounded
@@ -33,6 +34,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: {
     toggle: {
@@ -50,9 +52,15 @@ export default {
       coloralert: "",
       dialog: false,
       form: {
-        categoryid: "",
-        categoryname: "",
+        Status: "",
+        qCompanyId: "",
       },
+      status: [
+        "กำลังดำเนินการ",
+        "สำเร็จ",
+        "ข้อมูลไม่ครบถ้วน",
+        "รอการติดต่อกลับ",
+      ],
     };
   },
   watch: {
@@ -66,34 +74,25 @@ export default {
     },
   },
 
-  async created() {
-    //ปกป้องเสริมส่วนนี้มาให้
-    let res = await this.$http.get("/categories");
-  },
-
   methods: {
-    async updateCategory() {
-      //update ประเภทสินค้า
+    async update() {
       this.dialog = true;
-      let res = await this.$http.post("/categories/update", {
-        categoryid: this.form.categoryid,
-        categoryname: this.form.categoryname,
+      console.log("test", this.form.Status);
+      let res = await this.$http.post("/q_company/update", {
+        qCompanyId: this.form.qCompanyId,
+        qCompanyStatus: this.form.Status,
       });
       if (!res.data.ok) {
         console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
         window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
       } else {
         console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
         this.$emit("close");
+        this.refreshpage();
       }
     },
-    async getProduct() {
-      let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
-      });
+    refreshpage(event) {
+      window.location.reload(true);
     },
     close() {
       this.dialog = false;

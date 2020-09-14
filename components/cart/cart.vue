@@ -136,7 +136,6 @@ export default {
       let cartLength = await CartController.getCartLength(
         this.$nuxt.$auth.user[0].userid
       );
-
       this.$store.dispatch("setCartLength", cartLength);
     }
   },

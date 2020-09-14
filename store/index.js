@@ -6,9 +6,7 @@ export const getDefaultState = () => ({
   length: "",
   cartLength: 0,
   carts: [],
-  myorder: 0,
-  q_productid: "",
-  q_productname: ""
+  myorder: 0
 });
 
 export const state = () => ({
@@ -42,10 +40,9 @@ export const getters = {
   Ordernum: state => {
     return state.myorder;
   },
-  Qproductid: state => { 
-    return q_productid
+  Qproductid: state => {
+    return q_productid;
   }
-
 };
 export const mutations = {
   GET_PID_EDIT(state, pid) {

@@ -4,16 +4,10 @@
       <h3 :style="{ color: 'black' }">รายละเอียดสินค้าในตะกร้า</h3>
       <v-breadcrumbs :items="items">
         <template v-slot:item="{ item }">
-          <v-breadcrumbs-item :to="item.to" :disabled="item.disabled">
-            {{ item.text.toUpperCase() }}
-          </v-breadcrumbs-item>
+          <v-breadcrumbs-item :to="item.to" :disabled="item.disabled">{{ item.text.toUpperCase() }}</v-breadcrumbs-item>
         </template>
       </v-breadcrumbs>
-      <deleteproduct
-        :deletetoggle="b"
-        @closed="b = false"
-        :delete_id="id_delete"
-      />
+      <deleteproduct :deletetoggle="b" @closed="b = false" :delete_id="id_delete" />
       <div :style="{ color: 'black' }" class="text-center">
         <table :style="{ width: '100%', height: '50%' }">
           <tr class="head">
@@ -44,13 +38,7 @@
       </div>
       <v-container row>
         <v-flex xs6 class="text-left">
-          <v-btn
-            width="200px"
-            v-for="(item, idx) in product"
-            :key="idx"
-            :to="item.to"
-            >ย้อนกลับ</v-btn
-          >
+          <v-btn width="200px" v-for="(item, idx) in product" :key="idx" :to="item.to">ย้อนกลับ</v-btn>
         </v-flex>
         <v-flex xs6 class="text-right">
           <v-btn
@@ -60,8 +48,7 @@
             v-for="(item, id) in payment"
             :key="'A' + id"
             :to="item.to"
-            >ชำระสินค้า ></v-btn
-          >
+          >ชำระสินค้า ></v-btn>
         </v-flex>
       </v-container>
     </div>
@@ -69,9 +56,7 @@
       v-else-if="checknull == 0"
       :style="{ color: 'black' }"
       class="text-center"
-    >
-      ขออภัย , ท่านยังไม่มีสินค้าในตะกร้า
-    </div>
+    >ขออภัย , ท่านยังไม่มีสินค้าในตะกร้า</div>
   </v-container>
 </template>
 
@@ -83,7 +68,7 @@ import deleteproduct from "../../components/deleteproduct/deleteproduct";
 const cartService = new CartProvider();
 export default {
   components: {
-    deleteproduct
+    deleteproduct,
   },
   data() {
     return {
@@ -100,22 +85,22 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/"
+          to: "/",
         },
         {
           text: "รายละเอียดตะกร้าสินค้า",
           disabled: false,
-          to: "/users/cartdetail"
-        }
-      ]
+          to: "/users/cartdetail",
+        },
+      ],
     };
   },
   watch: {
     qty: {
       handler() {
         console.log("test qty", this.qty);
-      }
-    }
+      },
+    },
   },
   async mounted() {
     let uid = this.$nuxt.$auth.user[0].userid;
@@ -135,7 +120,6 @@ export default {
       }
     },
     ToggleDelete(pid) {
-      console.log("test del", pid);
       this.id_delete = pid;
       this.b = true;
     },
@@ -149,10 +133,8 @@ export default {
       let val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
-    test() {
-      console.log("test qty", this.qty);
-    }
-  }
+    test() {},
+  },
 };
 </script>
 

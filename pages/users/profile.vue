@@ -34,6 +34,9 @@
             <div v-else-if="menu === 3">
               <userorder />
             </div>
+            <div v-else-if="menu === 4 || item === 4 ">
+              <userqua />
+            </div>
           </v-flex>
         </v-layout>
       </v-container>
@@ -45,19 +48,27 @@
 import info from "../../components/user/userinfo";
 import useraddress from "../../components/user/useraddress";
 import userorder from "../../components/user/userorder";
+import userqua from "../../components/user/userqua";
 export default {
   components: {
     info,
     useraddress,
     userorder,
+    userqua,
+  },
+  created() {
+    this.item = this.$route.params.tabs;
+    console.log("test params", this.item);
   },
   data: () => ({
+    tabs: "",
     menu: "",
     item: 0,
     items: [
       { text: "บัญชีของฉัน", icon: "mdi-account", number: 1 },
       { text: "ที่อยู่", icon: "mdi-home", number: 2 },
       { text: "การซื้อของฉัน", icon: "mdi-view-list-outline", number: 3 },
+      { text: "รายการเสนอราคา", icon: "mdi-clipboard-list-outline", number: 4 },
     ],
   }),
   methods: {

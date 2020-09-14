@@ -12,7 +12,7 @@
         <!-- ถ้ามีการ login  -->
 
         <div class="right-user">
-          <v-btn text v-for="(item, idx) in user" :key="idx" :to="item.to">
+          <v-btn text @click="gotoprofile()">
             <v-icon size="20px">mdi-account</v-icon>
             {{ $auth.user[0].email }}
           </v-btn>
@@ -28,15 +28,8 @@
               <!-- เช็คก่อนออกจากระบบ -->
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red darken-1" text @click="dialog = false"
-                  >ไม่ใช่</v-btn
-                >
-                <v-btn
-                  color="green darken-1"
-                  text
-                  @click="$auth.logout(), (dialog = false)"
-                  >ใช่</v-btn
-                >
+                <v-btn color="red darken-1" text @click="dialog = false">ไม่ใช่</v-btn>
+                <v-btn color="green darken-1" text @click="$auth.logout(), (dialog = false)">ใช่</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -62,9 +55,7 @@
               <!-- เช็คก่อนออกจากระบบ -->
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red darken-1" text @click="dialog = false"
-                  >ไม่ใช่</v-btn
-                >
+                <v-btn color="red darken-1" text @click="dialog = false">ไม่ใช่</v-btn>
                 <v-btn color="green darken-1" text @click="logout()">ใช่</v-btn>
               </v-card-actions>
             </v-card>
@@ -83,23 +74,25 @@
             :key="idx"
             :to="item.to"
             exact
-            >{{ item.title }}</v-btn
-          >
+          >{{ item.title }}</v-btn>
         </div>
       </div>
       <div @click="$event.stopPropagation()">
         <cart />
       </div>
       <div @click="$event.stopPropagation()">
-        <quotation />
+        <v-icon class="ml-3" @click="gotoquo()" size="25px">mdi-clipboard-text-outline</v-icon>
+        <!-- <quotation /> -->
       </div>
       <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tabs-slider color="yellow"></v-tabs-slider>
-          <v-tab v-for="(item, idx) in items" :key="idx" :to="item.to" exact>{{
+          <v-tab v-for="(item, idx) in items" :key="idx" :to="item.to" exact>
+            {{
             item.title
-          }}</v-tab>
+            }}
+          </v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
@@ -113,7 +106,7 @@ import quotation from "../quotation/quotation";
 export default {
   components: {
     cart,
-    quotation
+    quotation,
   },
   data() {
     return {
@@ -121,31 +114,49 @@ export default {
       dialog: false,
       tab: null,
       admin: [{ to: "/admin/insertp" }],
-      user: [{ to: "/users/profile" }],
+      user: [{ to: "/users/profile", params: { tabs: 1 } }],
       items: [
         { title: "เกี่ยวกับเรา", to: { name: "index" } },
-        { title: "สินค้า", to: "/product/#/product" },
+        { title: "สินค้า", to: { name: "product" } },
         { title: "วิธีการสั่งซื้อ", to: { name: "howto" } },
         { title: "แจ้งชำระเงิน", to: { name: "payment" } },
-        { title: "ติดตามพัสดุ", to: { name: "tracking" } }
+        { title: "ติดตามพัสดุ", to: { name: "tracking" } },
       ],
       itembar: [
         { title: "เข้าสู่ระบบ", to: { name: "users-login" } },
-        { title: "สมัครสมาชิก", to: { name: "users-register" } }
-      ]
+        { title: "สมัครสมาชิก", to: { name: "users-register" } },
+      ],
     };
   },
   computed: {},
   methods: {
-    logout() {
-      this.$auth.logout();
+    gotoquo() {
       if ($nuxt.$auth.loggedIn == false) {
-        this.$store.dispatch("resetState");
+        this.$router.push("/users/login");
+      } else {
+        this.$router.push({
+          name: "users-profile",
+          params: { tabs: 4 },
+        });
+      }
+    },
+    gotoprofile() {
+      this.$router.push({
+        name: "users-profile",
+        params: { tabs: 0 },
+      });
+    },
+    logout() {
+      this.$store.dispatch("resetState");
+
+      this.$auth.logout();
+
+      if ($nuxt.$auth.loggedIn == false) {
       }
       // this.$store.dispatch("resetState");
       // dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -235,7 +246,7 @@ export default {
   .right-user {
     position: relative;
     text-decoration: none;
-    margin-left: 750px;
+    margin-left: 700px;
   }
   .login {
     position: relative;
@@ -281,7 +292,7 @@ export default {
   .right-user {
     position: relative;
     text-decoration: none;
-    margin-left: 500px;
+    margin-left: 450px;
   }
   .login {
     position: relative;

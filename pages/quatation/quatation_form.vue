@@ -34,15 +34,20 @@
 
                 <v-container>
                   <b-form-group id="input-group-1" label="รหัสสินค้า" label-for="input-1">
-                    <b-form-input v-model="productid" id="input-1" required disabled></b-form-input>
+                    <b-form-input v-model="form.productid" id="input-1" required disabled></b-form-input>
                   </b-form-group>
 
                   <b-form-group id="input-group-1" label="ชื่อสินค้า" label-for="input-1">
-                    <b-form-input v-model="productname" id="input-1" required disabled></b-form-input>
+                    <b-form-input v-model="form.productname" id="input-1" required disabled></b-form-input>
                   </b-form-group>
 
                   <v-row class="ml-1">
-                    <b-form-group id="input-group-1" label="จำนวนที่ต้องการ" label-for="input-1"></b-form-group>
+                    <b-form-group
+                      class="w"
+                      id="input-group-1"
+                      label="จำนวนที่ต้องการ"
+                      label-for="input-1"
+                    ></b-form-group>
                     <b-form-input
                       class="ml-10"
                       id="input-1"
@@ -53,9 +58,28 @@
                       oninput="validity.valid||(value='');"
                       required
                     ></b-form-input>
+
+                    <div>
+                      <v-flex xs6>
+                        <v-select
+                          class="ml-4"
+                          height="1"
+                          v-model="form.unittype"
+                          :items="unit"
+                          item-text="text"
+                          item-value="text"
+                          solo
+                          filled
+                          label="เลือก"
+                          :rules="[(v) => !!v || 'กรุณาเลือกหน่วย']"
+                          required
+                        ></v-select>
+                      </v-flex>
+                    </div>
                   </v-row>
                   <v-row class="ml-1">
                     <b-form-group
+                      class="w"
                       id="input-group-1"
                       label="หรือขนาดพื้นที่ที่ต้องการใช้สินค้า"
                       label-for="input-1"
@@ -69,6 +93,12 @@
                       oninput="validity.valid||(value='');"
                       required
                     ></b-form-input>
+                    <b-form-group
+                      class="space"
+                      id="input-group-1"
+                      label="ตารางเมตร"
+                      label-for="input-1"
+                    ></b-form-group>
                   </v-row>
                 </v-container>
               </v-card>
@@ -101,7 +131,7 @@
                     <b-form-textarea
                       required
                       type="text"
-                      v-model="form.addressq"
+                      v-model="form.addressd"
                       placeholder="กรุณาระบุที่อยู่ในชัดเจน"
                       rows="3"
                       max-rows="6"
@@ -121,8 +151,8 @@
                 </v-flex>
                 <v-flex xs6 class="text-right" :style="{paddingRight:'20px'}">
                   <!-- <v-btn color="primary" @click="test(), (e1 = 3)">ถัดไป</v-btn> -->
-                  <div v-if="form.addressq != ''">
-                    <v-btn color="primary" @click="test(), (e1 = 3)">ถัดไป</v-btn>
+                  <div v-if="form.addressd != ''">
+                    <v-btn color="primary" @click="(e1 = 3)">ถัดไป</v-btn>
                   </div>
                   <div v-else>
                     <b-button type="submit" variant="primary">ถัดไป</b-button>
@@ -143,10 +173,17 @@
                     <v-flex xs6>
                       <v-col>
                         <b-form-group id="input-group-1" label="*ชื่อ" label-for="input-1">
-                          <b-form-input placeholder="กรอกชื่อ" id="input-1" required></b-form-input>
+                          <b-form-input
+                            v-model="form.name"
+                            placeholder="กรอกชื่อ"
+                            id="input-1"
+                            required
+                          ></b-form-input>
                         </b-form-group>
                         <b-form-group id="input-group-1" label="*เบอร์โทรศัพท์" label-for="input-1">
                           <b-form-input
+                            maxlength="10"
+                            v-model="form.phone"
                             placeholder="กรอกเบอร์โทรศัพท์"
                             id="input-1"
                             @keypress="onlyNumber"
@@ -158,7 +195,12 @@
                     <v-flex xs6>
                       <v-col>
                         <b-form-group id="input-group-1" label="*นามสกุล" label-for="input-1">
-                          <b-form-input placeholder="กรอกนามสกุล" id="input-1" required></b-form-input>
+                          <b-form-input
+                            v-model="form.lastname"
+                            placeholder="กรอกนามสกุล"
+                            id="input-1"
+                            required
+                          ></b-form-input>
                         </b-form-group>
                         <b-form-group id="input-group-1" label="*อีเมล์" label-for="input-1">
                           <b-form-input
@@ -180,8 +222,9 @@
                         label-for="input-1"
                       >
                         <b-form-textarea
+                          v-model="form.info"
                           id="textarea"
-                          placeholder="กรุณากรอกรายละเอียด หรือ หากต้องการออกใบสั่งซื้อในนามบริษัท กรุณาระบุชื่อบริษัท ที่อยู่ เบอร์โทร ได้ที่นี่"
+                          placeholder="กรุณากรอกรายละเอียดเพิ่มเติมได้ที่นี่"
                           rows="3"
                           max-rows="6"
                         ></b-form-textarea>
@@ -199,7 +242,7 @@
                   <v-btn text @click="e1 = 1">ยกเลิก</v-btn>
                 </v-flex>
                 <v-flex xs6 class="text-right" :style="{paddingRight:'20px'}">
-                  <b-button type="submit" variant="primary">ส่งใบเสนอราคา</b-button>
+                  <b-button type="submit" variant="primary" @click="insert()">ส่งใบเสนอราคา</b-button>
                 </v-flex>
               </v-layout>
             </b-form>
@@ -211,21 +254,47 @@
 </template>
 
 <script>
+import moment from "moment";
+import "moment/locale/th";
+import { format, parseISO } from "date-fns";
+
 export default {
   props: ["quatationid"],
   data() {
     return {
-      productid: "",
-      productname: "",
+      date: parseISO(new Date().toISOString()),
+      q_date: "",
+      lastquaid: 0,
+      q_time: "",
       show: true,
+      dis: false,
+      lastquaid: 0,
       form: {
+        productid: "",
+        productname: "",
+        name: "",
+        lastname: "",
+        phone: "",
+        unittype: "",
         email: "",
-        addressq: "",
+        addressd: "",
         square: "",
         quantity: "",
+        info: "",
       },
       quantity: "",
       e1: 1,
+      unit: [
+        {
+          text: "หน่วย",
+        },
+        {
+          text: "ชิ้น",
+        },
+        {
+          text: "อัน",
+        },
+      ],
       items: [
         {
           text: "หน้าหลัก",
@@ -248,13 +317,79 @@ export default {
     };
   },
   created() {
-    this.productid = this.$route.params.pidq;
-    this.productname = this.$route.params.pnameq;
+    this.form.productid = this.$route.params.pidq;
+    this.form.productname = this.$route.params.pnameq;
   },
+
   methods: {
+    async insert() {
+      if (
+        this.form.name == "" ||
+        this.form.name == undefined ||
+        this.form.name == null ||
+        this.form.lastname == "" ||
+        this.form.lastname == undefined ||
+        this.form.lastname == null ||
+        this.form.phone == "" ||
+        this.form.phone == undefined ||
+        this.form.phone == null ||
+        this.form.email == "" ||
+        this.form.email == undefined ||
+        this.form.email == null
+      ) {
+        window.alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+      } else if (
+        this.form.productid == "" ||
+        this.form.productid == undefined ||
+        this.form.productid == null ||
+        this.form.productname == "" ||
+        this.form.productname == undefined ||
+        this.form.productname == null ||
+        this.form.unittype == "" ||
+        this.form.unittype == undefined ||
+        this.form.unittype == null
+      ) {
+        this.e1 = 1;
+      } else {
+        console.log("insert", this.form.unittype);
+        this.status = "กำลังดำเนินการ";
+        this.q_date = moment(this.date).format("dddd,DD-MMMM-YYYY");
+        this.q_time = moment(this.date).format("HH.mm.ss");
+        let res = await this.$http.post("/q_normal/insert", {
+          qNormalName: this.form.name,
+          qNormalUserid: this.$nuxt.$auth.user[0].userid,
+          qNormalLast: this.form.lastname,
+          qNormalPhone: this.form.phone,
+          qNormalEmail: this.form.email,
+          qNormalAddressDelivery: this.form.addressd,
+          qNormalProductname: this.form.productname,
+          qNormalProductid: this.form.productid,
+          qNormalQuantity: this.form.quantity,
+          qNormalUnittype: this.form.unittype,
+          qNormalSquaremetre: this.form.square,
+          qNormalDate: this.q_date,
+          qNormalTime: this.q_time,
+          qNormalInfo: this.form.info,
+          qNormalStatus: this.status,
+        });
+        if (!res.data.ok) {
+          console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
+          window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        } else {
+          this.lastquaid = res.data.lastid[0];
+          console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
+          this.lastquaid = res.data.lastid[0];
+          window.alert("Insert Successful!");
+          this.$router.push({
+            name: "quatation-detail-quan",
+            params: { quaid: this.lastquaid },
+          });
+        }
+      }
+    },
     onSubmit(evt) {
       evt.preventDefault();
-      // alert(JSON.stringify(this.form));
+      alert(JSON.stringify(this.form));
     },
     onReset(evt) {
       evt.preventDefault();
@@ -275,12 +410,19 @@ export default {
         $event.preventDefault();
       }
     },
-    test() {
-      console.log("test", this.quantity);
-      //เช็คค่าว่าง
-    },
   },
 };
 </script>
 
-<style></style>
+<style>
+.ml-10 {
+  height: 57px;
+}
+.w {
+  padding-top: 15px;
+}
+.space {
+  padding-top: 15px;
+  padding-left: 20px;
+}
+</style>

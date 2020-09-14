@@ -245,9 +245,13 @@ export default {
       }
     },
     addToQuo(pid, pname) {
-      this.dialog = true;
-      this.getpid = pid.toString();
-      this.getpname = pname;
+      if ($nuxt.$auth.loggedIn == false) {
+        this.$router.push("/users/login");
+      } else {
+        this.dialog = true;
+        this.getpid = pid.toString();
+        this.getpname = pname;
+      }
 
       // this.$router.push({
       //   name: "quatation-form",

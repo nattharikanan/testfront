@@ -43,6 +43,7 @@
               <td>{{ item.quantity }}</td>
               <td>{{ item.unitprice }}</td>
               <td>฿{{ formatPrice(item.quantity * item.unitprice) }}</td>
+              <div class="hidden">{{setvalue(item.productid)}}</div>
             </tr>
             <tr class="head">
               <th>รวม(ยังไม่รวมภาษีมูลค่าเพิ่ม 7%)</th>
@@ -79,6 +80,7 @@ import CartController from "@/utils/cart_controller";
 export default {
   data() {
     return {
+      productidvalue: "",
       lastestordernum: 0,
       ordertime: "",
       orderdate: "",
@@ -125,8 +127,6 @@ export default {
       name: c.shmName,
       id: c.shmId,
     }));
-
-    console.log("test resship", this.ship_medthod);
   },
   async mounted() {
     this.userid = this.$nuxt.$auth.user[0].userid;
@@ -186,11 +186,26 @@ export default {
       });
       this.lastestordernum = order.data.lastesordernum[0];
       console.log("test1", this.lastestordernum);
-      // setTimeout(() => this.$router.push("po"), 600);
+      this.$store.dispatch("resetState");
+      this.resetCart(this.productidvalue);
       this.$router.push({
         name: "users-po",
         params: { orderq: this.lastestordernum },
       });
+    },
+    async resetCart(id) {
+      let res = await this.$http.post("/carts/delete", {
+        productid: id,
+      });
+      if (!res.data.ok) {
+        console.log("รีเซ็ทค่า");
+      } else {
+        console.log("ลบ");
+      }
+      this.dialog = false;
+    },
+    setvalue(pid) {
+      this.productidvalue = pid;
     },
 
     cartTotalPrice() {
@@ -227,5 +242,8 @@ td {
 }
 .head {
   background-color: paleturquoise;
+}
+.hidden {
+  display: none;
 }
 </style>
