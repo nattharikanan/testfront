@@ -7,7 +7,9 @@
         defer
       ></script>
       <v-container>
-        <v-alert border="top" :color="coloralert" dark :value="regisstatus">{{ alertMessage }}</v-alert>
+        <v-alert border="top" :color="coloralert" dark :value="regisstatus">{{
+          alertMessage
+        }}</v-alert>
         <v-row align="center" justify="center">
           <v-col cols="12" md="6">
             <v-card height="580px">
@@ -92,14 +94,14 @@
                       </b-col>
                   </b-row>-->
                   <v-layout row>
-                    <v-flex xs12 :style="{paddingLeft:'25%'}">
+                    <v-flex xs12 :style="{ paddingLeft: '25%' }">
                       <VueRecaptcha
                         sitekey="6LecZAEVAAAAAGGh-f_XFHFIFK3GjHbk3GDYDq67"
                         @verify="checkCaptcha"
                       />
                     </v-flex>
                   </v-layout>
-                  <v-layout row :style="{paddingTop:'20px'}">
+                  <v-layout row :style="{ paddingTop: '20px' }">
                     <v-flex xs6 class="text-center">
                       <v-btn
                         type="submit"
@@ -108,10 +110,13 @@
                         height="50px"
                         color="primary"
                         @click="register"
-                      >ลงทะเบียน</v-btn>
+                        >ลงทะเบียน</v-btn
+                      >
                     </v-flex>
                     <v-flex xs6 class="text-center">
-                      <v-btn width="90%" height="50px" color="error" to="/">ยกเลิก</v-btn>
+                      <v-btn width="90%" height="50px" color="error" to="/"
+                        >ยกเลิก</v-btn
+                      >
                     </v-flex>
                   </v-layout>
 
@@ -129,13 +134,11 @@
 
 <script>
 import axios from "axios";
-import VuePhoneNumberInput from "vue-phone-number-input";
-import "vue-phone-number-input/dist/vue-phone-number-input.css";
 import VueRecaptcha from "vue-recaptcha";
 
 export default {
   theme: {
-    dark: true,
+    dark: true
   },
   layout: "regis",
   watch: {
@@ -143,7 +146,7 @@ export default {
   },
   components: {
     VuePhoneNumberInput,
-    VueRecaptcha,
+    VueRecaptcha
   },
   data: () => ({
     captchadata: false,
@@ -161,27 +164,27 @@ export default {
     iconalert: "",
     valid: true,
     nameRules: [
-      (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-      (v) => (v && v.length <= 200) || "Name must be less than 200 characters",
+      v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+      v => (v && v.length <= 200) || "Name must be less than 200 characters"
     ],
 
     emailRules: [
-      (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-      (v) =>
+      v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+      v =>
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
           v
-        ) || "อีเมล์ของท่านไม่ถูกต้อง",
+        ) || "อีเมล์ของท่านไม่ถูกต้อง"
     ],
     genders: ["ชาย", "หญิง", "ไม่ต้องการระบุ"],
     PasswordRules: {
-      required: (value) => !!value || "กรุณากรอกข้อมูลให้กรบถ้วน",
-      min: (v) => v.length >= 8 || "กำหนดรหัสผ่านอย่างน้อย 8 ตัวอักษร",
+      required: value => !!value || "กรุณากรอกข้อมูลให้กรบถ้วน",
+      min: v => v.length >= 8 || "กำหนดรหัสผ่านอย่างน้อย 8 ตัวอักษร"
     },
 
     show1: false,
     show2: true,
     show3: false,
-    show4: false,
+    show4: false
   }),
 
   methods: {
@@ -209,7 +212,7 @@ export default {
           firstname: this.firstname,
           lastname: this.lastname,
           email: this.email,
-          password: this.password,
+          password: this.password
         });
         console.log("res", res);
         if (res.data.ok) {
@@ -230,8 +233,8 @@ export default {
             window.scrollTo(0, 0);
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
