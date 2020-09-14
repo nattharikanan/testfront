@@ -98,6 +98,7 @@
                       <VueRecaptcha
                         sitekey="6LfdMMwZAAAAAFLzRip24CL5f9-s7E1oovlHjeGT"
                         @verify="checkCaptcha"
+                        :loadRecaptchaScript="true"
                       />
                       <!-- <recaptcha:RecaptchaControl
                         ID="recaptcha"
