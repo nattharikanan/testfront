@@ -80,7 +80,7 @@ export const actions = {
   async mylength({ commit }) {
     let uid = $nuxt.$auth.user[0].userid;
     const test = await axios.get(
-      `http://localhost:7000/api/carts/cartlength?userid=${uid}`
+      `${process.env.NUXT_ENV_API}/api/carts/cartlength?userid=${uid}`
     );
     let temp = test.data.carts[0].length;
     console.log("my", temp);
@@ -88,7 +88,7 @@ export const actions = {
   },
   async getProduct({ commit }, pid) {
     const res = await this.$axios.get(
-      `http://localhost:7000/api/product?productid=${pid}`
+      `${process.env.NUXT_ENV_API}/api/product?productid=${pid}`
     );
     console.log("products detail respon", res.data);
     commit("SET_PRODUCT", res.data);

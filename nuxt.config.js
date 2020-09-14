@@ -1,4 +1,6 @@
 import colors from "vuetify/es5/util/colors";
+import dotenv from "dotenv";
+dotenv.config();
 
 export default {
   mode: "universal",
@@ -37,13 +39,13 @@ export default {
     // { src: "~/plugins/localStorage.js", ssr: false }
   ],
   proxy: {
-    "/api": "http://127.0.0.1:7000", //-- ตั้งค่า map proxy url api server //http://9e5d3e89.ngrok.io/ //"http://127.0.0.1:7000"
+    "/api": process.env.NUXT_ENV_API, //-- ตั้งค่า map proxy url api server //http://9e5d3e89.ngrok.io/ //"http://127.0.0.1:7000"
     ws: true
   },
   /*
    ** Nuxt.js dev-modules
    */
-  buildModules: ["@nuxtjs/vuetify"],
+  buildModules: ["@nuxtjs/vuetify", ["@nuxtjs/dotenv", { systemvars: true }]],
   /*
    ** Nuxt.js modules
    */
@@ -61,21 +63,21 @@ export default {
       local: {
         endpoints: {
           login: {
-            url: "http://127.0.0.1:7000/api/users/login",
+            url: `${process.env.NUXT_ENV_API}/api/users/login`,
             method: "post",
             propertyName: "token"
           },
           logout: { url: "/sessions", method: "delete" },
           user: {
-            url: "http://127.0.0.1:7000/api/users/me",
+            url: `${process.env.NUXT_ENV_API}/api/users/me`,
             method: "get",
             propertyName: "userData"
           }
-        }
-        // tokenRequired: true,
-        // tokenType: 'bearer',
-        // globalToken: true,
-        // autoFetchUser: true
+        },
+        tokenRequired: true,
+        tokenType: "bearer",
+        globalToken: true,
+        autoFetchUser: true
       }
     }
   },
