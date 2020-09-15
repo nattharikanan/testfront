@@ -19,26 +19,31 @@
         <v-spacer></v-spacer>
         <div row>
           <v-flex xs12>
-            <v-data-table class="text-center" :headers="headers" :search="search" :items="show">
+            <v-data-table
+              class="text-center"
+              :headers="headers"
+              :search="search"
+              :items="show"
+            >
               <template v-slot:item.info="{ item }">
                 <v-btn @click="ToggleDetail(item)" class="center">
                   <v-icon>mdi-information</v-icon>
                 </v-btn>
               </template>
               <template v-slot:item.qNormalStatus="{ item }">
-                <div v-if="item.qNormalStatus ==='กำลังดำเนินการ' ">
-                  <v-btn color="yellow">{{item.qNormalStatus}}</v-btn>
+                <div v-if="item.qNormalStatus === 'กำลังดำเนินการ'">
+                  <v-btn color="yellow">{{ item.qNormalStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qNormalStatus ==='สำเร็จ' ">
-                  <v-btn color="green">{{item.qNormalStatus}}</v-btn>
+                <div v-else-if="item.qNormalStatus === 'สำเร็จ'">
+                  <v-btn color="green">{{ item.qNormalStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qNormalStatus ==='รอการติดต่อกลับ' ">
-                  <v-btn color="orange">{{item.qNormalStatus}}</v-btn>
+                <div v-else-if="item.qNormalStatus === 'รอการติดต่อกลับ'">
+                  <v-btn color="orange">{{ item.qNormalStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qNormalStatus ==='ข้อมูลไม่ครบถ้วน' ">
-                  <v-btn color="red">{{item.qNormalStatus}}</v-btn>
-                </div>
-              </template>-->
+                <div v-else-if="item.qNormalStatus === 'ข้อมูลไม่ครบถ้วน'">
+                  <v-btn color="red">{{ item.qNormalStatus }}</v-btn>
+                </div> </template
+              >-->
               <!-- <template v-slot:item.orderid="{ item }">
               <nuxt-link
                 :to="{  name: 'admin-showorder-detail',
@@ -82,7 +87,7 @@ import normaldetail from "../quadetail/normal_detail";
 
 export default {
   components: {
-    normaldetail,
+    normaldetail
   },
   data() {
     return {
@@ -98,21 +103,23 @@ export default {
           text: "หมายเลข",
           align: "start",
           sortable: true,
-          value: "qNormalId",
+          value: "qNormalId"
         },
         { text: "ชื่อผู้สั่ง", value: "qNormalName" },
         { text: "นามสกุล", value: "qNormalLast" },
         { text: "วันที่ขอใบเสนอราคา", value: "qNormalDate" },
         { text: "สถานะ", value: "qNormalStatus" },
-        { text: "รายละเอียด", value: "info" },
-      ],
+        { text: "รายละเอียด", value: "info" }
+      ]
     };
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
-    let res = await this.$http.get("/q_normal");
+    let res = await this.$http.get(
+      `q_show/normal?userid=${this.$nuxt.$auth.user[0].userid}`
+    );
 
-    this.show = res.data.Normal;
+    this.show = res.data.normal;
   },
   methods: {
     modalToggle(item) {
@@ -128,10 +135,10 @@ export default {
       // this.open = true;
       this.$router.push({
         name: "quatation-detail-quan",
-        params: { quaid: item.qNormalId },
+        params: { quaid: item.qNormalId }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

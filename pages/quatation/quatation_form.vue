@@ -1,11 +1,21 @@
 <template>
   <div>
+    <v-dialog v-model="dialog" persistent max-width="400px">
+      <v-card>
+        <v-card-title>ยืนยันการส่งข้อมูล ?</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="insert()">ใช่</v-btn>
+          <v-btn color="red darken-1" text @click="dialog = false"
+            >ไม่ใช่</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-breadcrumbs :items="items">
       <template v-slot:item="{ item }">
         <v-breadcrumbs-item :to="item.to" :disabled="item.disabled">
-          {{
-          item.text.toUpperCase()
-          }}
+          {{ item.text.toUpperCase() }}
         </v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>
@@ -29,16 +39,36 @@
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
               <v-card class="mb-12" color="blue lighten-5" full-height="900px">
                 <u>
-                  <h4 class="text-center" :style="{paddingTop:'15px'}">ติดต่อขอใบเสนอราคา</h4>
+                  <h4 class="text-center" :style="{ paddingTop: '15px' }">
+                    ติดต่อขอใบเสนอราคา
+                  </h4>
                 </u>
 
                 <v-container>
-                  <b-form-group id="input-group-1" label="รหัสสินค้า" label-for="input-1">
-                    <b-form-input v-model="form.productid" id="input-1" required disabled></b-form-input>
+                  <b-form-group
+                    id="input-group-1"
+                    label="รหัสสินค้า"
+                    label-for="input-1"
+                  >
+                    <b-form-input
+                      v-model="form.productid"
+                      id="input-1"
+                      required
+                      disabled
+                    ></b-form-input>
                   </b-form-group>
 
-                  <b-form-group id="input-group-1" label="ชื่อสินค้า" label-for="input-1">
-                    <b-form-input v-model="form.productname" id="input-1" required disabled></b-form-input>
+                  <b-form-group
+                    id="input-group-1"
+                    label="ชื่อสินค้า"
+                    label-for="input-1"
+                  >
+                    <b-form-input
+                      v-model="form.productname"
+                      id="input-1"
+                      required
+                      disabled
+                    ></b-form-input>
                   </b-form-group>
 
                   <v-row class="ml-1">
@@ -71,7 +101,7 @@
                           solo
                           filled
                           label="เลือก"
-                          :rules="[(v) => !!v || 'กรุณาเลือกหน่วย']"
+                          :rules="[v => !!v || 'กรุณาเลือกหน่วย']"
                           required
                         ></v-select>
                       </v-flex>
@@ -104,12 +134,16 @@
               </v-card>
 
               <v-layout row>
-                <v-flex xs6 :style="{paddingLeft:'20px'}">
+                <v-flex xs6 :style="{ paddingLeft: '20px' }">
                   <v-btn text>ยกเลิก</v-btn>
                 </v-flex>
-                <v-flex xs6 class="text-right" :style="{paddingRight:'20px'}">
+                <v-flex
+                  xs6
+                  class="text-right"
+                  :style="{ paddingRight: '20px' }"
+                >
                   <div v-if="form.square != '' || form.quantity != ''">
-                    <v-btn color="primary" @click="(e1 = 2)">ถัดไป</v-btn>
+                    <v-btn color="primary" @click="e1 = 2">ถัดไป</v-btn>
                   </div>
                   <div v-else>
                     <b-button type="submit" variant="primary">ถัดไป</b-button>
@@ -123,11 +157,17 @@
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
               <v-card class="mb-12" color="blue lighten-5" full-height="900px">
                 <u>
-                  <h4 class="text-center" :style="{paddingTop:'15px'}">ที่อยู่สำหรับการจัดส่ง</h4>
+                  <h4 class="text-center" :style="{ paddingTop: '15px' }">
+                    ที่อยู่สำหรับการจัดส่ง
+                  </h4>
                 </u>
 
                 <v-container>
-                  <b-form-group id="input-group-1" label="ที่อยู่" label-for="input-1">
+                  <b-form-group
+                    id="input-group-1"
+                    label="ที่อยู่"
+                    label-for="input-1"
+                  >
                     <b-form-textarea
                       required
                       type="text"
@@ -146,13 +186,17 @@
 
               <v-btn text @click="e1 = 1">ย้อนกลับ</v-btn>-->
               <v-layout row>
-                <v-flex xs6 :style="{paddingLeft:'20px'}">
+                <v-flex xs6 :style="{ paddingLeft: '20px' }">
                   <v-btn text @click="e1 = 1">ยกเลิก</v-btn>
                 </v-flex>
-                <v-flex xs6 class="text-right" :style="{paddingRight:'20px'}">
+                <v-flex
+                  xs6
+                  class="text-right"
+                  :style="{ paddingRight: '20px' }"
+                >
                   <!-- <v-btn color="primary" @click="test(), (e1 = 3)">ถัดไป</v-btn> -->
                   <div v-if="form.addressd != ''">
-                    <v-btn color="primary" @click="(e1 = 3)">ถัดไป</v-btn>
+                    <v-btn color="primary" @click="e1 = 3">ถัดไป</v-btn>
                   </div>
                   <div v-else>
                     <b-button type="submit" variant="primary">ถัดไป</b-button>
@@ -166,13 +210,19 @@
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
               <v-card class="mb-12" color="blue lighten-5" full-height="900px">
                 <u>
-                  <h4 class="text-center" :style="{paddingTop:'15px'}">ข้อมูลผู้สั่งซื้อ</h4>
+                  <h4 class="text-center" :style="{ paddingTop: '15px' }">
+                    ข้อมูลผู้สั่งซื้อ
+                  </h4>
                 </u>
                 <v-container>
                   <v-layout row>
                     <v-flex xs6>
                       <v-col>
-                        <b-form-group id="input-group-1" label="*ชื่อ" label-for="input-1">
+                        <b-form-group
+                          id="input-group-1"
+                          label="*ชื่อ"
+                          label-for="input-1"
+                        >
                           <b-form-input
                             v-model="form.name"
                             placeholder="กรอกชื่อ"
@@ -180,7 +230,11 @@
                             required
                           ></b-form-input>
                         </b-form-group>
-                        <b-form-group id="input-group-1" label="*เบอร์โทรศัพท์" label-for="input-1">
+                        <b-form-group
+                          id="input-group-1"
+                          label="*เบอร์โทรศัพท์"
+                          label-for="input-1"
+                        >
                           <b-form-input
                             maxlength="10"
                             v-model="form.phone"
@@ -194,7 +248,11 @@
                     </v-flex>
                     <v-flex xs6>
                       <v-col>
-                        <b-form-group id="input-group-1" label="*นามสกุล" label-for="input-1">
+                        <b-form-group
+                          id="input-group-1"
+                          label="*นามสกุล"
+                          label-for="input-1"
+                        >
                           <b-form-input
                             v-model="form.lastname"
                             placeholder="กรอกนามสกุล"
@@ -202,7 +260,11 @@
                             required
                           ></b-form-input>
                         </b-form-group>
-                        <b-form-group id="input-group-1" label="*อีเมล์" label-for="input-1">
+                        <b-form-group
+                          id="input-group-1"
+                          label="*อีเมล์"
+                          label-for="input-1"
+                        >
                           <b-form-input
                             id="input-1"
                             v-model="form.email"
@@ -238,11 +300,17 @@
 
               <!-- <v-btn>ย้อนกลับ</v-btn> -->
               <v-layout row>
-                <v-flex xs6 :style="{paddingLeft:'20px'}">
+                <v-flex xs6 :style="{ paddingLeft: '20px' }">
                   <v-btn text @click="e1 = 1">ยกเลิก</v-btn>
                 </v-flex>
-                <v-flex xs6 class="text-right" :style="{paddingRight:'20px'}">
-                  <b-button type="submit" variant="primary" @click="insert()">ส่งใบเสนอราคา</b-button>
+                <v-flex
+                  xs6
+                  class="text-right"
+                  :style="{ paddingRight: '20px' }"
+                >
+                  <b-button type="submit" variant="primary"
+                    >ส่งใบเสนอราคา</b-button
+                  >
                 </v-flex>
               </v-layout>
             </b-form>
@@ -262,6 +330,7 @@ export default {
   props: ["quatationid"],
   data() {
     return {
+      dialog: false,
       date: parseISO(new Date().toISOString()),
       q_date: "",
       lastquaid: 0,
@@ -280,40 +349,40 @@ export default {
         addressd: "",
         square: "",
         quantity: "",
-        info: "",
+        info: ""
       },
       quantity: "",
       e1: 1,
       unit: [
         {
-          text: "หน่วย",
+          text: "หน่วย"
         },
         {
-          text: "ชิ้น",
+          text: "ชิ้น"
         },
         {
-          text: "อัน",
-        },
+          text: "อัน"
+        }
       ],
       items: [
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: "ติดต่อขอรับใบเสนอราคา",
           disabled: false,
-          to: "/quatation/quatation_form",
-        },
+          to: "/quatation/quatation_form"
+        }
       ],
       emailRules: [
-        (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-        (v) =>
+        v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+        v =>
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
             v
-          ) || "อีเมล์ของท่านไม่ถูกต้อง",
-      ],
+          ) || "อีเมล์ของท่านไม่ถูกต้อง"
+      ]
     };
   },
   created() {
@@ -322,6 +391,9 @@ export default {
   },
 
   methods: {
+    check() {
+      this.dialog = true;
+    },
     async insert() {
       if (
         this.form.name == "" ||
@@ -370,26 +442,25 @@ export default {
           qNormalDate: this.q_date,
           qNormalTime: this.q_time,
           qNormalInfo: this.form.info,
-          qNormalStatus: this.status,
+          qNormalStatus: this.status
         });
         if (!res.data.ok) {
           console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
-          window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
         } else {
           this.lastquaid = res.data.lastid[0];
           console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
           this.lastquaid = res.data.lastid[0];
-          window.alert("Insert Successful!");
           this.$router.push({
             name: "quatation-detail-quan",
-            params: { quaid: this.lastquaid },
+            params: { quaid: this.lastquaid }
           });
         }
       }
     },
     onSubmit(evt) {
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
+      // alert(JSON.stringify(this.form));
+      this.dialog = true;
     },
     onReset(evt) {
       evt.preventDefault();
@@ -409,8 +480,8 @@ export default {
         // 46 is dot
         $event.preventDefault();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

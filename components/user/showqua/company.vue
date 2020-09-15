@@ -19,24 +19,29 @@
         <v-spacer></v-spacer>
         <div row>
           <v-flex xs12>
-            <v-data-table class="text-center" :headers="headers" :search="search" :items="show">
+            <v-data-table
+              class="text-center"
+              :headers="headers"
+              :search="search"
+              :items="show"
+            >
               <template v-slot:item.info="{ item }">
                 <v-btn @click="ToggleDetail(item)" class="center">
                   <v-icon>mdi-information</v-icon>
                 </v-btn>
               </template>
               <template v-slot:item.qCompanyStatus="{ item }">
-                <div v-if="item.qCompanyStatus ==='กำลังดำเนินการ' ">
-                  <v-btn color="yellow">{{item.qCompanyStatus}}</v-btn>
+                <div v-if="item.qCompanyStatus === 'กำลังดำเนินการ'">
+                  <v-btn color="yellow">{{ item.qCompanyStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qCompanyStatus ==='สำเร็จ' ">
-                  <v-btn color="green">{{item.qCompanyStatus}}</v-btn>
+                <div v-else-if="item.qCompanyStatus === 'สำเร็จ'">
+                  <v-btn color="green">{{ item.qCompanyStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qCompanyStatus ==='รอการติดต่อกลับ' ">
-                  <v-btn color="orange">{{item.qCompanyStatus}}</v-btn>
+                <div v-else-if="item.qCompanyStatus === 'รอการติดต่อกลับ'">
+                  <v-btn color="orange">{{ item.qCompanyStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qCompanyStatus ==='ข้อมูลไม่ครบถ้วน' ">
-                  <v-btn color="red">{{item.qCompanyStatus}}</v-btn>
+                <div v-else-if="item.qCompanyStatus === 'ข้อมูลไม่ครบถ้วน'">
+                  <v-btn color="red">{{ item.qCompanyStatus }}</v-btn>
                 </div>
               </template>
             </v-data-table>
@@ -52,7 +57,7 @@ import companydetail from "../quadetail/company_detail";
 
 export default {
   components: {
-    companydetail,
+    companydetail
   },
   data() {
     return {
@@ -68,19 +73,21 @@ export default {
           text: "หมายเลข",
           align: "start",
           sortable: true,
-          value: "qCompanyId",
+          value: "qCompanyId"
         },
         { text: "ชื่อผู้สั่ง", value: "qCompanyName" },
         { text: "นามสกุล", value: "qCompanyLast" },
         { text: "วันที่ขอใบเสนอราคา", value: "qCompanyDate" },
         { text: "สถานะ", value: "qCompanyStatus" },
-        { text: "รายละเอียด", value: "info" },
-      ],
+        { text: "รายละเอียด", value: "info" }
+      ]
     };
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
-    let res = await this.$http.get("/q_company");
+    let res = await this.$http.get(
+      `q_show/company?userid=${this.$nuxt.$auth.user[0].userid}`
+    );
     this.show = res.data.company;
   },
   methods: {
@@ -97,10 +104,10 @@ export default {
       // this.open = true;
       this.$router.push({
         name: "quatation-detail-quac",
-        params: { quaid: item.qCompanyId },
+        params: { quaid: item.qCompanyId }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

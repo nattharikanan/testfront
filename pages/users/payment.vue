@@ -1,11 +1,19 @@
 <template>
   <v-container>
-    <v-snackbar :color="coloralert" :value="alertstatus" :timeout="timeout" top>{{ alertMessage }}</v-snackbar>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top
+      >{{ alertMessage }}</v-snackbar
+    >
 
     <h3 :style="{ color: 'black' }">ชำระเงิน</h3>
     <v-breadcrumbs :items="items">
       <template v-slot:item="{ item }">
-        <v-breadcrumbs-item :to="item.to" :disabled="item.disabled">{{ item.text.toUpperCase() }}</v-breadcrumbs-item>
+        <v-breadcrumbs-item :to="item.to" :disabled="item.disabled">{{
+          item.text.toUpperCase()
+        }}</v-breadcrumbs-item>
       </template>
     </v-breadcrumbs>
     <div>
@@ -43,7 +51,7 @@
               <td>{{ item.quantity }}</td>
               <td>{{ item.unitprice }}</td>
               <td>฿{{ formatPrice(item.quantity * item.unitprice) }}</td>
-              <div class="hidden">{{setvalue(item.productid)}}</div>
+              <div class="hidden">{{ setvalue(item.productid) }}</div>
             </tr>
             <tr class="head">
               <th>รวม(ยังไม่รวมภาษีมูลค่าเพิ่ม 7%)</th>
@@ -63,7 +71,9 @@
               label="กรุณาเลือกการจัดส่ง"
             ></v-select>
           </v-container>
-          <v-btn v-for="(item, idx) in cartdetail" :key="idx" :to="item.to">ย้อนกลับ</v-btn>
+          <v-btn v-for="(item, idx) in cartdetail" :key="idx" :to="item.to"
+            >ย้อนกลับ</v-btn
+          >
           <v-btn color="green" @click="confirm()">สั่งสินค้า</v-btn>
         </v-flex>
       </v-container>
@@ -103,19 +113,19 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: "รายละเอียดตะกร้าสินค้า",
           disabled: false,
-          to: "/users/cartdetail",
+          to: "/users/cartdetail"
         },
         {
           text: "ชำระเงิน",
           disabled: false,
-          to: "/users/payment",
-        },
-      ],
+          to: "/users/payment"
+        }
+      ]
     };
   },
   async created() {
@@ -123,9 +133,9 @@ export default {
     let resship = await this.$http.get("/ship_medthod");
     // console.log(res.data);
     let temp = resship.data.ship_medthod;
-    this.ship_medthod = temp.map((c) => ({
+    this.ship_medthod = temp.map(c => ({
       name: c.shmName,
-      id: c.shmId,
+      id: c.shmId
     }));
   },
   async mounted() {
@@ -182,7 +192,7 @@ export default {
         tracking: this.tracking,
         shipMedthod: this.shmId,
         orderAddress: this.address,
-        netprice: this.netprice,
+        netprice: this.netprice
       });
       this.lastestordernum = order.data.lastesordernum[0];
       console.log("test1", this.lastestordernum);
@@ -190,12 +200,12 @@ export default {
       this.resetCart(this.productidvalue);
       this.$router.push({
         name: "users-po",
-        params: { orderq: this.lastestordernum },
+        params: { orderq: this.lastestordernum }
       });
     },
     async resetCart(id) {
       let res = await this.$http.post("/carts/delete", {
-        productid: id,
+        productid: id
       });
       if (!res.data.ok) {
         console.log("รีเซ็ทค่า");
@@ -217,8 +227,8 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-  },
+    }
+  }
 };
 </script>
 

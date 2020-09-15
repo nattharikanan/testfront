@@ -1,11 +1,19 @@
 <template>
   <v-flex>
-    <v-snackbar :color="coloralert" :value="alertstatus" :timeout="timeout" top>{{ alertMessage }}</v-snackbar>
+    <v-snackbar
+      :color="coloralert"
+      :value="alertstatus"
+      :timeout="timeout"
+      top
+      >{{ alertMessage }}</v-snackbar
+    >
     <v-card width="90%">
       <!-- <div class="overline mb-4">ข้อมูลของฉัน</div> -->
       <v-container>
         <v-list-item-title>ที่อยู่ของฉัน</v-list-item-title>
-        <v-list-item-subtitle>จัดการข้อมูลส่วนตัวคุณเพื่อความปลอดภัยของบัญชีผู้ใช้นี้</v-list-item-subtitle>
+        <v-list-item-subtitle
+          >จัดการข้อมูลส่วนตัวคุณเพื่อความปลอดภัยของบัญชีผู้ใช้นี้</v-list-item-subtitle
+        >
         <v-divider></v-divider>
         <v-container fluid>
           <v-row>
@@ -13,7 +21,7 @@
               <v-subheader>ชื่อ-นามสกุล</v-subheader>
             </v-col>
             <v-col cols="8">
-              <v-subheader>{{fullname}}</v-subheader>
+              <v-subheader>{{ fullname }}</v-subheader>
             </v-col>
           </v-row>
           <v-row>
@@ -21,7 +29,7 @@
               <v-subheader>เบอร์โทรศัพท์</v-subheader>
             </v-col>
             <v-col cols="8">
-              <v-subheader>{{phone}}</v-subheader>
+              <v-subheader>{{ phone }}</v-subheader>
             </v-col>
           </v-row>
           <!-- <v-row :style="{height : '80px'}">
@@ -36,7 +44,7 @@
       </v-col>
           </v-row>-->
 
-          <v-row :style="{height : '250px'}">
+          <v-row :style="{ height: '250px' }">
             <v-col cols="4">
               <v-subheader>ที่อยู่</v-subheader>
             </v-col>
@@ -49,20 +57,25 @@
                 v-model="address"
                 counter="200"
               ></v-textarea>
-              <v-btn color="primary" dark class="mb-2" @click="dialog=true">บันทึก</v-btn>
+              <v-btn color="primary" dark class="mb-2" @click="dialog = true"
+                >บันทึก</v-btn
+              >
               <v-dialog v-model="dialog" persistent max-width="350">
                 <v-card>
                   <v-card-title>ต้องการบันทึกข้อมูลใช่หรือไม่?</v-card-title>
                   <!-- เช็คก่อนออกจากระบบ -->
                   <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" text @click="updateinfo">ใช่</v-btn>
+                    <v-btn color="green darken-1" text @click="updateinfo"
+                      >ใช่</v-btn
+                    >
                     <v-btn
                       color="red darken-1"
                       rounded
-                      :style="{color:'white'}"
+                      :style="{ color: 'white' }"
                       @click="close"
-                    >ไม่ใช่</v-btn>
+                      >ไม่ใช่</v-btn
+                    >
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -88,7 +101,7 @@ export default {
       fullname: "",
       phone: "",
       address: "",
-      email: "",
+      email: ""
     };
   },
   mounted() {
@@ -108,7 +121,7 @@ export default {
         firstname: this.firstname,
         lastname: this.lastname,
         phone: this.phone,
-        address: this.address,
+        address: this.address
       });
       if (!res.data.ok) {
         console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
@@ -120,15 +133,18 @@ export default {
         this.alertstatus = true;
         (this.coloralert = "green lighten-2"),
           (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
+        this.refreshpage();
       }
       this.dialog = false;
     },
     close() {
       this.dialog = false;
     },
-  },
+    refreshpage() {
+      window.location.reload(true);
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

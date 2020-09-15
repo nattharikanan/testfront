@@ -17,7 +17,12 @@
       <v-spacer></v-spacer>
       <div row>
         <v-flex xs12>
-          <v-data-table :headers="headers" :search="search" class="elevation-1" :items="show">
+          <v-data-table
+            :headers="headers"
+            :search="search"
+            class="elevation-1"
+            :items="show"
+          >
             <template v-slot:item.paymentImage="{ item }">
               <div class="img">
                 <img :src="item.paymentImage" height="150px" width="150px" />
@@ -25,14 +30,20 @@
             </template>
 
             <template v-slot:item.paymentstatus="{ item }">
-              <div v-if="item.paymentstatus =='สำเร็จ' ">
-                <v-btn color="green" :style="{color:'white'}">{{item.paymentstatus}}</v-btn>
+              <div v-if="item.paymentstatus == 'สำเร็จ'">
+                <v-btn color="green" :style="{ color: 'white' }">{{
+                  item.paymentstatus
+                }}</v-btn>
               </div>
-              <div v-else-if="item.paymentstatus =='กำลังดำเนินการ' ">
-                <v-btn color="amber darken-2" :style="{color:'white'}">{{item.paymentstatus}}</v-btn>
+              <div v-else-if="item.paymentstatus == 'กำลังดำเนินการ'">
+                <v-btn color="amber darken-2" :style="{ color: 'white' }">{{
+                  item.paymentstatus
+                }}</v-btn>
               </div>
-              <div v-else-if="item.paymentstatus =='ไม่สำเร็จ' ">
-                <v-btn color="red darken-2" :style="{color:'white'}">{{item.paymentstatus}}</v-btn>
+              <div v-else-if="item.paymentstatus == 'ไม่สำเร็จ'">
+                <v-btn color="red darken-2" :style="{ color: 'white' }">{{
+                  item.paymentstatus
+                }}</v-btn>
               </div>
             </template>
 
@@ -52,7 +63,7 @@
 import updatepayment from "../../components/payment/updatepayment";
 export default {
   components: {
-    updatepayment,
+    updatepayment
   },
   data() {
     return {
@@ -67,7 +78,7 @@ export default {
           text: "ลำดับ",
           align: "start",
           sortable: true,
-          value: "paymentid",
+          value: "paymentid"
         },
         { text: "หมายเลขออเดอร์", value: "orderid" },
         { text: "วันที่โอน", value: "orderdate" },
@@ -75,11 +86,10 @@ export default {
         { text: "ชื่อผู้โอน", value: "transferName" },
         { text: "ธนาคารที่โอน", value: "bankName" },
         { text: "ยอดที่ต้องชำระ", value: "netprice" },
-        { text: "ยอดที่แจ้งชำระ", value: "totalprice" },
         { text: "หลักฐานการโอน", value: "paymentImage" },
         { text: "สถานะ", value: "paymentstatus" },
-        { text: "แก้ไข", value: "edit" },
-      ],
+        { text: "แก้ไข", value: "edit" }
+      ]
     };
   },
   async created() {
@@ -99,8 +109,8 @@ export default {
       this.id_delete = pid.orderid;
       this.b = true;
       console.log("hi", this.id_delete);
-    },
-  },
+    }
+  }
 };
 </script>
 
