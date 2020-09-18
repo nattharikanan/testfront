@@ -1,5 +1,10 @@
 <template>
-  <v-data-table :headers="headers" :items="show" :search="search" class="elevation-1">
+  <v-data-table
+    :headers="headers"
+    :items="show"
+    :search="search"
+    class="elevation-1"
+  >
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>ข้อมูลสินค้า</v-toolbar-title>
@@ -15,7 +20,9 @@
 
         <v-dialog v-model="dialog" max-width="500px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mb-2" v-on="on">เพิ่มสินค้า</v-btn>
+            <v-btn color="primary" dark class="mb-2" v-on="on"
+              >เพิ่มสินค้า</v-btn
+            >
           </template>
           <v-card>
             <v-card-title>
@@ -23,25 +30,7 @@
             </v-card-title>
 
             <v-card-text>
-              <v-container>
-                <!-- <v-row>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.name" label="Dessert name"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.calories" label="Calories"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.fat" label="Fat (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.carbs" label="Carbs (g)"></v-text-field>
-                  </v-col>
-                  <v-col cols="12" sm="6" md="4">
-                    <v-text-field v-model="editedItem.protein" label="Protein (g)"></v-text-field>
-                  </v-col>
-                </v-row>-->
-              </v-container>
+              <v-container> </v-container>
             </v-card-text>
 
             <v-card-actions>
