@@ -28,15 +28,8 @@
               <!-- เช็คก่อนออกจากระบบ -->
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red darken-1" text @click="dialog = false"
-                  >ไม่ใช่</v-btn
-                >
-                <v-btn
-                  color="green darken-1"
-                  text
-                  @click="$auth.logout(), (dialog = false)"
-                  >ใช่</v-btn
-                >
+                <v-btn color="red darken-1" text @click="dialog = false">ไม่ใช่</v-btn>
+                <v-btn color="green darken-1" text @click="$auth.logout(), (dialog = false)">ใช่</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -62,9 +55,7 @@
               <!-- เช็คก่อนออกจากระบบ -->
               <v-card-actions>
                 <v-spacer></v-spacer>
-                <v-btn color="red darken-1" text @click="dialog = false"
-                  >ไม่ใช่</v-btn
-                >
+                <v-btn color="red darken-1" text @click="dialog = false">ไม่ใช่</v-btn>
                 <v-btn color="green darken-1" text @click="logout()">ใช่</v-btn>
               </v-card-actions>
             </v-card>
@@ -83,8 +74,7 @@
             :key="idx"
             :to="item.to"
             exact
-            >{{ item.title }}</v-btn
-          >
+          >{{ item.title }}</v-btn>
         </div>
       </div>
       <div
@@ -97,18 +87,14 @@
         v-if="$auth.loggedIn && $auth.user[0].status == 'user'"
         @click="$event.stopPropagation()"
       >
-        <v-icon class="ml-3" @click="gotoquo()" size="25px"
-          >mdi-clipboard-text-outline</v-icon
-        >
+        <v-icon class="ml-3" @click="gotoquo()" size="25px">mdi-clipboard-text-outline</v-icon>
         <!-- <quotation /> -->
       </div>
       <v-spacer></v-spacer>
       <template v-slot:extension>
         <v-tabs align-with-title>
           <v-tabs-slider color="yellow"></v-tabs-slider>
-          <v-tab v-for="(item, idx) in items" :key="idx" :to="item.to" exact>
-            {{ item.title }}
-          </v-tab>
+          <v-tab v-for="(item, idx) in items" :key="idx" :to="item.to" exact>{{ item.title }}</v-tab>
         </v-tabs>
       </template>
     </v-toolbar>
@@ -122,7 +108,7 @@ import quotation from "../quotation/quotation";
 export default {
   components: {
     cart,
-    quotation
+    quotation,
   },
   data() {
     return {
@@ -135,13 +121,14 @@ export default {
         { title: "เกี่ยวกับเรา", to: { name: "index" } },
         { title: "สินค้า", to: { name: "product" } },
         { title: "วิธีการสั่งซื้อ", to: { name: "howto" } },
+        { title: "ช่องทางการชำระเงิน", to: { name: "paymentdetail" } },
         { title: "แจ้งชำระเงิน", to: { name: "payment" } },
-        { title: "ติดตามพัสดุ", to: { name: "tracking" } }
+        { title: "ติดตามพัสดุ", to: { name: "tracking" } },
       ],
       itembar: [
         { title: "เข้าสู่ระบบ", to: { name: "users-login" } },
-        { title: "สมัครสมาชิก", to: { name: "users-register" } }
-      ]
+        { title: "สมัครสมาชิก", to: { name: "users-register" } },
+      ],
     };
   },
   computed: {},
@@ -152,14 +139,14 @@ export default {
       } else {
         this.$router.push({
           name: "users-profile",
-          params: { tabs: 4 }
+          params: { tabs: 4 },
         });
       }
     },
     gotoprofile() {
       this.$router.push({
         name: "users-profile",
-        params: { tabs: 0 }
+        params: { tabs: 0 },
       });
     },
     logout() {
@@ -171,8 +158,8 @@ export default {
       }
       // this.$store.dispatch("resetState");
       // dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

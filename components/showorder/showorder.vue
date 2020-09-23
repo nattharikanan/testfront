@@ -38,6 +38,9 @@
               <div v-if="item.orderStatus ==='รอการชำระเงิน' ">
                 <v-btn color="yellow">{{item.orderStatus}}</v-btn>
               </div>
+              <div v-if="item.orderStatus ==='กำลังดำเนินการ' ">
+                <v-btn color="blue lighten-3">{{item.orderStatus}}</v-btn>
+              </div>
               <div v-else-if="item.orderStatus ==='กำลังจัดส่ง' ">
                 <v-btn color="orange">{{item.orderStatus}}</v-btn>
               </div>
@@ -45,6 +48,9 @@
                 <v-btn color="green">{{item.orderStatus}}</v-btn>
               </div>
               <div v-else-if="item.orderStatus ==='ยกเลิก' ">
+                <v-btn color="red">{{item.orderStatus}}</v-btn>
+              </div>
+              <div v-else-if="item.orderStatus ==='การชำระเงินไม่สำเร็จ' ">
                 <v-btn color="red">{{item.orderStatus}}</v-btn>
               </div>
             </template>

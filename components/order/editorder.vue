@@ -65,7 +65,13 @@ export default {
         orderstatus: "",
       },
 
-      status: ["รอการชำระเงิน", "กำลังจัดส่ง", "สำเร็จ", "ยกเลิก"],
+      status: [
+        "รอการชำระเงิน",
+        "กำลังจัดส่ง",
+        "สำเร็จ",
+        "การชำระเงินไม่สำเร็จ",
+        "ยกเลิก",
+      ],
     };
   },
   watch: {
@@ -88,7 +94,7 @@ export default {
     async updateorder() {
       //update สินค้า
       this.dialog = true;
-      console.log("test update", this.form.orderid);
+      console.log("test update", this.form.orderstatus);
 
       let res = await this.$http.post("/orders/update", {
         orderid: this.form.orderid,
@@ -97,11 +103,11 @@ export default {
       });
       if (!res.data.ok) {
         console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
+
         window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
       } else {
         console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
+
         window.alert("Insert Successful!");
         this.$emit("close");
       }

@@ -4,9 +4,7 @@
       <!-- <div class="overline mb-4">ข้อมูลของฉัน</div> -->
       <v-container>
         <v-list-item-title>รายการสั่งซื้อของฉัน</v-list-item-title>
-        <v-list-item-subtitle
-          >จัดการข้อมูลส่วนตัวคุณเพื่อความปลอดภัยของบัญชีผู้ใช้นี้</v-list-item-subtitle
-        >
+        <v-list-item-subtitle>จัดการข้อมูลส่วนตัวคุณเพื่อความปลอดภัยของบัญชีผู้ใช้นี้</v-list-item-subtitle>
         <v-divider></v-divider>
 
         <!-- <editorder :toggle="a" @close="a = false" :sendvalue="send" />
@@ -25,12 +23,7 @@
         <v-spacer></v-spacer>
         <div row>
           <v-flex xs12>
-            <v-data-table
-              :headers="headers"
-              :search="search"
-              class="elevation-1"
-              :items="show"
-            >
+            <v-data-table :headers="headers" :search="search" class="elevation-1" :items="show">
               <template v-slot:item.orderid="{ item }">
                 <nuxt-link
                   :to="{
@@ -54,14 +47,25 @@
                 <div v-if="item.orderStatus === 'รอการชำระเงิน'">
                   <v-btn color="yellow">{{ item.orderStatus }}</v-btn>
                 </div>
+                <div v-if="item.orderStatus === 'กำลังดำเนินการ'">
+                  <v-btn color="blue lighten-3">{{ item.orderStatus }}</v-btn>
+                </div>
                 <div v-else-if="item.orderStatus === 'กำลังจัดส่ง'">
                   <v-btn color="orange">{{ item.orderStatus }}</v-btn>
                 </div>
                 <div v-else-if="item.orderStatus === 'สำเร็จ'">
                   <v-btn color="green">{{ item.orderStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.orderStatus === 'ยกเลิก'">
+                <div v-else-if="item.orderStatus === 'การชำระเงินไม่สำเร็จ'">
                   <v-btn color="red">{{ item.orderStatus }}</v-btn>
+                </div>
+              </template>
+              <template v-slot:item.payment="{ item }">
+                <div v-if="item.orderStatus === 'รอการชำระเงิน'">
+                  <v-btn @click="TogglePayment(item)">คลิก</v-btn>
+                </div>
+                <div v-else>
+                  <v-btn disabled>คลิก</v-btn>
                 </div>
               </template>
             </v-data-table>
@@ -88,13 +92,14 @@ export default {
           text: "หมายเลขคำสั่งซื้อ (คลิกเพื่อดูข้อมูลเพิ่มเติม)",
           align: "start",
           sortable: false,
-          value: "orderid"
+          value: "orderid",
         },
         { text: "วันที่สั่งสินค้า", value: "orderdate" },
         { text: "เลขพัสดุ", value: "tracking" },
-        { text: "สถานะ", value: "orderStatus" }
+        { text: "สถานะคำสั่งซื้อ", value: "orderStatus" },
+        { text: "ชำระเงิน", value: "payment" },
         // { text: "แก้ไข", value: "edit" },
-      ]
+      ],
     };
   },
   async created() {
@@ -116,8 +121,15 @@ export default {
       this.id_delete = pid.orderid;
       this.b = true;
       console.log("hi", this.id_delete);
-    }
-  }
+    },
+    TogglePayment(pid) {
+      console.log("hi", pid.orderid);
+      this.$router.push({
+        name: "payment",
+        params: { orderid: pid.orderid },
+      });
+    },
+  },
 };
 </script>
 
