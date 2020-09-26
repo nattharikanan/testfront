@@ -5,6 +5,14 @@
     :search="search"
     class="elevation-1"
   >
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-toolbar-title>ข้อมูลสินค้า</v-toolbar-title>
@@ -55,6 +63,10 @@
 <script>
 export default {
   data: () => ({
+    coloralert: "",
+    alertstatus: false,
+    alertMessage: "",
+    timeout: 2000,
     search: "",
     dialog: false,
     editedIndex: -1,
@@ -123,12 +135,13 @@ export default {
         productimage: this.productimage
       });
       if (!res.data.ok) {
-        console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
+        this.coloralert = "green";
+        (this.alertstatus = true),
+          (this.alertMessage = "เพิ่มข้อมูลสินค้าสำเร็จ");
       }
     },
     async getProduct() {

@@ -27,7 +27,7 @@
 
       <div class="text-center">
         <h5 :style="{ paddingTop: '20px' }">
-          <b>ใบขอเสนอราคานิติบุคคลเลขที่ {{this.$route.params.quaid}}</b>
+          <b>ใบขอเสนอราคาเลขที่ {{ this.$route.params.quaid }}</b>
         </h5>
       </div>
       <v-layout row>
@@ -52,7 +52,7 @@
             {{ this.sendvalue.qNormalId }}
             <br />
             <b>วันที่สั่งซื้อ :</b>
-            {{this.sendvalue.qNormalDate}}
+            {{ this.sendvalue.qNormalDate }}
             <br />
             <b>เวลา :</b>
             {{ this.sendvalue.qNormalTime }}
@@ -73,14 +73,13 @@
         }"
         class="text-center"
       >
-        <table border :style="{ width: '100%', height: '50%'}">
+        <table border :style="{ width: '100%', height: '50%' }">
           <tr>
-            <th :style="{background:'cyan' }">หมายเลขสินค้า</th>
-            <th :style="{background:'cyan' }">สินค้า</th>
+            <th :style="{ background: 'cyan' }">หมายเลขสินค้า</th>
+            <th :style="{ background: 'cyan' }">สินค้า</th>
             <!-- <th>รูปสินค้า</th> -->
-            <th :style="{background:'cyan' }">จำนวน</th>
-            <th :style="{background:'cyan' }">หน่วย</th>
-            <th :style="{background:'cyan' }">ตารางเมตร</th>
+            <th :style="{ background: 'cyan' }">จำนวน</th>
+            <th :style="{ background: 'cyan' }">หน่วย</th>
           </tr>
           <tr>
             <td>{{ this.sendvalue.qNormalProductid }}</td>
@@ -88,12 +87,15 @@
             <!-- <td>
                 <img :src="item.productimage" />
             </td>-->
-            <td>{{ this.sendvalue.qNormalQuantity }}</td>
-            <td>{{ this.sendvalue.qNormalUnittype }}</td>
             <td>
-              <div v-if="this.sendvalue.qNormalSquaremetre == 0">-</div>
-              <div v-else>{{ this.sendvalue.qNormalSquaremetre }}</div>
+              <div v-if="this.sendvalue.qNormalQuantity === 0">
+                {{ this.sendvalue.qNormalSquaremetre }}
+              </div>
+              <div v-else>
+                {{ this.sendvalue.qNormalQuantity }}
+              </div>
             </td>
+            <td>{{ this.sendvalue.qNormalUnittype }}</td>
           </tr>
         </table>
       </v-flex>
@@ -106,9 +108,14 @@
           <ul>
             <li>
               <div
-                v-if="this.sendvalue.qNormalInfo =='' || this.sendvalue.qNormalInfo == null"
-              >ไม่มี</div>
-              <div v-else>{{this.sendvalue.qNormalInfo}}</div>
+                v-if="
+                  this.sendvalue.qNormalInfo == '' ||
+                    this.sendvalue.qNormalInfo == null
+                "
+              >
+                ไม่มี
+              </div>
+              <div v-else>{{ this.sendvalue.qNormalInfo }}</div>
             </li>
           </ul>
         </v-flex>
@@ -124,13 +131,13 @@ export default {
   data() {
     return {
       sendvalue: {},
-      cartdetail: [{ to: "/admin/insertp" }],
+      cartdetail: [{ to: "/admin/insertp" }]
     };
   },
 
   async created() {
     let res = await this.$http.get("/q_show/normal/show", {
-      params: { qNormalId: this.$route.params.quaid },
+      params: { qNormalId: this.$route.params.quaid }
     });
     console.log("see data normal", res.data.normal[0]);
     this.sendvalue = res.data.normal[0];
@@ -138,7 +145,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: "index",
+        name: "index"
       });
     },
     refreshpage() {
@@ -152,8 +159,8 @@ export default {
       document.title = "ใบเสนอราคา.pdf";
       window.print();
       document.title = tempTitle;
-    },
-  },
+    }
+  }
 };
 </script>
 

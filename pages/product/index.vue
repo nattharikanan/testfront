@@ -5,10 +5,17 @@
       @close="dialog = false"
       :pidq="getpid"
       :pnameq="getpname"
+      :punitq="getpunit"
       @submited="gotopage"
     />
 
-    <v-snackbar :color="coloralert" v-model="alertstatus" :timeout="timeout" top>{{ alertMessage }}</v-snackbar>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top
+      >{{ alertMessage }}</v-snackbar
+    >
     <v-app class="app">
       <v-content>
         <v-container fluid ma-0 pa-0 fill-height>
@@ -17,7 +24,11 @@
               <v-container>
                 <v-card width="400">
                   <v-list-item class="blue lighten-4">ประเภทสินค้า</v-list-item>
-                  <v-list-item v-for="c in categories" :key="c.id" @click="categorySelect(c.id)">
+                  <v-list-item
+                    v-for="c in categories"
+                    :key="c.id"
+                    @click="categorySelect(c.id)"
+                  >
                     <v-list-item-title>{{ c.name }}</v-list-item-title>
                   </v-list-item>
                 </v-card>
@@ -87,9 +98,7 @@
                         }"
                       >
                         <v-list-item-title :style="{ marginLeft: '10px' }">
-                          {{
-                          p.productname
-                          }}
+                          {{ p.productname }}
                         </v-list-item-title>
                       </nuxt-link>
                       <v-list-item-subtitle :style="{ marginLeft: '10px' }">
@@ -109,8 +118,12 @@
                           <v-icon color="amber darken-2">mdi-cart-off</v-icon>
                         </h6>
                       </div>
-                      <div v-else-if="p.productstatus == 'สินค้ายกเลิกการจำหน่าย'">
-                        <h6 :style="{ color: 'red', marginLeft: '10px' }">{{ p.productstatus }}</h6>
+                      <div
+                        v-else-if="p.productstatus == 'สินค้ายกเลิกการจำหน่าย'"
+                      >
+                        <h6 :style="{ color: 'red', marginLeft: '10px' }">
+                          {{ p.productstatus }}
+                        </h6>
                       </div>
                     </v-list-item-content>
 
@@ -119,18 +132,21 @@
                   </v-list-item>
 
                   <v-card-actions class="addbutton">
-                    <div v-if="p.weight > 25">
+                    <div v-if="p.weight > 25 || p.unit === 'JOB'">
                       <v-btn
                         class="buttonwidth"
                         color="warning"
-                        @click="addToQuo(p.productid,p.productname)"
-                      >ขอใบเสนอราคา</v-btn>
+                        @click="addToQuo(p.productid, p.productname, p.unit)"
+                        >ขอใบเสนอราคา</v-btn
+                      >
                     </div>
                     <div v-else>
                       <div v-if="p.productstatus == 'สินค้าหมดชั่วคราว'">
                         <v-btn disabled class="buttonwidth">สินค้าหมด</v-btn>
                       </div>
-                      <div v-else-if="p.productstatus == 'สินค้ายกเลิกการจำหน่าย'">
+                      <div
+                        v-else-if="p.productstatus == 'สินค้ายกเลิกการจำหน่าย'"
+                      >
                         <v-btn disabled class="buttonwidth">ใส่ตะกร้า</v-btn>
                       </div>
                       <div v-else-if="p.productstatus == 'พร้อมส่ง'">
@@ -138,7 +154,8 @@
                           class="buttonwidth"
                           color="success"
                           @click="addToCart(p.productid), (alertstatus = true)"
-                        >ใส่รถเข็น</v-btn>
+                          >ใส่รถเข็น</v-btn
+                        >
                       </div>
                     </div>
 
@@ -174,15 +191,15 @@ import { tr } from "date-fns/locale";
 
 const cartService = new CartProvider();
 
-const delay = (timeout) => {
-  return new Promise((resolve) => {
+const delay = timeout => {
+  return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
 };
 
 export default {
   components: {
-    askbefore,
+    askbefore
   },
   name: "product",
   props: ["product"],
@@ -202,6 +219,7 @@ export default {
       cartLengthTemp: 0,
       getpid: "",
       getpname: "",
+      getpunit: ""
     };
   },
 
@@ -209,9 +227,9 @@ export default {
     let res = await this.$http.get("/categories");
     console.log("respond", res.data);
     let temp = res.data.categories;
-    this.categories = temp.map((c) => ({
+    this.categories = temp.map(c => ({
       name: c.categoryname,
-      id: c.categoryid,
+      id: c.categoryid
     }));
     this.getProduct();
   },
@@ -226,37 +244,33 @@ export default {
   },
 
   methods: {
-    gotopage(pid, form, pname) {
+    gotopage(pid, form, pname, punit) {
       if (form == 1) {
         this.$router.push({
           name: "quatation-quatation_form",
-          params: { pidq: pid, pnameq: pname },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       } else if (form == 2) {
         this.$router.push({
           name: "quatation-personal_form",
-          params: { pidq: pid, pnameq: pname },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       } else if (form == 3) {
         this.$router.push({
           name: "quatation-company_form",
-          params: { pidq: pid, pnameq: pname },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       }
     },
-    addToQuo(pid, pname) {
+    addToQuo(pid, pname, punit) {
       if ($nuxt.$auth.loggedIn == false) {
         this.$router.push("/users/login");
       } else {
         this.dialog = true;
         this.getpid = pid.toString();
         this.getpname = pname;
+        this.getpunit = punit;
       }
-
-      // this.$router.push({
-      //   name: "quatation-form",
-      //   params: { pidq: pid, toggle: true },
-      // });
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
@@ -264,7 +278,7 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
+        params: { categoryid: this.categoryid }
       });
       console.log(res.data);
       this.products = res.data.products;
@@ -279,7 +293,7 @@ export default {
     async handleClicked() {
       console.log("FROM ENTER", this.search);
       let res = await this.$http.get("/product/search", {
-        params: { productname: this.search },
+        params: { productname: this.search }
       });
       console.log(res.data);
       this.products = res.data.products;
@@ -289,18 +303,18 @@ export default {
         this.$router.push("/users/login");
       } else {
         let res = await this.$http.get("/product", {
-          params: { productid: id },
+          params: { productid: id }
         });
         let uid = $nuxt.$auth.user[0].userid;
         let resuser = await this.$http.get("/users", {
-          params: { userid: uid },
+          params: { userid: uid }
         });
 
         this.selected = res.data.products;
         let testapi = await CartController.addToCart({
           id,
           quantity: 1,
-          uid,
+          uid
         });
 
         // console.log("test api",testapi)
@@ -328,8 +342,8 @@ export default {
       let uid = this.$nuxt.$auth.user[0].userid;
       let resCart = await CartController.getCartById(uid);
       this.$store.dispatch("setCartLength", cartLength);
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <v-dialog v-model="show" max-width="500px" persistent>
       <v-card>
         <v-card-title>
@@ -57,6 +65,10 @@ export default {
     return {
       regisstatus: "",
       coloralert: "",
+      alertstatus: false,
+      alertMessage: "",
+      timeout: 2000,
+
       dialog: false,
       form: {
         shmName: "",
@@ -84,11 +96,13 @@ export default {
         shmName: this.form.shmName
       });
       if (!res.data.ok) {
-        console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        window.alert("update Successful!");
+        this.coloralert = "green";
+        (this.alertstatus = true), (this.alertMessage = "แก้ไขสำเร็จ");
+
         this.$emit("close");
       }
     },

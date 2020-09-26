@@ -1,5 +1,14 @@
 <template>
   <v-layout class="details">
+    <askbefore
+      :toggle="dialog"
+      @close="dialog = false"
+      :pidq="getpid"
+      :pnameq="getpname"
+      :punitq="getpunit"
+      @submited="gotopage"
+    />
+
     <v-container>
       <v-card
         full-height="900px"
@@ -21,7 +30,9 @@
           <div class="paragraph">
             <h2>{{ dt.productname }}</h2>
             <br />
-            <h4 class="price" style="color:#F39C12">฿ {{ formatPrice(dt.unitprice) }}</h4>
+            <h4 class="price" style="color:#F39C12">
+              ฿ {{ formatPrice(dt.unitprice) }}
+            </h4>
             <br />
             <h6>หมายเหตุสินค้า : {{ dt.notation }}</h6>
             <br />
@@ -34,27 +45,34 @@
                 :to="item.to"
                 color="warning"
                 :style="{ width: '200px', height: '60px' }"
-              >ย้อนกลับ</v-btn>
+                >ย้อนกลับ</v-btn
+              >
               <div v-if="dt.weight > 25">
                 <v-btn
                   color="green"
                   :style="{ width: '200px', height: '60px' }"
-                  @click="addToQuo()"
-                >ขอใบเสนอราคา</v-btn>
+                  @click="addToQuo(dt.productid, dt.productname, dt.unit)"
+                  >ขอใบเสนอราคา</v-btn
+                >
               </div>
               <div v-else>
                 <div v-if="dt.productstatus == 'สินค้าหมดชั่วคราว'">
-                  <v-btn :style="{ width: '200px', height: '60px' }" disabled>สินค้าหมดชั่วคราว</v-btn>
+                  <v-btn :style="{ width: '200px', height: '60px' }" disabled
+                    >สินค้าหมดชั่วคราว</v-btn
+                  >
                 </div>
                 <div v-else-if="dt.productstatus == 'สินค้ายกเลิกการจำหน่าย'">
-                  <v-btn :style="{ width: '200px', height: '60px' }" disabled>สินค้ายกเลิกการจำหน่าย</v-btn>
+                  <v-btn :style="{ width: '200px', height: '60px' }" disabled
+                    >สินค้ายกเลิกการจำหน่าย</v-btn
+                  >
                 </div>
                 <div v-else>
                   <v-btn
                     color="success"
                     :style="{ width: '200px', height: '60px' }"
                     @click="addToCart(dt.productid)"
-                  >หยิบใส่รถเข็น</v-btn>
+                    >หยิบใส่รถเข็น</v-btn
+                  >
                 </div>
               </div>
             </v-card-actions>
@@ -67,10 +85,18 @@
 
 <script>
 import CartController from "@/utils/cart_controller";
+import askbefore from "@/components/quatation/askbefore";
 export default {
+  components: {
+    askbefore
+  },
   data() {
     return {
+      dialog: false,
       product: [{ to: "/product" }],
+      getpid: "",
+      getpname: "",
+      getpunit: ""
     };
   },
   validate({ params }) {
@@ -82,14 +108,39 @@ export default {
     productg() {
       return this.$store.state.productg;
       console.log("test", this.$store.state.productg);
-    },
+    }
   },
   mounted() {
     this.$store.dispatch("getProduct", this.$route.params.id);
   },
   methods: {
-    addToQuo() {
-      console.log("ขอใบเสนอราคา");
+    gotopage(pid, form, pname, punit) {
+      if (form == 1) {
+        this.$router.push({
+          name: "quatation-quatation_form",
+          params: { pidq: pid, pnameq: pname, punitq: punit }
+        });
+      } else if (form == 2) {
+        this.$router.push({
+          name: "quatation-personal_form",
+          params: { pidq: pid, pnameq: pname, punitq: punit }
+        });
+      } else if (form == 3) {
+        this.$router.push({
+          name: "quatation-company_form",
+          params: { pidq: pid, pnameq: pname, punitq: punit }
+        });
+      }
+    },
+    addToQuo(pid, pname, punit) {
+      if ($nuxt.$auth.loggedIn == false) {
+        this.$router.push("/users/login");
+      } else {
+        this.dialog = true;
+        this.getpid = pid.toString();
+        this.getpname = pname;
+        this.getpunit = punit;
+      }
     },
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
@@ -100,18 +151,18 @@ export default {
         this.$router.push("/users/login");
       } else {
         let res = await this.$http.get("/product", {
-          params: { productid: id },
+          params: { productid: id }
         });
         let uid = $nuxt.$auth.user[0].userid;
         let resuser = await this.$http.get("/users", {
-          params: { userid: uid },
+          params: { userid: uid }
         });
 
         this.selected = res.data.products;
         let testapi = await CartController.addToCart({
           id,
           quantity: 1,
-          uid,
+          uid
         });
         // console.log("test api",testapi)
         // let cartLength = await CartController.getCartLength(this.$nuxt.$auth.user[0].userid);
@@ -127,8 +178,8 @@ export default {
         // let cartlength = await cartService.getCartLength(this.$nuxt.$auth.user[0].userid)
         // this.$store.dispatch("setCartLength", cartlength.carts[0].length);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

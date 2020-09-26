@@ -27,7 +27,7 @@
 
       <div class="text-center">
         <h5 :style="{ paddingTop: '20px' }">
-          <b>ใบขอเสนอราคาทั่วไปเลขที่ {{this.$route.params.quaid}}</b>
+          <b>ใบขอเสนอราคานิติบุคลเลขที่ {{ this.$route.params.quaid }}</b>
         </h5>
       </div>
       <v-layout row>
@@ -40,7 +40,7 @@
             {{ this.sendvalue.qPersonalAddressDelivery }}
             <br />
             <b>ที่อยู่ออกใบกำกับภาษี :</b>
-            {{ this.sendvalue.qPersonalAddress}}
+            {{ this.sendvalue.qPersonalAddress }}
             <br />
             <b>เบอร์โทร :</b>
             {{ this.sendvalue.qPersonalPhone }}
@@ -55,7 +55,7 @@
             {{ this.sendvalue.qPersonalId }}
             <br />
             <b>วันที่สั่งซื้อ :</b>
-            {{this.sendvalue.qPersonalDate}}
+            {{ this.sendvalue.qPersonalDate }}
             <br />
             <b>เวลา :</b>
             {{ this.sendvalue.qPersonalTime }}
@@ -79,14 +79,13 @@
         }"
         class="text-center"
       >
-        <table border :style="{ width: '100%', height: '50%'}">
+        <table border :style="{ width: '100%', height: '50%' }">
           <tr>
-            <th :style="{background:'cyan' }">หมายเลขสินค้า</th>
-            <th :style="{background:'cyan' }">สินค้า</th>
+            <th :style="{ background: 'cyan' }">หมายเลขสินค้า</th>
+            <th :style="{ background: 'cyan' }">สินค้า</th>
             <!-- <th>รูปสินค้า</th> -->
-            <th :style="{background:'cyan' }">จำนวน</th>
-            <th :style="{background:'cyan' }">หน่วย</th>
-            <th :style="{background:'cyan' }">ตารางเมตร</th>
+            <th :style="{ background: 'cyan' }">จำนวน</th>
+            <th :style="{ background: 'cyan' }">หน่วย</th>
           </tr>
           <tr>
             <td>{{ this.sendvalue.qPersonalProductid }}</td>
@@ -94,12 +93,15 @@
             <!-- <td>
                 <img :src="item.productimage" />
             </td>-->
-            <td>{{ this.sendvalue.qPersonalQuantity }}</td>
-            <td>{{ this.sendvalue.qPeronalUnittype }}</td>
             <td>
-              <div v-if="this.sendvalue.qPersonalSquaremetre == 0">-</div>
-              <div v-else>{{ this.sendvalue.qPersonalSquaremetre }}</div>
+              <div v-if="this.sendvalue.qPersonalQuantity === 0">
+                {{ this.sendvalue.qPersonalSquaremetre }}
+              </div>
+              <div v-else>
+                {{ this.sendvalue.qPersonalQuantity }}
+              </div>
             </td>
+            <td>{{ this.sendvalue.qPeronalUnittype }}</td>
           </tr>
         </table>
       </v-flex>
@@ -122,13 +124,13 @@ export default {
   data() {
     return {
       sendvalue: {},
-      cartdetail: [{ to: "/admin/insertp" }],
+      cartdetail: [{ to: "/admin/insertp" }]
     };
   },
 
   async created() {
     let res = await this.$http.get("/q_show/personal/show", {
-      params: { qPersonalId: this.$route.params.quaid },
+      params: { qPersonalId: this.$route.params.quaid }
     });
     console.log("see data Personal", res.data.personal[0]);
     this.sendvalue = res.data.personal[0];
@@ -136,7 +138,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: "index",
+        name: "index"
       });
     },
     refreshpage() {
@@ -150,8 +152,8 @@ export default {
       document.title = "ใบเสนอราคา.pdf";
       window.print();
       document.title = tempTitle;
-    },
-  },
+    }
+  }
 };
 </script>
 

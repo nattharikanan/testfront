@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <v-dialog v-model="show" max-width="500px" persistent>
       <v-card>
         <v-card-title>
@@ -11,7 +19,11 @@
             แก้ไขประเภทสินค้า
             <v-row>
               <v-col cols="12">
-                <v-text-field v-model="form.categoryname" required label="ชื่อประเภทสินค้า"></v-text-field>
+                <v-text-field
+                  v-model="form.categoryname"
+                  required
+                  label="ชื่อประเภทสินค้า"
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -19,13 +31,16 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="updateCategory()">บันทึก</v-btn>
+          <v-btn color="blue darken-1" text @click="updateCategory()"
+            >บันทึก</v-btn
+          >
           <v-btn
             color="blue darken-1"
             rounded
-            :style="{color:'white'}"
+            :style="{ color: 'white' }"
             @click="() => $emit('close')"
-          >ยกเลิก</v-btn>
+            >ยกเลิก</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -37,33 +52,36 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false,
+      default: false
     },
     sendvalue: {
       type: Object,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
   data() {
     return {
       regisstatus: "",
       coloralert: "",
+      alertstatus: false,
+      alertMessage: "",
+      timeout: 2000,
       dialog: false,
       form: {
         categoryid: "",
-        categoryname: "",
-      },
+        categoryname: ""
+      }
     };
   },
   watch: {
     show() {
       this.form = this.sendvalue;
-    },
+    }
   },
   computed: {
     show() {
       return this.toggle;
-    },
+    }
   },
 
   async created() {
@@ -77,30 +95,28 @@ export default {
       this.dialog = true;
       let res = await this.$http.post("/categories/update", {
         categoryid: this.form.categoryid,
-        categoryname: this.form.categoryname,
+        categoryname: this.form.categoryname
       });
       if (!res.data.ok) {
-        console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
-        window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
+        this.coloralert = "red";
+        (this.alertstatus = true), (this.alertMessage = "แก้ไขข้อมูลถูกต้อง");
         this.$emit("close");
       }
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
+        params: { categoryid: this.categoryid }
       });
     },
     close() {
       this.dialog = false;
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

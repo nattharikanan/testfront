@@ -6,9 +6,18 @@
         <!-- เช็คก่อนออกจากระบบ -->
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="orange darken-1" text @click="without(),($emit('close'))">ไม่ต้องการ</v-btn>
-          <v-btn color="green darken-1" text @click="seconddialog(),($emit('close'))">ใช่</v-btn>
-          <v-btn color="red darken-1" text @click="() => $emit('close')">ยกเลิก</v-btn>
+          <v-btn color="orange darken-1" text @click="without(), $emit('close')"
+            >ไม่ต้องการ</v-btn
+          >
+          <v-btn
+            color="green darken-1"
+            text
+            @click="seconddialog(), $emit('close')"
+            >ใช่</v-btn
+          >
+          <v-btn color="red darken-1" text @click="() => $emit('close')"
+            >ยกเลิก</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -18,7 +27,7 @@
       <v-card>
         <v-card-title class="text-center">
           ท่านต้องการออกใบกำกับภาษีรูปแบบใด ?
-          <div :style="{paddingLeft:'100px'}">
+          <div :style="{ paddingLeft: '100px' }">
             <v-radio-group v-model="radios" :mandatory="false" row>
               <v-radio label="บุคคล"></v-radio>
               <v-radio label="บริษัท"></v-radio>
@@ -29,8 +38,15 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="selecttype(),(dialog2 = false)">ตกลง</v-btn>
-          <v-btn color="red darken-1" text @click="(dialog2 = false)">ยกเลิก</v-btn>
+          <v-btn
+            color="green darken-1"
+            text
+            @click="selecttype(), (dialog2 = false)"
+            >ตกลง</v-btn
+          >
+          <v-btn color="red darken-1" text @click="dialog2 = false"
+            >ยกเลิก</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -43,29 +59,33 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false,
+      default: false
     },
     pidq: {
       type: String,
-      default: "",
+      default: ""
     },
     pnameq: {
       type: String,
-      default: "",
+      default: ""
     },
+    punitq: {
+      type: String,
+      default: ""
+    }
   },
   data() {
     return {
       radios: "",
       dialog2: false,
-      form: "",
+      form: ""
     };
   },
   watch: {},
   computed: {
     dialog() {
       return this.toggle;
-    },
+    }
   },
   methods: {
     selecttype() {
@@ -73,12 +93,12 @@ export default {
         console.log("บุคคล");
         this.form = 2;
 
-        this.$emit("submited", this.pidq, this.form, this.pnameq);
+        this.$emit("submited", this.pidq, this.form, this.pnameq, this.punitq);
       } else if (this.radios == 1) {
         console.log("บริษัท");
         this.form = 3;
 
-        this.$emit("submited", this.pidq, this.form, this.pnameq);
+        this.$emit("submited", this.pidq, this.form, this.pnameq, this.punitq);
       }
     },
     seconddialog() {
@@ -86,11 +106,10 @@ export default {
     },
     without() {
       this.form = 1;
-      this.$emit("submited", this.pidq, this.form, this.pnameq);
-    },
-  },
+      this.$emit("submited", this.pidq, this.form, this.pnameq, this.punitq);
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

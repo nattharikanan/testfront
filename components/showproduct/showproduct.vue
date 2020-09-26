@@ -1,7 +1,11 @@
 <template>
   <div>
     <editproduct :toggle="a" @close="a = false" :sendvalue="send" />
-    <deleteproduct :deletetoggle="b" @closed="b=false" :delete_id="id_delete" />
+    <deleteproduct
+      :deletetoggle="b"
+      @closed="b = false"
+      :delete_id="id_delete"
+    />
     <v-card>
       <v-card-title>
         ข้อมูลสินค้า
@@ -18,16 +22,27 @@
         <addproduct />
       </v-card-title>
 
-      <v-data-table :headers="headers" :search="search" :items="show" class="elevation-1">
+      <v-data-table
+        :headers="headers"
+        :search="search"
+        :items="show"
+        class="elevation-1"
+      >
         <template v-slot:item.productstatus="{ item }">
-          <div v-if="item.productstatus =='พร้อมส่ง' ">
-            <v-btn rounded color="green" :style="{color:'white'}">{{item.productstatus}}</v-btn>
+          <div v-if="item.productstatus == 'พร้อมส่ง'">
+            <v-btn rounded color="green" :style="{ color: 'white' }">{{
+              item.productstatus
+            }}</v-btn>
           </div>
-          <div v-else-if="item.productstatus =='สินค้าหมดชั่วคราว' ">
-            <v-btn rounded color="amber darken-2" :style="{color:'white'}">{{item.productstatus}}</v-btn>
+          <div v-else-if="item.productstatus == 'สินค้าหมดชั่วคราว'">
+            <v-btn rounded color="amber darken-2" :style="{ color: 'white' }">{{
+              item.productstatus
+            }}</v-btn>
           </div>
-          <div v-else-if="item.productstatus =='สินค้ายกเลิกการจำหน่าย' ">
-            <v-btn rounded color="red darken-2" :style="{color:'white'}">{{item.productstatus}}</v-btn>
+          <div v-else-if="item.productstatus == 'สินค้ายกเลิกการจำหน่าย'">
+            <v-btn rounded color="red darken-2" :style="{ color: 'white' }">{{
+              item.productstatus
+            }}</v-btn>
           </div>
         </template>
         <template v-slot:item.productimage="{ item }">
@@ -36,7 +51,7 @@
           </div>
         </template>
         <template v-slot:item.quotationStatus="{ item }">
-          <div v-if="item.quotationStatus == 'ขอใบเสนอราคา' ">
+          <div v-if="item.quotationStatus == 'ขอใบเสนอราคา'">
             <v-icon color="green">mdi-check-bold</v-icon>
           </div>
         </template>
@@ -63,7 +78,7 @@ export default {
   components: {
     addproduct,
     editproduct,
-    deleteproduct,
+    deleteproduct
   },
   data() {
     return {
@@ -87,7 +102,7 @@ export default {
           text: "ชื่อสินค้า",
           align: "start",
           sortable: false,
-          value: "productname",
+          value: "productname"
         },
         { text: "รหัสสินค้า", value: "productid" },
         { text: "ประเภทสินค้า", value: "categoryname" },
@@ -100,24 +115,25 @@ export default {
         { text: "ยาว", value: "length" },
         { text: "สูง", value: "height" },
         { text: "น้ำหนัก", value: "weight" },
-        { text: "แก้ไขสินค้า", value: "edit" },
-      ],
+        { text: "หน่วย", value: "unit" },
+        { text: "แก้ไขสินค้า", value: "edit" }
+      ]
     };
   },
   watch: {
     checkbox: {
       handler() {
         console.log("check", this.checkbox);
-      },
-    },
+      }
+    }
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
     let res = await this.$http.get("/categories");
     let temp = res.data.categories;
-    this.categories = temp.map((c) => ({
+    this.categories = temp.map(c => ({
       name: c.categoryname,
-      id: c.categoryid,
+      id: c.categoryid
     }));
     this.getProduct();
   },
@@ -134,12 +150,12 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
+        params: { categoryid: this.categoryid }
       });
 
       this.show = res.data.products;
-    },
-  },
+    }
+  }
 };
 </script>
 

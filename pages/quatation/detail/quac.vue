@@ -27,7 +27,7 @@
 
       <div class="text-center">
         <h5 :style="{ paddingTop: '20px' }">
-          <b>ใบขอเสนอราคาบริษัทเลขที่ {{this.$route.params.quaid}}</b>
+          <b>ใบขอเสนอราคาบริษัทเลขที่ {{ this.$route.params.quaid }}</b>
         </h5>
       </div>
       <v-layout row>
@@ -46,7 +46,7 @@
             {{ this.sendvalue.qCompanyAddressDelivery }}
             <br />
             <b>ที่อยู่ออกใบกำกับภาษี :</b>
-            {{ this.sendvalue.qCompanyAddress}}
+            {{ this.sendvalue.qCompanyAddress }}
             <br />
             <b>เบอร์โทร :</b>
             {{ this.sendvalue.qCompanyPhone }}
@@ -64,7 +64,7 @@
             {{ this.sendvalue.qCompanyTax }}
             <br />
             <b>วันที่สั่งซื้อ :</b>
-            {{this.sendvalue.qCompanyDate}}
+            {{ this.sendvalue.qCompanyDate }}
             <br />
             <b>เวลา :</b>
             {{ this.sendvalue.qCompanyTime }}
@@ -88,14 +88,13 @@
         }"
         class="text-center"
       >
-        <table border :style="{ width: '100%', height: '50%'}">
+        <table border :style="{ width: '100%', height: '50%' }">
           <tr>
-            <th :style="{background:'cyan' }">หมายเลขสินค้า</th>
-            <th :style="{background:'cyan' }">สินค้า</th>
+            <th :style="{ background: 'cyan' }">หมายเลขสินค้า</th>
+            <th :style="{ background: 'cyan' }">สินค้า</th>
             <!-- <th>รูปสินค้า</th> -->
-            <th :style="{background:'cyan' }">จำนวน</th>
-            <th :style="{background:'cyan' }">หน่วย</th>
-            <th :style="{background:'cyan' }">ตารางเมตร</th>
+            <th :style="{ background: 'cyan' }">จำนวน</th>
+            <th :style="{ background: 'cyan' }">หน่วย</th>
           </tr>
           <tr>
             <td>{{ this.sendvalue.qCompanyProductid }}</td>
@@ -103,12 +102,15 @@
             <!-- <td>
                 <img :src="item.productimage" />
             </td>-->
-            <td>{{ this.sendvalue.qCompanyQuantity }}</td>
-            <td>{{ this.sendvalue.qCompanyUnittype }}</td>
             <td>
-              <div v-if="this.sendvalue.qCompanySquaremetre == 0">-</div>
-              <div v-else>{{ this.sendvalue.qCompanySquaremetre }}</div>
+              <div v-if="this.sendvalue.qCompanyQuantity === 0">
+                {{ this.sendvalue.qCompanySquaremetre }}
+              </div>
+              <div v-else>
+                {{ this.sendvalue.qCompanyQuantity }}
+              </div>
             </td>
+            <td>{{ this.sendvalue.qCompanyUnittype }}</td>
           </tr>
         </table>
       </v-flex>
@@ -131,13 +133,13 @@ export default {
   data() {
     return {
       sendvalue: {},
-      cartdetail: [{ to: "/admin/insertp" }],
+      cartdetail: [{ to: "/admin/insertp" }]
     };
   },
 
   async created() {
     let res = await this.$http.get("/q_show/company/show", {
-      params: { qCompanyId: this.$route.params.quaid },
+      params: { qCompanyId: this.$route.params.quaid }
     });
     console.log("see data Company", this.$route.params.quaid);
     this.sendvalue = res.data.company[0];
@@ -145,7 +147,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        name: "index",
+        name: "index"
       });
     },
     refreshpage() {
@@ -159,8 +161,8 @@ export default {
       document.title = "ใบเสนอราคา.pdf";
       window.print();
       document.title = tempTitle;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -1,23 +1,23 @@
 <template>
   <div class="payment" ref="content">
     <v-snackbar border="top" :color="coloralert" dark :value="regisstatus">
-      {{
-      alertMessage
-      }}
+      {{ alertMessage }}
     </v-snackbar>
     <v-snackbar :color="coloralert" dark v-model="regisstatus">
-      {{
-      alertMessage
-      }}
+      {{ alertMessage }}
     </v-snackbar>
     <v-flex xs12 class="text-center">
-      <h2 :style="{ paddingTop: '15px', color: '#3498DB ' }">ข้อมูลการชำระเงิน</h2>
+      <h2 :style="{ paddingTop: '15px', color: '#3498DB ' }">
+        ข้อมูลการชำระเงิน
+      </h2>
     </v-flex>
 
     <v-layout>
       <v-container>
         <v-layout row>
-          <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right">หมายเลขคำสั่งซื้อ :</v-col>
+          <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right"
+            >หมายเลขคำสั่งซื้อ :</v-col
+          >
           <v-col cols="6">
             <v-select
               v-model="orderid"
@@ -30,7 +30,9 @@
           </v-col>
         </v-layout>
         <v-layout row>
-          <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right">ชื่อผู้โอน :</v-col>
+          <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right"
+            >ชื่อผู้โอน :</v-col
+          >
           <v-col cols="6">
             <v-text-field
               background-color="white"
@@ -52,7 +54,12 @@
           <h5>ธนาคารที่โอนเข้า</h5>
         </u>
         <v-col class="text-center">
-          <v-radio-group v-for="(item, idx) in bank" :key="idx" v-model="radios" :mandatory="false">
+          <v-radio-group
+            v-for="(item, idx) in bank"
+            :key="idx"
+            v-model="radios"
+            :mandatory="false"
+          >
             <h6>ธนาคาร{{ item.bankName }} ชื่อบัญชี{{ item.owner }}</h6>
 
             <v-radio :label="item.bankAcc" :value="item.bankNum"></v-radio>
@@ -62,7 +69,9 @@
     </v-container>
     <v-container>
       <v-layout row>
-        <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right">ยอดที่ต้องชำระ :</v-col>
+        <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right"
+          >ยอดที่ต้องชำระ :</v-col
+        >
 
         <v-col cols="6">
           <v-text-field
@@ -76,7 +85,9 @@
         </v-col>
       </v-layout>
       <v-layout row>
-        <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right">วันที่โอน :</v-col>
+        <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right"
+          >วันที่โอน :</v-col
+        >
         <v-col cols="6">
           <v-menu
             ref="menu1"
@@ -101,12 +112,19 @@
                 required
               ></v-text-field>
             </template>
-            <v-date-picker locale="th" v-model="date" no-title @input="menu1 = false"></v-date-picker>
+            <v-date-picker
+              locale="th"
+              v-model="date"
+              no-title
+              @input="menu1 = false"
+            ></v-date-picker>
           </v-menu>
         </v-col>
       </v-layout>
       <v-layout row>
-        <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right">เวลาที่โอน :</v-col>
+        <v-col :style="{ paddinTop: '15px' }" cols="4" class="text-right"
+          >เวลาที่โอน :</v-col
+        >
         <v-col cols="6">
           <b-form-timepicker
             v-bind="labels['TH']"
@@ -119,7 +137,9 @@
         </v-col>
       </v-layout>
       <v-layout row>
-        <v-col :style="{ paddinTop: '20' }" cols="4" class="text-right">รูปภาพหลักฐานการโอน :</v-col>
+        <v-col :style="{ paddinTop: '20' }" cols="4" class="text-right"
+          >รูปภาพหลักฐานการโอน :</v-col
+        >
         <v-col cols="6">
           <v-file-input
             background-color="white"
@@ -140,7 +160,8 @@
           color="green"
           width="250px"
           :style="{ color: 'white' }"
-        >แจ้งการชำระเงิน</v-btn>
+          >แจ้งการชำระเงิน</v-btn
+        >
       </v-flex>
     </v-layout>
   </div>
@@ -149,7 +170,7 @@
 <script>
 import axios from "axios";
 export default {
-  data: (vm) => ({
+  data: vm => ({
     total: "",
     value: "",
     formatted: "",
@@ -170,12 +191,12 @@ export default {
         labelResetButton: "ลบ",
         labelNowButton: "เวลาตอนนี้",
         labelNoTimeSelected: "กรุณาเลือกเวลาที่โอน",
-        labelCloseButton: "ปิด",
-      },
+        labelCloseButton: "ปิด"
+      }
     },
     nameRules: [
-      (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-      (v) => (v && v.length <= 200) || "Name must be less than 200 characters",
+      v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+      v => (v && v.length <= 200) || "Name must be less than 200 characters"
     ],
     regisstatus: false,
     alertMessage: "",
@@ -195,7 +216,7 @@ export default {
     y: "top",
     noimage:
       "https://www.img.in.th/images/13d03dc7c98b2cc7c207a41775ec44dd.jpg",
-    item: [],
+    item: []
   }),
   create() {},
   async mounted() {
@@ -215,7 +236,7 @@ export default {
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
-    },
+    }
   },
 
   watch: {
@@ -226,13 +247,13 @@ export default {
     radios: {
       handler() {
         console.log("radio", this.radios);
-      },
+      }
     },
     orderid: {
       handler() {
         this.checkorderid();
-      },
-    },
+      }
+    }
   },
   methods: {
     async checkorderid() {
@@ -284,11 +305,11 @@ export default {
           await axios
             .post("https://api.imgur.com/3/image", formData, {
               headers: {
-                Authorization: "Client-ID e93753161349d59",
+                Authorization: "Client-ID e93753161349d59"
                 // Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c",
-              },
+              }
             })
-            .then((res) => {
+            .then(res => {
               this.imagelink = res.data.data.link;
             });
 
@@ -304,7 +325,7 @@ export default {
         totalprice: this.priceint,
         paymentDate: this.dateFormatted,
         paymentTime: this.time,
-        paymentImage: this.imagelink,
+        paymentImage: this.imagelink
       });
       if (!respayment.data.ok) {
         console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
@@ -329,15 +350,14 @@ export default {
         totalprice: this.priceint,
         paymentDate: this.dateFormatted,
         paymentTime: this.time,
-        paymentImage: this.noimage,
+        paymentImage: this.noimage
       });
       if (!respayment.data.ok) {
         console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
         this.regisstatus = true;
         (this.coloralert = "red lighten-2"),
           (this.iconalert = "mdi-alert-circle"),
-          (this.alertMessage = "ไม่สำเร็จ"),
-          window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+          (this.alertMessage = "ไม่สำเร็จ");
       } else {
         console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
         this.regisstatus = true;
@@ -371,8 +391,8 @@ export default {
       // let sum = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       console.log("format", sum);
       return (this.total = sum);
-    },
-  },
+    }
+  }
 };
 </script>
 <style>

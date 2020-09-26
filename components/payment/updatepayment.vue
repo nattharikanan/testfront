@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <v-dialog v-model="show" max-width="500px" persistent>
       <v-card>
         <v-card-title>
@@ -27,13 +35,16 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="updatepayment()">บันทึก</v-btn>
+          <v-btn color="blue darken-1" text @click="updatepayment()"
+            >บันทึก</v-btn
+          >
           <v-btn
             color="blue darken-1"
             rounded
-            :style="{color:'white'}"
+            :style="{ color: 'white' }"
             @click="() => $emit('close')"
-          >ยกเลิก</v-btn>
+            >ยกเลิก</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -45,34 +56,37 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false,
+      default: false
     },
     sendvalue: {
       type: Object,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
   data() {
     return {
       coloralert: "",
+      alertstatus: false,
+      alertMessage: "",
+      timeout: 2000,
       dialog: false,
       form: {
         paymentid: "",
-        paymentstatus: "",
+        paymentstatus: ""
       },
 
-      statuspayment: ["กำลังดำเนินการ", "สำเร็จ", "ไม่สำเร็จ"],
+      statuspayment: ["กำลังดำเนินการ", "สำเร็จ", "ไม่สำเร็จ"]
     };
   },
   watch: {
     show() {
       this.form = this.sendvalue;
-    },
+    }
   },
   computed: {
     show() {
       return this.toggle;
-    },
+    }
   },
   methods: {
     async updatepayment() {
@@ -82,26 +96,24 @@ export default {
 
       let res = await this.$http.post("/payments/update", {
         paymentid: this.form.paymentid,
-        paymentstatus: this.form.paymentstatus,
+        paymentstatus: this.form.paymentstatus
       });
 
       if (!res.data.ok) {
-        console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
-        window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
+        this.coloralert = "green";
+        (this.alertstatus = true), (this.alertMessage = "แก้ไขสถานะสำเร็จ");
         this.$emit("close");
       }
     },
     close() {
       this.dialog = false;
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style>
-</style>
+<style></style>

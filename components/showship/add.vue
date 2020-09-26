@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <v-btn @click="dialog = true" color="primary" dark class="mb-2"
       >+ เพิ่มการขนส่ง</v-btn
     >
@@ -52,6 +60,10 @@ export default {
   },
   data() {
     return {
+      coloralert: "",
+      alertstatus: false,
+      alertMessage: "",
+      timeout: 2000,
       dialog: false,
       ShmName: ""
     };
@@ -65,13 +77,12 @@ export default {
         shmName: this.ShmName
       });
       if (!res.data.ok) {
-        console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
-        window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        this.coloralert = "red";
+        (this.alertstatus = true), (this.alertMessage = "ไม่สำเร็จ");
       } else {
-        console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
+        this.coloralert = "green";
+        (this.alertstatus = true), (this.alertMessage = "เพิ่มข้อมูลสำเร็จ");
+
         this.close();
       }
     },

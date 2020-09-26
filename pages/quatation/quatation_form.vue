@@ -1,5 +1,13 @@
 <template>
   <div>
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <v-dialog v-model="dialog" persistent max-width="400px">
       <v-card>
         <v-card-title>ยืนยันการส่งข้อมูล ?</v-card-title>
@@ -70,66 +78,60 @@
                       disabled
                     ></b-form-input>
                   </b-form-group>
+                  <div v-if="form.unit != 'JOB'">
+                    <v-row class="ml-1">
+                      <b-form-group
+                        class="w"
+                        id="input-group-1"
+                        label="จำนวนที่ต้องการ"
+                        label-for="input-1"
+                      ></b-form-group>
+                      <b-form-input
+                        class="ml-10"
+                        id="input-1"
+                        type="number"
+                        v-model="form.quantity"
+                        name="test"
+                        min="1"
+                        oninput="validity.valid||(value='');"
+                        required
+                      ></b-form-input>
 
-                  <v-row class="ml-1">
-                    <b-form-group
-                      class="w"
-                      id="input-group-1"
-                      label="จำนวนที่ต้องการ"
-                      label-for="input-1"
-                    ></b-form-group>
-                    <b-form-input
-                      class="ml-10"
-                      id="input-1"
-                      type="number"
-                      v-model="form.quantity"
-                      name="test"
-                      min="1"
-                      oninput="validity.valid||(value='');"
-                      required
-                    ></b-form-input>
-
-                    <div>
-                      <v-flex xs6>
-                        <v-select
-                          class="ml-4"
-                          height="1"
-                          v-model="form.unittype"
-                          :items="unit"
-                          item-text="text"
-                          item-value="text"
-                          solo
-                          filled
-                          label="เลือก"
-                          :rules="[v => !!v || 'กรุณาเลือกหน่วย']"
-                          required
-                        ></v-select>
-                      </v-flex>
-                    </div>
-                  </v-row>
-                  <v-row class="ml-1">
-                    <b-form-group
-                      class="w"
-                      id="input-group-1"
-                      label="หรือขนาดพื้นที่ที่ต้องการใช้สินค้า"
-                      label-for="input-1"
-                    ></b-form-group>
-                    <b-form-input
-                      class="ml-10"
-                      id="input-1"
-                      type="number"
-                      v-model="form.square"
-                      min="1"
-                      oninput="validity.valid||(value='');"
-                      required
-                    ></b-form-input>
-                    <b-form-group
-                      class="space"
-                      id="input-group-1"
-                      label="ตารางเมตร"
-                      label-for="input-1"
-                    ></b-form-group>
-                  </v-row>
+                      <div>
+                        <b-form-group
+                          class="space"
+                          id="input-group-1"
+                          :label="form.unit"
+                          label-for="input-1"
+                        ></b-form-group>
+                      </div>
+                    </v-row>
+                  </div>
+                  <div v-if="form.unit === 'JOB'">
+                    <v-row class="ml-1">
+                      <b-form-group
+                        class="w"
+                        id="input-group-1"
+                        label="ขนาดพื้นที่ที่ต้องการใช้สินค้า"
+                        label-for="input-1"
+                      ></b-form-group>
+                      <b-form-input
+                        class="ml-10"
+                        id="input-1"
+                        type="number"
+                        v-model="form.square"
+                        min="1"
+                        oninput="validity.valid||(value='');"
+                        required
+                      ></b-form-input>
+                      <b-form-group
+                        class="space"
+                        id="input-group-1"
+                        label="ตารางเมตร"
+                        label-for="input-1"
+                      ></b-form-group>
+                    </v-row>
+                  </div>
                 </v-container>
               </v-card>
 
@@ -155,51 +157,88 @@
 
           <v-stepper-content step="2">
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
-              <v-card class="mb-12" color="blue lighten-5" full-height="900px">
-                <u>
-                  <h4 class="text-center" :style="{ paddingTop: '15px' }">
-                    ที่อยู่สำหรับการจัดส่ง
-                  </h4>
-                </u>
-
+              <v-layout column :style="{ background: '#e3f2fd' }">
                 <v-container>
-                  <b-form-group
-                    id="input-group-1"
-                    label="ที่อยู่"
-                    label-for="input-1"
-                  >
-                    <b-form-textarea
-                      required
-                      type="text"
-                      v-model="form.addressd"
-                      placeholder="กรุณาระบุที่อยู่ในชัดเจน"
-                      rows="3"
-                      max-rows="6"
-                    ></b-form-textarea>
+                  <u :style="{ color: 'black' }">
+                    <h4
+                      class="text-center"
+                      :style="{ paddingTop: '15px', color: 'black' }"
+                    >
+                      ที่อยู่สำหรับการจัดส่ง
+                    </h4>
+                  </u>
+                  <b-form-group :style="{ color: 'black' }">
+                    รายละเอียดที่อยู่
                   </b-form-group>
+                  <b-form-textarea
+                    v-model="addressinfo"
+                    :style="{ marginBottom: '10px' }"
+                    id="textarea"
+                    placeholder="กรอกรายละเอียดที่อยู่"
+                    rows="3"
+                    max-rows="6"
+                  ></b-form-textarea>
+                  <ThailandAutoComplete
+                    v-model="district"
+                    type="district"
+                    @select="select"
+                    label="ตำบล"
+                    color="#85C1E9 "
+                    placeholder="กรุณากรอกตำบล"
+                  />
 
-                  <!-- <b-form-group id="input-group-1" label="เบอร์โทรที่ติดต่อได้ :"></b-form-group> -->
+                  <ThailandAutoComplete
+                    v-model="amphoe"
+                    type="amphoe"
+                    @select="select"
+                    label="อำเภอ"
+                    color="#85C1E9 "
+                    placeholder="กรุณากรอกอำเภอ"
+                  />
+
+                  <ThailandAutoComplete
+                    v-model="province"
+                    type="province"
+                    @select="select"
+                    label="จังหวัด"
+                    color="#85C1E9 "
+                    placeholder="กรุณากรอกจังหวัด"
+                  />
+
+                  <ThailandAutoComplete
+                    v-model="zipcode"
+                    type="zipcode"
+                    @select="select"
+                    color="#85C1E9 "
+                    placeholder="รหัสไปรษณีย์"
+                  />
                 </v-container>
-              </v-card>
+              </v-layout>
 
-              <!-- <v-btn color="primary" @click="e1 = 3">ถัดไป</v-btn>
-
-              <v-btn text @click="e1 = 1">ย้อนกลับ</v-btn>-->
-              <v-layout row>
+              <v-layout row :style="{ paddingTop: '20px' }">
                 <v-flex xs6 :style="{ paddingLeft: '20px' }">
-                  <v-btn text @click="e1 = 1">ยกเลิก</v-btn>
+                  <v-btn text @click="e1 = 1">ย้อนกลับ</v-btn>
                 </v-flex>
                 <v-flex
                   xs6
                   class="text-right"
                   :style="{ paddingRight: '20px' }"
                 >
-                  <!-- <v-btn color="primary" @click="test(), (e1 = 3)">ถัดไป</v-btn> -->
-                  <div v-if="form.addressd != ''">
-                    <v-btn color="primary" @click="e1 = 3">ถัดไป</v-btn>
+                  <div
+                    v-if="
+                      district != '' &&
+                        amphoe != '' &&
+                        province != '' &&
+                        zipcode != '' &&
+                        addressinfo != ''
+                    "
+                  >
+                    <v-btn color="primary" @click="(e1 = 3), mergeaddress()"
+                      >ถัดไป</v-btn
+                    >
                   </div>
                   <div v-else>
-                    <b-button type="submit" variant="primary">ถัดไป</b-button>
+                    <v-btn color="primary" @click="alert()">ถัดไป</v-btn>
                   </div>
                 </v-flex>
               </v-layout>
@@ -301,7 +340,7 @@
               <!-- <v-btn>ย้อนกลับ</v-btn> -->
               <v-layout row>
                 <v-flex xs6 :style="{ paddingLeft: '20px' }">
-                  <v-btn text @click="e1 = 1">ยกเลิก</v-btn>
+                  <v-btn text @click="e1 = 2">ย้อนกลับ</v-btn>
                 </v-flex>
                 <v-flex
                   xs6
@@ -325,11 +364,24 @@
 import moment from "moment";
 import "moment/locale/th";
 import { format, parseISO } from "date-fns";
+import ThailandAutoComplete from "vue-thailand-address-autocomplete";
 
 export default {
+  components: {
+    ThailandAutoComplete
+  },
   props: ["quatationid"],
   data() {
     return {
+      coloralert: "",
+      alertstatus: false,
+      alertMessage: "",
+      timeout: 2000,
+      district: "",
+      amphoe: "",
+      province: "",
+      zipcode: "",
+      addressinfo: "",
       dialog: false,
       date: parseISO(new Date().toISOString()),
       q_date: "",
@@ -349,21 +401,12 @@ export default {
         addressd: "",
         square: "",
         quantity: "",
-        info: ""
+        info: "",
+        unit: ""
       },
       quantity: "",
       e1: 1,
-      unit: [
-        {
-          text: "หน่วย"
-        },
-        {
-          text: "ชิ้น"
-        },
-        {
-          text: "อัน"
-        }
-      ],
+
       items: [
         {
           text: "หน้าหลัก",
@@ -388,9 +431,39 @@ export default {
   created() {
     this.form.productid = this.$route.params.pidq;
     this.form.productname = this.$route.params.pnameq;
+    this.form.unit = this.$route.params.punitq;
   },
 
   methods: {
+    mergeaddress() {
+      this.form.addressd =
+        this.addressinfo +
+        "\xa0\xa0" +
+        "ตำบล/แขวง" +
+        "\xa0\xa0" +
+        this.district +
+        "\xa0\xa0" +
+        "เขต/อำเภอ" +
+        "\xa0\xa0" +
+        this.amphoe +
+        "\xa0\xa0" +
+        "จังหวัด" +
+        "\xa0\xa0" +
+        this.province;
+      "\xa0\xa0" + "รหัสไปรษณีย์" + "\xa0\xa0" + this.zipcode;
+      console.log(this.form.addressd);
+    },
+    alert() {
+      this.coloralert = "red";
+      (this.alertstatus = true),
+        (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
+    },
+    select(address) {
+      this.district = address.district;
+      this.amphoe = address.amphoe;
+      this.province = address.province;
+      this.zipcode = address.zipcode;
+    },
     check() {
       this.dialog = true;
     },
@@ -409,24 +482,27 @@ export default {
         this.form.email == undefined ||
         this.form.email == null
       ) {
-        window.alert("กรุณากรอกข้อมูลให้ครบถ้วน");
+        this.alert();
       } else if (
         this.form.productid == "" ||
         this.form.productid == undefined ||
         this.form.productid == null ||
         this.form.productname == "" ||
         this.form.productname == undefined ||
-        this.form.productname == null ||
-        this.form.unittype == "" ||
-        this.form.unittype == undefined ||
-        this.form.unittype == null
+        this.form.productname == null
       ) {
         this.e1 = 1;
       } else {
-        console.log("insert", this.form.unittype);
+        if (this.form.unit === "JOB") {
+          this.form.unittype = "ตารางเมตร";
+        } else {
+          this.form.unittype = this.form.unit;
+        }
+
         this.status = "กำลังดำเนินการ";
         this.q_date = moment(this.date).format("dddd,DD-MMMM-YYYY");
         this.q_time = moment(this.date).format("HH.mm.ss");
+
         let res = await this.$http.post("/q_normal/insert", {
           qNormalName: this.form.name,
           qNormalUserid: this.$nuxt.$auth.user[0].userid,

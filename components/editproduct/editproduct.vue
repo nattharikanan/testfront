@@ -1,13 +1,13 @@
 <template>
   <div>
-    <!-- <v-alert
-          border="top"
-          :color="coloralert"
-          dark
-          :value="regisstatus"
-        >
-          {{ alertMessage }}
-    </v-alert>-->
+    <v-snackbar
+      :color="coloralert"
+      v-model="alertstatus"
+      :timeout="timeout"
+      top=""
+    >
+      {{ alertMessage }}
+    </v-snackbar>
     <v-dialog v-model="show" max-width="500px" persistent>
       <!-- <template v-slot:activator="{ on }">
         <v-btn color="primary" dark class="mb-2" v-on="on">+ เพิ่มสินค้า</v-btn>
@@ -121,6 +121,14 @@
                         oninput="validity.valid||(value='');"
                       ></v-text-field>
                     </v-col>
+                    <v-col cols="12" sm="6" md="6">
+                      <v-select
+                        v-model="form.unit"
+                        label="หน่วยของสินค้า"
+                        :items="item"
+                      >
+                      </v-select>
+                    </v-col>
                   </v-row>
                 </v-item-group>
               </v-col>
@@ -176,6 +184,9 @@ export default {
     return {
       regisstatus: "",
       coloralert: "",
+      alertstatus: false,
+      alertMessage: "",
+      timeout: 2000,
       dialog: false,
       categories: [],
       FILE: null,
@@ -193,10 +204,12 @@ export default {
         length: 0,
         weigth: 0,
         height: 0,
-        widtg: 0
+        widtg: 0,
+        unit: ""
       },
       q: ["ขอใบเสนอราคา", "ไม่มี"],
-      status: ["พร้อมส่ง", "สินค้าหมดชั่วคราว", "สินค้ายกเลิกการจำหน่าย"]
+      status: ["พร้อมส่ง", "สินค้าหมดชั่วคราว", "สินค้ายกเลิกการจำหน่าย"],
+      item: ["PC", "UT", "ST", "JOB"]
     };
   },
   watch: {
@@ -267,16 +280,18 @@ export default {
         height: this.form.height,
         weight: this.form.weight,
         length: this.form.length,
-        width: this.form.width
+        width: this.form.width,
+        unit: this.form.unit
       });
       if (!res.data.ok) {
-        console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
-        window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "การแก้ไขข้อมูลถูกต้อง");
+
         this.$emit("close");
       }
     },
@@ -295,16 +310,17 @@ export default {
         height: this.form.height,
         weight: this.form.weight,
         length: this.form.length,
-        width: this.form.width
+        width: this.form.width,
+        unit: this.form.unit
       });
       if (!res.data.ok) {
-        console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        <v-alert type="error">เพิ่มข้อมูลสินค้าไม่สำเร็จ</v-alert>;
-        window.alert("กรุณากรอกข้อมูลให้ถูกต้อง");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        <v-alert type="success">เพิ่มข้อมูลสินค้าสำเร็จ</v-alert>;
-        window.alert("Insert Successful!");
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "การแก้ไขข้อมูลถูกต้อง");
         this.$emit("close");
       }
     },
