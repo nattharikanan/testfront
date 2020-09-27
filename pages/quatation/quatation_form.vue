@@ -227,10 +227,10 @@
                   <div
                     v-if="
                       district != '' &&
-                        amphoe != '' &&
-                        province != '' &&
-                        zipcode != '' &&
-                        addressinfo != ''
+                      amphoe != '' &&
+                      province != '' &&
+                      zipcode != '' &&
+                      addressinfo != ''
                     "
                   >
                     <v-btn color="primary" @click="(e1 = 3), mergeaddress()"
@@ -364,11 +364,11 @@
 import moment from "moment";
 import "moment/locale/th";
 import { format, parseISO } from "date-fns";
-import ThailandAutoComplete from "vue-thailand-address-autocomplete";
+// import ThailandAutoComplete from "vue-thailand-address-autocomplete";
 
 export default {
   components: {
-    ThailandAutoComplete
+    // ThailandAutoComplete
   },
   props: ["quatationid"],
   data() {
@@ -402,7 +402,7 @@ export default {
         square: "",
         quantity: "",
         info: "",
-        unit: ""
+        unit: "",
       },
       quantity: "",
       e1: 1,
@@ -411,21 +411,21 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/"
+          to: "/",
         },
         {
           text: "ติดต่อขอรับใบเสนอราคา",
           disabled: false,
-          to: "/quatation/quatation_form"
-        }
+          to: "/quatation/quatation_form",
+        },
       ],
       emailRules: [
-        v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-        v =>
+        (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+        (v) =>
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
             v
-          ) || "อีเมล์ของท่านไม่ถูกต้อง"
-      ]
+          ) || "อีเมล์ของท่านไม่ถูกต้อง",
+      ],
     };
   },
   created() {
@@ -518,7 +518,7 @@ export default {
           qNormalDate: this.q_date,
           qNormalTime: this.q_time,
           qNormalInfo: this.form.info,
-          qNormalStatus: this.status
+          qNormalStatus: this.status,
         });
         if (!res.data.ok) {
           console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
@@ -528,7 +528,7 @@ export default {
           this.lastquaid = res.data.lastid[0];
           this.$router.push({
             name: "quatation-detail-quan",
-            params: { quaid: this.lastquaid }
+            params: { quaid: this.lastquaid },
           });
         }
       }
@@ -556,8 +556,8 @@ export default {
         // 46 is dot
         $event.preventDefault();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

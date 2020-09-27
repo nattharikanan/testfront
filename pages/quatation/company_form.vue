@@ -439,10 +439,10 @@
 import moment from "moment";
 import "moment/locale/th";
 import { format, parseISO } from "date-fns";
-import ThailandAutoComplete from "vue-thailand-address-autocomplete";
+// import ThailandAutoComplete from "vue-thailand-address-autocomplete";
 export default {
   components: {
-    ThailandAutoComplete
+    // ThailandAutoComplete
   },
   props: ["quatationid"],
   data() {
