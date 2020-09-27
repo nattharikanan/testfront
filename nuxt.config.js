@@ -34,9 +34,8 @@ export default {
    ** Plugins to load before mounting the App
    */
   plugins: [
-    "~/plugins/axios" //-- add plugins axios
-
-    // { src: "~/plugins/localStorage.js", ssr: false }
+    "~/plugins/axios", //-- add plugins axios
+    { src: "~/plugins/vue-thailand-address-autocomplete", ssr: false }
   ],
   proxy: {
     "/api": process.env.NUXT_ENV_API, //-- ตั้งค่า map proxy url api server //http://9e5d3e89.ngrok.io/ //"http://127.0.0.1:7000"

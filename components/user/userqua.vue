@@ -10,13 +10,13 @@
       <v-tab-item v-for="item in items" :key="item">
         <v-card color="basil" flat>
           <v-card-text>
-            <div v-if="tab=='0'">
+            <div v-if="tab == '0'">
               <normal />
             </div>
-            <div v-else-if="tab=='1'">
+            <div v-else-if="tab == '1'">
               <personal />
             </div>
-            <div v-else-if="tab=='2'">
+            <div v-else-if="tab == '2'">
               <company />
             </div>
           </v-card-text>
@@ -34,21 +34,21 @@ export default {
   components: {
     normal,
     personal,
-    company,
+    company
   },
   data() {
     return {
       tab: null,
-      items: ["ทั่วไป", "นิติบุคคล", "บริษัท"],
+      items: ["ทั่วไป", "นิติบุคคล", "บริษัท"]
     };
   },
   watch: {
     tab: {
       handler() {
         console.log(this.tab);
-      },
-    },
-  },
+      }
+    }
+  }
 };
 </script>
 

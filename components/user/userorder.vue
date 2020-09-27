@@ -4,7 +4,9 @@
       <!-- <div class="overline mb-4">ข้อมูลของฉัน</div> -->
       <v-container>
         <v-list-item-title>รายการสั่งซื้อของฉัน</v-list-item-title>
-        <v-list-item-subtitle>จัดการข้อมูลส่วนตัวคุณเพื่อความปลอดภัยของบัญชีผู้ใช้นี้</v-list-item-subtitle>
+        <v-list-item-subtitle
+          >จัดการข้อมูลส่วนตัวคุณเพื่อความปลอดภัยของบัญชีผู้ใช้นี้</v-list-item-subtitle
+        >
         <v-divider></v-divider>
 
         <!-- <editorder :toggle="a" @close="a = false" :sendvalue="send" />
@@ -23,7 +25,12 @@
         <v-spacer></v-spacer>
         <div row>
           <v-flex xs12>
-            <v-data-table :headers="headers" :search="search" class="elevation-1" :items="show">
+            <v-data-table
+              :headers="headers"
+              :search="search"
+              class="elevation-1"
+              :items="show"
+            >
               <template v-slot:item.orderid="{ item }">
                 <nuxt-link
                   :to="{
@@ -92,14 +99,14 @@ export default {
           text: "หมายเลขคำสั่งซื้อ (คลิกเพื่อดูข้อมูลเพิ่มเติม)",
           align: "start",
           sortable: false,
-          value: "orderid",
+          value: "orderid"
         },
         { text: "วันที่สั่งสินค้า", value: "orderdate" },
         { text: "เลขพัสดุ", value: "tracking" },
         { text: "สถานะคำสั่งซื้อ", value: "orderStatus" },
-        { text: "ชำระเงิน", value: "payment" },
+        { text: "ชำระเงิน", value: "payment" }
         // { text: "แก้ไข", value: "edit" },
-      ],
+      ]
     };
   },
   async created() {
@@ -126,10 +133,10 @@ export default {
       console.log("hi", pid.orderid);
       this.$router.push({
         name: "payment",
-        params: { orderid: pid.orderid },
+        params: { orderid: pid.orderid }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

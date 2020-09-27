@@ -6,9 +6,15 @@
           <v-flex xs4 class="menu">
             <v-card class="mx-auto" max-width="300">
               <v-list rounded>
-                <v-subheader>โปรไฟล์ของคุณ {{ $auth.user[0].firstname}}</v-subheader>
+                <v-subheader
+                  >โปรไฟล์ของคุณ {{ $auth.user[0].firstname }}</v-subheader
+                >
                 <v-list-item-group v-model="item" color="primary">
-                  <v-list-item v-for="(item, i) in items" :key="i" @click="select(item.number)">
+                  <v-list-item
+                    v-for="(item, i) in items"
+                    :key="i"
+                    @click="select(item.number)"
+                  >
                     <v-list-item-icon>
                       <v-icon v-text="item.icon"></v-icon>
                     </v-list-item-icon>
@@ -28,13 +34,16 @@
             <div v-else-if="item === 0">
               <info />
             </div>
+            <div v-else-if="item === undefined">
+              <info />
+            </div>
             <div v-else-if="menu === 2">
               <useraddress />
             </div>
             <div v-else-if="menu === 3">
               <userorder />
             </div>
-            <div v-else-if="menu === 4 || item === 4 ">
+            <div v-else-if="menu === 4 || item === 4">
               <userqua />
             </div>
           </v-flex>
@@ -54,12 +63,25 @@ export default {
     info,
     useraddress,
     userorder,
-    userqua,
+    userqua
+  },
+  watch: {
+    item: {
+      handler() {
+        console.log("item", this.item);
+      }
+    },
+    menu: {
+      handler() {
+        console.log("menu", this.menu);
+      }
+    }
   },
   created() {
     this.item = this.$route.params.tabs;
     console.log("test params", this.item);
   },
+
   data: () => ({
     tabs: "",
     menu: "",
@@ -68,14 +90,14 @@ export default {
       { text: "บัญชีของฉัน", icon: "mdi-account", number: 1 },
       { text: "ที่อยู่", icon: "mdi-home", number: 2 },
       { text: "การซื้อของฉัน", icon: "mdi-view-list-outline", number: 3 },
-      { text: "รายการเสนอราคา", icon: "mdi-clipboard-list-outline", number: 4 },
-    ],
+      { text: "รายการเสนอราคา", icon: "mdi-clipboard-list-outline", number: 4 }
+    ]
   }),
   methods: {
     select(number) {
       this.menu = number;
-    },
-  },
+    }
+  }
 };
 </script>
 

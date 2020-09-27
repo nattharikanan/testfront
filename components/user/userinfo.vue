@@ -134,6 +134,11 @@ export default {
       phone: ""
     };
   },
+  created() {
+    if (typeof window === "undefined") {
+      global.window = {};
+    }
+  },
   mounted() {
     this.email = $nuxt.$auth.user[0].email;
     this.firstname = $nuxt.$auth.user[0].firstname;
@@ -163,15 +168,12 @@ export default {
         this.alertstatus = true;
         (this.coloralert = "green lighten-2"),
           (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
-        this.refreshpage();
+        window.location.reload(true);
       }
       this.dialog = false;
     },
     close() {
       this.dialog = false;
-    },
-    refreshpage() {
-      window.location.reload(true);
     }
   }
 };

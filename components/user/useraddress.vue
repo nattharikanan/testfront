@@ -7,7 +7,7 @@
       top
       >{{ alertMessage }}</v-snackbar
     >
-    <v-card width="90%">
+    <v-card height="700px">
       <!-- <div class="overline mb-4">ข้อมูลของฉัน</div> -->
       <v-container>
         <v-list-item-title>ที่อยู่ของฉัน</v-list-item-title>
@@ -32,31 +32,55 @@
               <v-subheader>{{ phone }}</v-subheader>
             </v-col>
           </v-row>
-          <!-- <v-row :style="{height : '80px'}">
-      <v-col cols="4">
-        <v-subheader>เบอร์โทรศัพท์</v-subheader>
-      </v-col>
-      <v-col cols="8">
-        <v-text-field
-          :value="phone"
-        outlined=""
-        ></v-text-field>
-      </v-col>
-          </v-row>-->
-
           <v-row :style="{ height: '250px' }">
             <v-col cols="4">
               <v-subheader>ที่อยู่</v-subheader>
             </v-col>
             <v-col cols="8">
-              <v-textarea
-                name="input-7-1"
-                filled
-                label="กรุณาระบุที่อยู่ให้จัดเจน"
-                auto-grow
-                v-model="address"
-                counter="200"
-              ></v-textarea>
+              <v-container>
+                <b-form-textarea
+                  v-model="addressinfo"
+                  :style="{ marginBottom: '10px' }"
+                  id="textarea"
+                  placeholder="กรอกรายละเอียดที่อยู่"
+                  rows="3"
+                  max-rows="6"
+                ></b-form-textarea>
+                <ThailandAutoComplete
+                  v-model="district"
+                  type="district"
+                  @select="select"
+                  label="ตำบล"
+                  color="#85C1E9 "
+                  placeholder="กรุณากรอกตำบล"
+                />
+
+                <ThailandAutoComplete
+                  v-model="amphoe"
+                  type="amphoe"
+                  @select="select"
+                  label="อำเภอ"
+                  color="#85C1E9 "
+                  placeholder="กรุณากรอกอำเภอ"
+                />
+
+                <ThailandAutoComplete
+                  v-model="province"
+                  type="province"
+                  @select="select"
+                  label="จังหวัด"
+                  color="#85C1E9 "
+                  placeholder="กรุณากรอกจังหวัด"
+                />
+
+                <ThailandAutoComplete
+                  v-model="zipcode"
+                  type="zipcode"
+                  @select="select"
+                  color="#85C1E9 "
+                  placeholder="รหัสไปรษณีย์"
+                />
+              </v-container>
               <v-btn color="primary" dark class="mb-2" @click="dialog = true"
                 >บันทึก</v-btn
               >
@@ -88,7 +112,11 @@
 </template>
 
 <script>
+// import ThailandAutoComplete from "vue-thailand-address-autocomplete";
 export default {
+  components: {
+    // ThailandAutoComplete
+  },
   data() {
     return {
       coloralert: "",
@@ -101,27 +129,82 @@ export default {
       fullname: "",
       phone: "",
       address: "",
-      email: ""
+      email: "",
+      district: "",
+      amphoe: "",
+      province: "",
+      zipcode: "",
+      addressinfo: ""
     };
   },
   mounted() {
+    if (typeof window === "undefined") {
+      global.window = {};
+    }
     this.email = $nuxt.$auth.user[0].email;
     this.firstname = $nuxt.$auth.user[0].firstname;
     this.lastname = $nuxt.$auth.user[0].lastname;
     this.phone = $nuxt.$auth.user[0].phone;
     this.address = $nuxt.$auth.user[0].address;
     this.fullname = this.firstname + " " + this.lastname;
+    if (
+      $nuxt.$auth.user[0].addressInfo == null ||
+      $nuxt.$auth.user[0].addressDistrict == null ||
+      $nuxt.$auth.user[0].addressAmphoe == null ||
+      $nuxt.$auth.user[0].addressProvince == null ||
+      $nuxt.$auth.user[0].addressZipcode == null
+    ) {
+      console.log("IF");
+      this.addressinfo = "";
+      this.district = "";
+      this.amphoe = "";
+      this.province = "";
+      this.zipcode = "";
+    } else {
+      console.log("else");
+      this.addressinfo = $nuxt.$auth.user[0].addressInfo;
+      this.district = $nuxt.$auth.user[0].addressDistrict;
+      this.amphoe = $nuxt.$auth.user[0].addressAmphoe;
+      this.province = $nuxt.$auth.user[0].addressProvince;
+      this.zipcode = $nuxt.$auth.user[0].addressZipcode;
+    }
   },
   methods: {
+    select(address) {
+      this.district = address.district;
+      this.amphoe = address.amphoe;
+      this.province = address.province;
+      this.zipcode = address.zipcode;
+    },
     async updateinfo() {
       //ต้องมีการยืนยันรหัสผ่านอีกรอบเพื่อทำการเปลี่ยนแปลงข้อมูล
-      console.log("hello", this.address);
+      this.address =
+        this.addressinfo +
+        "\xa0\xa0" +
+        "ตำบล/แขวง" +
+        "\xa0\xa0" +
+        this.district +
+        "\xa0\xa0" +
+        "เขต/อำเภอ" +
+        "\xa0\xa0" +
+        this.amphoe +
+        "\xa0\xa0" +
+        "จังหวัด" +
+        "\xa0\xa0" +
+        this.province;
+      "\xa0\xa0" + "รหัสไปรษณีย์" + "\xa0\xa0" + this.zipcode;
+      console.log(this.address);
       let res = await this.$http.post("/users/update", {
         email: this.email,
         firstname: this.firstname,
         lastname: this.lastname,
         phone: this.phone,
-        address: this.address
+        address: this.address,
+        addressInfo: this.addressinfo,
+        addressDistrict: this.district,
+        addressAmphoe: this.amphoe,
+        addressProvince: this.province,
+        addressZipcode: this.zipcode
       });
       if (!res.data.ok) {
         console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
@@ -133,15 +216,12 @@ export default {
         this.alertstatus = true;
         (this.coloralert = "green lighten-2"),
           (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
-        this.refreshpage();
+        window.location.reload(true);
       }
       this.dialog = false;
     },
     close() {
       this.dialog = false;
-    },
-    refreshpage() {
-      window.location.reload(true);
     }
   }
 };

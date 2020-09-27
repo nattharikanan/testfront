@@ -81,6 +81,8 @@ export default {
           //   (this.iconalert = "mdi mdi-checkbox-marked-circle"),
           (this.alertMessage = "ลบสินค้าสำเร็จ");
         this.$emit("closed");
+
+        window.location.reload(true);
       }
     }
   }
