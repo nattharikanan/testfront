@@ -52,12 +52,12 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     sendvalue: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -69,19 +69,19 @@ export default {
       dialog: false,
       form: {
         categoryid: "",
-        categoryname: ""
-      }
+        categoryname: "",
+      },
     };
   },
   watch: {
     show() {
       this.form = this.sendvalue;
-    }
+    },
   },
   computed: {
     show() {
       return this.toggle;
-    }
+    },
   },
 
   async created() {
@@ -95,27 +95,27 @@ export default {
       this.dialog = true;
       let res = await this.$http.post("/categories/update", {
         categoryid: this.form.categoryid,
-        categoryname: this.form.categoryname
+        categoryname: this.form.categoryname,
       });
       if (!res.data.ok) {
         this.coloralert = "red";
         (this.alertstatus = true),
           (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        this.coloralert = "red";
+        this.coloralert = "green";
         (this.alertstatus = true), (this.alertMessage = "แก้ไขข้อมูลถูกต้อง");
         this.$emit("close");
       }
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid }
+        params: { categoryid: this.categoryid },
       });
     },
     close() {
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

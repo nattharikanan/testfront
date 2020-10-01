@@ -59,6 +59,17 @@
                   v-model="form.productstatus"
                 ></v-select>
               </v-col>
+              <v-col cols="12" sm="6" md="6">
+                <v-select
+                  v-model="form.quotationstatus"
+                  :items="q"
+                  label="ให้ขอเสนอราคาหรือไม่"
+                  persistent-hint
+                  return-object
+                  single-line
+                  required
+                ></v-select>
+              </v-col>
               <v-col cols="12" sm="6" md="12">
                 <v-textarea
                   filled
@@ -66,17 +77,7 @@
                   v-model="form.notation"
                 ></v-textarea>
               </v-col>
-              <!-- <v-col cols="12" sm="6" md="6">
-                <v-select
-                  v-model="form.quotationstatus"
-                  :items="q"
-                  label="ขอเสนอราคา"
-                  persistent-hint
-                  return-object
-                  single-line
-                  required
-                ></v-select>
-              </v-col>-->
+
               <v-col cols="12" md="12">
                 <v-item-group>
                   <u>
@@ -173,12 +174,12 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     sendvalue: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -205,22 +206,22 @@ export default {
         weigth: 0,
         height: 0,
         widtg: 0,
-        unit: ""
+        unit: "",
       },
       q: ["ขอใบเสนอราคา", "ไม่มี"],
       status: ["พร้อมส่ง", "สินค้าหมดชั่วคราว", "สินค้ายกเลิกการจำหน่าย"],
-      item: ["PC", "UT", "ST", "JOB"]
+      item: ["PC", "UT", "ST", "JOB"],
     };
   },
   watch: {
     show() {
       this.form = this.sendvalue;
-    }
+    },
   },
   computed: {
     show() {
       return this.toggle;
-    }
+    },
   },
 
   async created() {
@@ -228,9 +229,9 @@ export default {
     let res = await this.$http.get("/categories");
     // console.log(res.data);
     let temp = res.data.categories;
-    this.categories = temp.map(c => ({
+    this.categories = temp.map((c) => ({
       name: c.categoryname,
-      id: c.categoryid
+      id: c.categoryid,
     }));
     // this.getProduct();
   },
@@ -254,11 +255,11 @@ export default {
       await axios
         .post("https://api.imgur.com/3/image", formData, {
           headers: {
-            Authorization: "Client-ID e93753161349d59"
+            Authorization: "Client-ID e93753161349d59",
             // Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c",
-          }
+          },
         })
-        .then(res => {
+        .then((res) => {
           this.imagelink = res.data.data.link;
         });
       console.log("res", this.imagelink);
@@ -276,12 +277,12 @@ export default {
         notation: this.form.notation,
         productstatus: this.form.productstatus,
         productimage: this.imagelink,
-        // quotationStatus: this.form.quotationstatus,
+        quotationStatus: this.form.quotationstatus,
         height: this.form.height,
         weight: this.form.weight,
         length: this.form.length,
         width: this.form.width,
-        unit: this.form.unit
+        unit: this.form.unit,
       });
       if (!res.data.ok) {
         this.coloralert = "red";
@@ -306,19 +307,19 @@ export default {
         unitprice: this.form.unitprice,
         notation: this.form.notation,
         productstatus: this.form.productstatus,
-        // quotationStatus: this.form.quotationstatus,
+        quotationStatus: this.form.quotationstatus,
         height: this.form.height,
         weight: this.form.weight,
         length: this.form.length,
         width: this.form.width,
-        unit: this.form.unit
+        unit: this.form.unit,
       });
       if (!res.data.ok) {
         this.coloralert = "red";
         (this.alertstatus = true),
           (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        this.coloralert = "red";
+        this.coloralert = "green";
         (this.alertstatus = true),
           (this.alertMessage = "การแก้ไขข้อมูลถูกต้อง");
         this.$emit("close");
@@ -326,13 +327,13 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid }
+        params: { categoryid: this.categoryid },
       });
     },
     close() {
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

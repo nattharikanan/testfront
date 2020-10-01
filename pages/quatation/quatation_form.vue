@@ -81,13 +81,13 @@
                   <div v-if="form.unit != 'JOB'">
                     <v-row class="ml-1">
                       <b-form-group
-                        class="w"
+                        class="quantity-input"
                         id="input-group-1"
                         label="จำนวนที่ต้องการ"
                         label-for="input-1"
                       ></b-form-group>
                       <b-form-input
-                        class="ml-10"
+                        class="ml-10 square-input"
                         id="input-1"
                         type="number"
                         v-model="form.quantity"
@@ -116,7 +116,7 @@
                         label-for="input-1"
                       ></b-form-group>
                       <b-form-input
-                        class="ml-10"
+                        class="ml-10 square-input"
                         id="input-1"
                         type="number"
                         v-model="form.square"
@@ -158,7 +158,7 @@
           <v-stepper-content step="2">
             <b-form @submit="onSubmit" @reset="onReset" v-if="show">
               <v-layout column :style="{ background: '#e3f2fd' }">
-                <v-container>
+                <v-container class="all">
                   <u :style="{ color: 'black' }">
                     <h4
                       class="text-center"
@@ -178,40 +178,42 @@
                     rows="3"
                     max-rows="6"
                   ></b-form-textarea>
-                  <ThailandAutoComplete
-                    v-model="district"
-                    type="district"
-                    @select="select"
-                    label="ตำบล"
-                    color="#85C1E9 "
-                    placeholder="กรุณากรอกตำบล"
-                  />
+                  <div class="changefont">
+                    <ThailandAutoComplete
+                      v-model="district"
+                      type="district"
+                      @select="select"
+                      label="ตำบล"
+                      color="#85C1E9 "
+                      placeholder="กรุณากรอกตำบล"
+                    />
 
-                  <ThailandAutoComplete
-                    v-model="amphoe"
-                    type="amphoe"
-                    @select="select"
-                    label="อำเภอ"
-                    color="#85C1E9 "
-                    placeholder="กรุณากรอกอำเภอ"
-                  />
+                    <ThailandAutoComplete
+                      v-model="amphoe"
+                      type="amphoe"
+                      @select="select"
+                      label="อำเภอ"
+                      color="#85C1E9 "
+                      placeholder="กรุณากรอกอำเภอ"
+                    />
 
-                  <ThailandAutoComplete
-                    v-model="province"
-                    type="province"
-                    @select="select"
-                    label="จังหวัด"
-                    color="#85C1E9 "
-                    placeholder="กรุณากรอกจังหวัด"
-                  />
+                    <ThailandAutoComplete
+                      v-model="province"
+                      type="province"
+                      @select="select"
+                      label="จังหวัด"
+                      color="#85C1E9 "
+                      placeholder="กรุณากรอกจังหวัด"
+                    />
 
-                  <ThailandAutoComplete
-                    v-model="zipcode"
-                    type="zipcode"
-                    @select="select"
-                    color="#85C1E9 "
-                    placeholder="รหัสไปรษณีย์"
-                  />
+                    <ThailandAutoComplete
+                      v-model="zipcode"
+                      type="zipcode"
+                      @select="select"
+                      color="#85C1E9 "
+                      placeholder="รหัสไปรษณีย์"
+                    />
+                  </div>
                 </v-container>
               </v-layout>
 
@@ -562,14 +564,36 @@ export default {
 </script>
 
 <style>
-.ml-10 {
+.ml-10.square-input {
   height: 57px;
 }
-.w {
+.quantity-input {
   padding-top: 15px;
 }
 .space {
   padding-top: 15px;
   padding-left: 20px;
+}
+
+div.vth-addr-label {
+  font-family: "Kanit";
+}
+input.vth-addr-input.vth-addr-input-size-default {
+  font-family: "Kanit";
+}
+
+/* span.item-first {
+  font-family: "Kanit";
+} */
+span.vth-addr-font-weight-bold {
+  font-family: "Kanit";
+}
+/* span.vth-addr-item-second {
+  font-family: "Kanit";
+} */
+span.item-first,
+span.vth-addr-item-second,
+span.vth-addr-item-third {
+  font-family: "Kanit";
 }
 </style>

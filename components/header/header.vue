@@ -145,7 +145,7 @@ export default {
       ],
     };
   },
-  computed: {},
+
   methods: {
     gotoquo() {
       if ($nuxt.$auth.loggedIn == false) {

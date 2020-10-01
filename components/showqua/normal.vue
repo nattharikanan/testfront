@@ -1,7 +1,11 @@
 <template>
   <div>
     <normaledit :toggle="a" @close="a = false" :sendvalue="send" />
-    <normaldelete :deletetoggle="b" @closed="b=false" :delete_id="id_delete" />
+    <normaldelete
+      :deletetoggle="b"
+      @closed="b = false"
+      :delete_id="id_delete"
+    />
     <div v-if="open">
       <normaldetail :sendvalue="send" />
     </div>
@@ -21,7 +25,12 @@
         <v-spacer></v-spacer>
         <div row>
           <v-flex xs12>
-            <v-data-table class="text-center" :headers="headers" :search="search" :items="show">
+            <v-data-table
+              class="text-center"
+              :headers="headers"
+              :search="search"
+              :items="show"
+            >
               <template v-slot:item.edit="{ item }">
                 <v-btn @click="ToggleDetail(item)" class="center">
                   <v-icon>mdi-information</v-icon>
@@ -34,19 +43,19 @@
                 </v-btn>
               </template>
               <template v-slot:item.qNormalStatus="{ item }">
-                <div v-if="item.qNormalStatus ==='กำลังดำเนินการ' ">
-                  <v-btn color="yellow">{{item.qNormalStatus}}</v-btn>
+                <div v-if="item.qNormalStatus === 'กำลังดำเนินการ'">
+                  <v-btn color="yellow">{{ item.qNormalStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qNormalStatus ==='สำเร็จ' ">
-                  <v-btn color="green">{{item.qNormalStatus}}</v-btn>
+                <div v-else-if="item.qNormalStatus === 'สำเร็จ'">
+                  <v-btn color="green">{{ item.qNormalStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qNormalStatus ==='รอการติดต่อกลับ' ">
-                  <v-btn color="orange">{{item.qNormalStatus}}</v-btn>
+                <div v-else-if="item.qNormalStatus === 'รอการติดต่อกลับ'">
+                  <v-btn color="orange">{{ item.qNormalStatus }}</v-btn>
                 </div>
-                <div v-else-if="item.qNormalStatus ==='ข้อมูลไม่ครบถ้วน' ">
-                  <v-btn color="red">{{item.qNormalStatus}}</v-btn>
-                </div>
-              </template>-->
+                <div v-else-if="item.qNormalStatus === 'ข้อมูลไม่ครบถ้วน'">
+                  <v-btn color="red">{{ item.qNormalStatus }}</v-btn>
+                </div> </template
+              >-->
               <!-- <template v-slot:item.orderid="{ item }">
               <nuxt-link
                 :to="{  name: 'admin-showorder-detail',
@@ -120,6 +129,7 @@ export default {
         { text: "วันที่ขอใบเสนอราคา", value: "qNormalDate" },
         { text: "สถานะ", value: "qNormalStatus" },
         { text: "แก้ไข", value: "edit" },
+        { text: "ตอบกลับ", value: "reply" },
       ],
     };
   },

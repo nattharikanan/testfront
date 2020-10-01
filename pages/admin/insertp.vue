@@ -72,6 +72,7 @@ import showuser from "../../components/showuser/showuser";
 import showship from "../../components/showship/showship";
 
 export default {
+  middleware: "auth",
   props: ["m"],
   components: {
     // addproduct,
@@ -84,9 +85,9 @@ export default {
     showbank,
     showqua,
     showuser,
-    showship
+    showship,
   },
-  middleware: ["auth-admin"],
+  // middleware: ["auth"],
   data() {
     return {
       items: [
@@ -95,33 +96,33 @@ export default {
         {
           text: "ข้อมูลใบเสนอสินค้า",
           icon: "mdi-view-list-outline",
-          number: 3
+          number: 3,
         },
         {
           text: "แจ้งการชำระเงิน",
           icon: "mdi-cash-usd-outline",
-          number: 4
+          number: 4,
         },
         {
           text: "ประเภทสินค้า",
           icon: "mdi-basket-unfill",
-          number: 5
+          number: 5,
         },
         {
           text: "ธนาคาร",
           icon: "mdi-bank",
-          number: 6
+          number: 6,
         },
         {
           text: "การจัดส่ง",
           icon: "mdi-car-estate",
-          number: 7
+          number: 7,
         },
         {
           text: "จัดการสมาชิก",
           icon: "mdi-account",
-          number: 8
-        }
+          number: 8,
+        },
       ],
       item: 0,
       menu: "",
@@ -143,7 +144,7 @@ export default {
           text: "ชื่อสินค้า",
           align: "start",
           sortable: false,
-          value: "productname"
+          value: "productname",
         },
         { text: "รหัสสินค้า", value: "productid" },
         { text: "ประเภทสินค้า", value: "categoryname" },
@@ -151,8 +152,8 @@ export default {
         { text: "หมายเหตุ", value: "notation" },
         { text: "สถานะสินค้า", value: "productstatus" },
         { text: "ภาพสินค้า", value: "productimage" },
-        { text: "แก้ไขสินค้า", value: "edit" }
-      ]
+        { text: "แก้ไขสินค้า", value: "edit" },
+      ],
     };
   },
   watch: {
@@ -174,24 +175,24 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid }
+        params: { categoryid: this.categoryid },
       });
 
       this.show = res.data.products;
-    }
+    },
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
     let res = await this.$http.get("/categories");
     // console.log(res.data);
     let temp = res.data.categories;
-    this.categories = temp.map(c => ({
+    this.categories = temp.map((c) => ({
       name: c.categoryname,
-      id: c.categoryid
+      id: c.categoryid,
     }));
 
     this.getProduct();
-  }
+  },
 };
 </script>
 

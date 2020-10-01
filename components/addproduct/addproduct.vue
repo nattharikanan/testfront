@@ -27,7 +27,7 @@
                 <v-text-field
                   v-model="productname"
                   required
-                  label="ชื่อสินค้า"
+                  label="ชื่อสินค้า*"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
@@ -36,7 +36,7 @@
                   :items="categories"
                   item-text="name"
                   item-value="id"
-                  label="ประเภทสินค้า"
+                  label="ประเภทสินค้า*"
                   persistent-hint
                   return-object
                   single-line
@@ -44,20 +44,36 @@
                 ></v-select>
               </v-col>
               <v-col cols="12" sm="6" md="6">
-                <v-text-field
-                  label="ราคาสินค้า"
-                  v-model="unitprice"
-                  type="number"
-                ></v-text-field>
+                <v-select
+                  v-model="quotationstatus"
+                  :items="q"
+                  label="ให้ขอเสนอราคาหรือไม่*"
+                  persistent-hint
+                  return-object
+                  single-line
+                  required
+                ></v-select>
               </v-col>
+
               <v-col cols="12" sm="6" md="6">
                 <!-- <v-text-field label="สถานะสินค้า" v-model="productstatus"></v-text-field> -->
                 <v-select
                   :items="status"
-                  label="สถานะสินค้า"
+                  label="สถานะสินค้า*"
                   v-model="productstatus"
                 ></v-select>
               </v-col>
+              <div v-show="this.quotationstatus == 'ไม่มี'">
+                <v-col cols="12" sm="6" md="12">
+                  <v-text-field
+                    label="ราคาสินค้า"
+                    v-model="unitprice"
+                    type="number"
+                    suffix="บาท"
+                  ></v-text-field>
+                </v-col>
+              </div>
+
               <v-col cols="12" sm="6" md="12">
                 <v-textarea
                   filled
@@ -65,6 +81,7 @@
                   v-model="notation"
                 ></v-textarea>
               </v-col>
+
               <v-col cols="12" md="12">
                 <v-item-group>
                   <u>
@@ -113,7 +130,7 @@
                       <v-select
                         v-model="unit"
                         :items="item"
-                        label="หน่วยของสินค้า"
+                        label="หน่วยของสินค้า*"
                       >
                       </v-select>
                     </v-col>
@@ -160,8 +177,8 @@ export default {
   props: {
     label: {
       type: String,
-      default: "Label"
-    }
+      default: "Label",
+    },
   },
   data() {
     return {
@@ -180,22 +197,31 @@ export default {
       categoryid: "",
       unitprice: "",
       notation: "",
+      quotationstatus: "",
       productstatus: "",
       productimage: "",
       status: ["พร้อมส่ง", "สินค้าหมดชั่วคราว", "สินค้ายกเลิกการจำหน่าย"],
       image: [],
       imagelink: "",
+      q: ["ขอใบเสนอราคา", "ไม่มี"],
       noimage:
         "https://www.img.in.th/images/13d03dc7c98b2cc7c207a41775ec44dd.jpg",
-      item: ["PC", "UT", "ST", "JOB"]
+      item: ["PC", "UT", "ST", "JOB"],
     };
   },
   watch: {
     categoryid: {
       handler() {
         console.log("cateID", this.categoryid);
-      }
-    }
+      },
+    },
+    quotationstatus: {
+      handler() {
+        if (this.quotationstatus == "ขอใบเสนอราคา") {
+          this.unitprice = 0;
+        }
+      },
+    },
   },
 
   async created() {
@@ -203,12 +229,13 @@ export default {
     let res = await this.$http.get("/categories");
     // console.log(res.data);
     let temp = res.data.categories;
-    this.categories = temp.map(c => ({
+    this.categories = temp.map((c) => ({
       name: c.categoryname,
-      id: c.categoryid
+      id: c.categoryid,
     }));
     this.getProduct();
   },
+  mounted() {},
   methods: {
     onFileUpload() {
       // this.FILE = event;
@@ -225,14 +252,14 @@ export default {
       // upload file
       const formData = new FormData();
       formData.append("image", this.image, this.image.name);
-      await axios
+      await this.$http
         .post("https://api.imgur.com/3/image", formData, {
           headers: {
             Authorization: "Client-ID e93753161349d59",
-            Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c"
-          }
+            Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c",
+          },
         })
-        .then(res => {
+        .then((res) => {
           this.imagelink = res.data.data.link;
         });
       console.log("res", this.imagelink);
@@ -240,34 +267,48 @@ export default {
     },
     async savewithimage() {
       this.dialog = true;
-      let res = await this.$http.post("/product/insert", {
-        productid: this.$route.query.productid,
-        productname: this.productname,
-        categoryid: this.categoryid.id, //ที่ต้อง.id เพราะมันส่งค่าเ็น obj ไป เราอยากได้แค่ id
-        unitprice: this.unitprice,
-        notation: this.notation,
-        productstatus: this.productstatus,
-        productimage: this.imagelink,
-        height: this.height,
-        weight: this.weight,
-        length: this.length,
-        width: this.width,
-        unit: this.unit
-      });
-      if (!res.data.ok) {
+      if (
+        this.quotationstatus == "" ||
+        this.quotationstatus == null ||
+        this.categoryid.id == "" ||
+        this.productname == "" ||
+        this.productstatus == "" ||
+        this.unit == ""
+      ) {
         this.coloralert = "red";
         (this.alertstatus = true),
           (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        this.coloralert = "green";
-        (this.alertstatus = true),
-          (this.alertMessage = "เพิ่มข้อมูลสินค้าถูกต้อง");
-        this.close();
+        let res = await this.$http.post("/product/insert", {
+          productid: this.$route.query.productid,
+          productname: this.productname,
+          categoryid: this.categoryid.id, //ที่ต้อง.id เพราะมันส่งค่าเ็น obj ไป เราอยากได้แค่ id
+          unitprice: this.unitprice,
+          notation: this.notation,
+          productstatus: this.productstatus,
+          productimage: this.imagelink,
+          quotationStatus: this.quotationstatus,
+          height: this.height,
+          weight: this.weight,
+          length: this.length,
+          width: this.width,
+          unit: this.unit,
+        });
+        if (!res.data.ok) {
+          this.coloralert = "red";
+          (this.alertstatus = true),
+            (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
+        } else {
+          this.coloralert = "green";
+          (this.alertstatus = true),
+            (this.alertMessage = "เพิ่มข้อมูลสินค้าถูกต้อง");
+          this.close();
+        }
       }
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid }
+        params: { categoryid: this.categoryid },
       });
       this.show = res.data.products;
       //   console.log("test ", this.show);
@@ -277,33 +318,47 @@ export default {
     },
     async savewithoutimage() {
       this.dialog = true;
-      console.log(this.unit);
-      let res = await this.$http.post("/product/insert", {
-        productid: this.$route.query.productid,
-        productname: this.productname,
-        categoryid: this.categoryid.id, //ที่ต้อง.id เพราะมันส่งค่าเ็น obj ไป เราอยากได้แค่ id
-        unitprice: this.unitprice,
-        notation: this.notation,
-        productstatus: this.productstatus,
-        productimage: this.noimage,
-        height: this.height,
-        weight: this.weight,
-        length: this.length,
-        width: this.width,
-        unit: this.unit
-      });
-      if (!res.data.ok) {
+      console.log(this.categoryid.id);
+      if (
+        this.quotationstatus == "" ||
+        this.quotationstatus == null ||
+        this.categoryid.id == "" ||
+        this.productname == "" ||
+        this.productstatus == "" ||
+        this.unit == ""
+      ) {
         this.coloralert = "red";
         (this.alertstatus = true),
           (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        this.coloralert = "green";
-        (this.alertstatus = true),
-          (this.alertMessage = "เพิ่มข้อมูลสินค้าถูกต้อง");
-        this.close();
+        let res = await this.$http.post("/product/insert", {
+          productid: this.$route.query.productid,
+          productname: this.productname,
+          categoryid: this.categoryid.id, //ที่ต้อง.id เพราะมันส่งค่าเ็น obj ไป เราอยากได้แค่ id
+          unitprice: this.unitprice,
+          notation: this.notation,
+          productstatus: this.productstatus,
+          productimage: this.noimage,
+          quotationStatus: this.quotationstatus,
+          height: this.height,
+          weight: this.weight,
+          length: this.length,
+          width: this.width,
+          unit: this.unit,
+        });
+        if (!res.data.ok) {
+          this.coloralert = "red";
+          (this.alertstatus = true),
+            (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
+        } else {
+          this.coloralert = "green";
+          (this.alertstatus = true),
+            (this.alertMessage = "เพิ่มข้อมูลสินค้าถูกต้อง");
+          this.close();
+        }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -56,7 +56,7 @@
           paddingLeft: '70px',
           paddingRight: '70px',
           paddingTop: '20px',
-          color: 'black'
+          color: 'black',
         }"
         class="text-center"
       >
@@ -113,6 +113,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 
 export default {
+  middleware: "auth",
   name: "users-po",
   props: ["orderq"],
   data() {
@@ -126,7 +127,7 @@ export default {
       product: [],
       totalPrice: "",
       vat7: "",
-      netprice: ""
+      netprice: "",
     };
   },
 
@@ -175,8 +176,8 @@ export default {
       document.title = "ใบยืนยันการสั่งสินค้า.pdf";
       window.print();
       document.title = tempTitle;
-    }
-  }
+    },
+  },
 };
 </script>
 

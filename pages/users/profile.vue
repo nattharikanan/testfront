@@ -59,23 +59,24 @@ import useraddress from "../../components/user/useraddress";
 import userorder from "../../components/user/userorder";
 import userqua from "../../components/user/userqua";
 export default {
+  middleware: "auth",
   components: {
     info,
     useraddress,
     userorder,
-    userqua
+    userqua,
   },
   watch: {
     item: {
       handler() {
         console.log("item", this.item);
-      }
+      },
     },
     menu: {
       handler() {
         console.log("menu", this.menu);
-      }
-    }
+      },
+    },
   },
   created() {
     this.item = this.$route.params.tabs;
@@ -90,14 +91,14 @@ export default {
       { text: "บัญชีของฉัน", icon: "mdi-account", number: 1 },
       { text: "ที่อยู่", icon: "mdi-home", number: 2 },
       { text: "การซื้อของฉัน", icon: "mdi-view-list-outline", number: 3 },
-      { text: "รายการเสนอราคา", icon: "mdi-clipboard-list-outline", number: 4 }
-    ]
+      { text: "รายการเสนอราคา", icon: "mdi-clipboard-list-outline", number: 4 },
+    ],
   }),
   methods: {
     select(number) {
       this.menu = number;
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -608,10 +608,10 @@ export default {
         this.form.companyid == null ||
         this.form.tax == "" ||
         this.form.tax == undefined ||
-        this.form.tax == null ||
-        this.form.addressinfoq == "" ||
-        this.form.addressinfoq == undefined ||
-        this.form.addressinfoq == null
+        this.form.tax == null
+        // this.form.addressinfoq == "" ||
+        // this.form.addressinfoq == undefined ||
+        // this.form.addressinfoq == null
       ) {
         this.alert();
       } else if (
@@ -671,7 +671,7 @@ export default {
     },
     onSubmit(evt) {
       evt.preventDefault();
-      // alert(JSON.stringify(this.form));
+      alert(JSON.stringify(this.form));
     },
     onReset(evt) {
       evt.preventDefault();

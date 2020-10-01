@@ -30,8 +30,17 @@
           <div class="paragraph">
             <h2>{{ dt.productname }}</h2>
             <br />
-            <h4 class="price" style="color:#F39C12">
-              ฿ {{ formatPrice(dt.unitprice) }}
+            <h4 class="price" style="color: #f39c12">
+              <div
+                v-if="
+                  dt.unitprice == 0 ||
+                  dt.unitprice == '' ||
+                  dt.unitprice == null
+                "
+              >
+                กรุณาขอใบเสนอราคา
+              </div>
+              <div v-else>฿ {{ formatPrice(dt.unitprice) }}</div>
             </h4>
             <br />
             <h6>หมายเหตุสินค้า : {{ dt.notation }}</h6>
@@ -47,7 +56,13 @@
                 :style="{ width: '200px', height: '60px' }"
                 >ย้อนกลับ</v-btn
               >
-              <div v-if="dt.weight > 25">
+              <div
+                v-if="
+                  dt.quotationStatus == 'ขอใบเสนอราคา' ||
+                  dt.unit === 'JOB' ||
+                  dt.productstatus == 'สินค้าหมดชั่วคราว'
+                "
+              >
                 <v-btn
                   color="green"
                   :style="{ width: '200px', height: '60px' }"
@@ -56,12 +71,12 @@
                 >
               </div>
               <div v-else>
-                <div v-if="dt.productstatus == 'สินค้าหมดชั่วคราว'">
+                <!-- <div v-if="dt.productstatus == 'สินค้าหมดชั่วคราว'">
                   <v-btn :style="{ width: '200px', height: '60px' }" disabled
                     >สินค้าหมดชั่วคราว</v-btn
                   >
-                </div>
-                <div v-else-if="dt.productstatus == 'สินค้ายกเลิกการจำหน่าย'">
+                </div> -->
+                <div v-if="dt.productstatus == 'สินค้ายกเลิกการจำหน่าย'">
                   <v-btn :style="{ width: '200px', height: '60px' }" disabled
                     >สินค้ายกเลิกการจำหน่าย</v-btn
                   >
@@ -88,7 +103,7 @@ import CartController from "@/utils/cart_controller";
 import askbefore from "@/components/quatation/askbefore";
 export default {
   components: {
-    askbefore
+    askbefore,
   },
   data() {
     return {
@@ -96,7 +111,7 @@ export default {
       product: [{ to: "/product" }],
       getpid: "",
       getpname: "",
-      getpunit: ""
+      getpunit: "",
     };
   },
   validate({ params }) {
@@ -108,7 +123,7 @@ export default {
     productg() {
       return this.$store.state.productg;
       console.log("test", this.$store.state.productg);
-    }
+    },
   },
   mounted() {
     this.$store.dispatch("getProduct", this.$route.params.id);
@@ -118,17 +133,17 @@ export default {
       if (form == 1) {
         this.$router.push({
           name: "quatation-quatation_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit }
+          params: { pidq: pid, pnameq: pname, punitq: punit },
         });
       } else if (form == 2) {
         this.$router.push({
           name: "quatation-personal_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit }
+          params: { pidq: pid, pnameq: pname, punitq: punit },
         });
       } else if (form == 3) {
         this.$router.push({
           name: "quatation-company_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit }
+          params: { pidq: pid, pnameq: pname, punitq: punit },
         });
       }
     },
@@ -151,18 +166,18 @@ export default {
         this.$router.push("/users/login");
       } else {
         let res = await this.$http.get("/product", {
-          params: { productid: id }
+          params: { productid: id },
         });
         let uid = $nuxt.$auth.user[0].userid;
         let resuser = await this.$http.get("/users", {
-          params: { userid: uid }
+          params: { userid: uid },
         });
 
         this.selected = res.data.products;
         let testapi = await CartController.addToCart({
           id,
           quantity: 1,
-          uid
+          uid,
         });
         // console.log("test api",testapi)
         // let cartLength = await CartController.getCartLength(this.$nuxt.$auth.user[0].userid);
@@ -178,8 +193,8 @@ export default {
         // let cartlength = await cartService.getCartLength(this.$nuxt.$auth.user[0].userid)
         // this.$store.dispatch("setCartLength", cartlength.carts[0].length);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
