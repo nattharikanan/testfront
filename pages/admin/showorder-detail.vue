@@ -56,7 +56,7 @@
           paddingRight: '70px',
           paddingTop: '20px',
           paddingBottom: '30px',
-          color: 'black'
+          color: 'black',
         }"
         class="text-center"
       >
@@ -111,8 +111,8 @@
           :to="{
             name: 'admin-insertp',
             params: {
-              m: 2
-            }
+              m: 2,
+            },
           }"
         >
           <v-icon color="white">mdi-arrow-left</v-icon>
@@ -140,7 +140,7 @@ export default {
       totalPrice: "",
       vat7: "",
       netprice: "",
-      back: [{ to: "insertp" }]
+      back: [{ to: "insertp" }],
     };
   },
 
@@ -175,7 +175,6 @@ export default {
       window.print();
       document.title = tempTitle;
     },
-
     cartTotalPrice() {
       this.totalPrice = 0;
       for (const p of this.product) {
@@ -187,8 +186,8 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-  }
+    },
+  },
 };
 </script>
 

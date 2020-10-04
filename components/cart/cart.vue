@@ -33,12 +33,16 @@
               <br />
               {{ item.quantity }} * {{ formatPrice(item.unitprice) }}
               <br />
-              รวม
-              : {{ formatPrice(item.quantity * item.unitprice) }}
+              รวม : {{ formatPrice(item.quantity * item.unitprice) }}
             </div>
             <div></div>
             <div>
-              <a text @click="dialog = true,myid = item.productid" class="badge badge-secondary">ลบ</a>
+              <a
+                text
+                @click="(dialog = true), (myid = item.productid)"
+                class="badge badge-secondary"
+                >ลบ</a
+              >
               <!-- <a @click="deletecart(item.productid)" class="badge badge-secondary">ลบ</a> -->
             </div>
           </div>
@@ -49,11 +53,9 @@
         <div class="px-2 d-flex justify-content-between">
           <span>ยอดรวม : {{ formatPrice(totalPrice) }} บาท</span>
 
-          <nuxt-link
-            v-for=" (item,idx) in cartdetail "
-            :key="idx"
-            :to="item.to"
-          >รายละเอียดตะกร้าสินค้า</nuxt-link>
+          <nuxt-link v-for="(item, idx) in cartdetail" :key="idx" :to="item.to"
+            >รายละเอียดตะกร้าสินค้า</nuxt-link
+          >
         </div>
       </v-list>
     </v-menu>
@@ -62,8 +64,12 @@
         <v-card-title>ท่านต้องการลบสินค้าในตะกร้าใช่หรือไม่ ?</v-card-title>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="green darken-1" text @click="deletecart(myid)">ใช่</v-btn>
-          <v-btn color="red darken-1" text @click="dialog = false">ไม่ใช่</v-btn>
+          <v-btn color="green darken-1" text @click="deletecart(myid)"
+            >ใช่</v-btn
+          >
+          <v-btn color="red darken-1" text @click="dialog = false"
+            >ไม่ใช่</v-btn
+          >
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -144,6 +150,7 @@ export default {
     async deletecart(id) {
       let res = await this.$http.post("/carts/delete", {
         productid: id,
+        userid: this.$nuxt.$auth.user[0].userid,
       });
       if (!res.data.ok) {
         console.log("ลบข้อมูลสินค้าไม่สำเร็จ");
