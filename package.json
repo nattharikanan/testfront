@@ -28,6 +28,7 @@
     "jspdf": "^2.0.0",
     "moment": "^2.27.0",
     "nuxt": "^2.11.0",
+    "smtp": "^0.1.4",
     "v-money": "^0.8.1",
     "vue-axios": "^2.1.5",
     "vue-base64-file-upload": "^1.0.4",

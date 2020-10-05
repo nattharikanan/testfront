@@ -2,7 +2,7 @@
   <v-flex>
     <v-snackbar
       :color="coloralert"
-      :value="alertstatus"
+      v-model="alertstatus"
       :timeout="timeout"
       top
       >{{ alertMessage }}</v-snackbar
@@ -73,17 +73,43 @@
                   placeholder="กรุณากรอกจังหวัด"
                 />
 
-                <ThailandAutoComplete
-                  v-model="zipcode"
-                  type="zipcode"
-                  @select="select"
-                  color="#85C1E9 "
-                  placeholder="รหัสไปรษณีย์"
-                />
+                <div v-if="this.zipcode == null || this.zipcode == ''">
+                  <ThailandAutoComplete
+                    type="zipcode"
+                    v-model="zipcodenull"
+                    color="#85C1E9 "
+                    placeholder="รหัสไปรษณีย์"
+                  />
+                </div>
+                <div v-else>
+                  <ThailandAutoComplete
+                    v-model="zipcode"
+                    type="zipcode"
+                    @select="select"
+                    color="#85C1E9 "
+                    placeholder="รหัสไปรษณีย์"
+                  />
+                </div>
               </v-container>
-              <v-btn color="primary" dark class="mb-2" @click="dialog = true"
-                >บันทึก</v-btn
+
+              <div
+                v-if="
+                  (district != '' &&
+                    amphoe != '' &&
+                    province != '' &&
+                    zipcode != '' &&
+                    addressinfo != '') ||
+                    zipcodenull != ''
+                "
               >
+                <v-btn color="primary" dark class="mb-2" @click="dialog = true"
+                  >บันทึก</v-btn
+                >
+              </div>
+              <div v-else>
+                <v-btn color="primary" @click="alert()">บันทึก</v-btn>
+              </div>
+
               <v-dialog v-model="dialog" persistent max-width="350">
                 <v-card>
                   <v-card-title>ต้องการบันทึกข้อมูลใช่หรือไม่?</v-card-title>
@@ -119,6 +145,7 @@ export default {
   },
   data() {
     return {
+      zipcodenull: "",
       coloralert: "",
       alertstatus: false,
       alertMessage: "",
@@ -169,62 +196,149 @@ export default {
       this.zipcode = $nuxt.$auth.user[0].addressZipcode;
     }
   },
+  checkbeforeinsert() {},
   methods: {
     select(address) {
-      this.district = address.district;
-      this.amphoe = address.amphoe;
-      this.province = address.province;
-      this.zipcode = address.zipcode;
+      if (address.zipcode === null) {
+        this.district = address.district;
+        this.amphoe = address.amphoe;
+        this.province = address.province;
+        this.zipcode = this.zipcodenull;
+      } else {
+        this.district = address.district;
+        this.amphoe = address.amphoe;
+        this.province = address.province;
+        this.zipcode = address.zipcode;
+      }
     },
     async updateinfo() {
       //ต้องมีการยืนยันรหัสผ่านอีกรอบเพื่อทำการเปลี่ยนแปลงข้อมูล
-      this.address =
-        this.addressinfo +
-        "\xa0\xa0" +
-        "ตำบล/แขวง" +
-        "\xa0\xa0" +
-        this.district +
-        "\xa0\xa0" +
-        "เขต/อำเภอ" +
-        "\xa0\xa0" +
-        this.amphoe +
-        "\xa0\xa0" +
-        "จังหวัด" +
-        "\xa0\xa0" +
-        this.province;
-      "\xa0\xa0" + "รหัสไปรษณีย์" + "\xa0\xa0" + this.zipcode;
-      console.log(this.address);
-      let res = await this.$http.post("/users/update", {
-        email: this.email,
-        firstname: this.firstname,
-        lastname: this.lastname,
-        phone: this.phone,
-        address: this.address,
-        addressInfo: this.addressinfo,
-        addressDistrict: this.district,
-        addressAmphoe: this.amphoe,
-        addressProvince: this.province,
-        addressZipcode: this.zipcode
-      });
-      if (!res.data.ok) {
-        console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
-        this.alertstatus = true;
-        (this.coloralert = "red lighten-2"),
-          (this.alertMessage = "แก้ไขข้อมูลสำเร็จไม่สำเร็จ");
+      if (this.zipcodenull == null || this.zipcodenull == "") {
+        this.address =
+          this.addressinfo +
+          "\xa0\xa0" +
+          "ตำบล/แขวง" +
+          "\xa0\xa0" +
+          this.district +
+          "\xa0\xa0" +
+          "เขต/อำเภอ" +
+          "\xa0\xa0" +
+          this.amphoe +
+          "\xa0\xa0" +
+          "จังหวัด" +
+          "\xa0\xa0" +
+          this.province +
+          "\xa0\xa0" +
+          "รหัสไปรษณีย์" +
+          "\xa0\xa0" +
+          this.zipcode;
+        console.log(this.address);
+
+        let res = await this.$http.post("/users/update", {
+          email: this.email,
+          firstname: this.firstname,
+          lastname: this.lastname,
+          phone: this.phone,
+          address: this.address,
+          addressInfo: this.addressinfo,
+          addressDistrict: this.district,
+          addressAmphoe: this.amphoe,
+          addressProvince: this.province,
+          addressZipcode: this.zipcode
+        });
+        if (!res.data.ok) {
+          console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
+          this.alertstatus = true;
+          (this.coloralert = "red lighten-2"),
+            (this.alertMessage = "แก้ไขข้อมูลสำเร็จไม่สำเร็จ");
+        } else {
+          console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
+          this.alertstatus = true;
+          (this.coloralert = "green lighten-2"),
+            (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
+          window.location.reload(true);
+        }
       } else {
-        console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
-        this.alertstatus = true;
-        (this.coloralert = "green lighten-2"),
-          (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
-        window.location.reload(true);
+        this.address =
+          this.addressinfo +
+          "\xa0\xa0" +
+          "ตำบล/แขวง" +
+          "\xa0\xa0" +
+          this.district +
+          "\xa0\xa0" +
+          "เขต/อำเภอ" +
+          "\xa0\xa0" +
+          this.amphoe +
+          "\xa0\xa0" +
+          "จังหวัด" +
+          "\xa0\xa0" +
+          this.province +
+          "\xa0\xa0" +
+          "รหัสไปรษณีย์" +
+          "\xa0\xa0" +
+          this.zipcodenull;
+        console.log(this.address);
+
+        let res = await this.$http.post("/users/update", {
+          email: this.email,
+          firstname: this.firstname,
+          lastname: this.lastname,
+          phone: this.phone,
+          address: this.address,
+          addressInfo: this.addressinfo,
+          addressDistrict: this.district,
+          addressAmphoe: this.amphoe,
+          addressProvince: this.province,
+          addressZipcode: this.zipcodenull
+        });
+        if (!res.data.ok) {
+          console.log("แก้ไขข้อมูลสินค้าไม่สำเร็จ");
+          this.alertstatus = true;
+          (this.coloralert = "red lighten-2"),
+            (this.alertMessage = "แก้ไขข้อมูลสำเร็จไม่สำเร็จ");
+        } else {
+          console.log("แก้ไขข้อมูลสินค้าสำเร็จ");
+          this.alertstatus = true;
+          (this.coloralert = "green lighten-2"),
+            (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
+          window.location.reload(true);
+        }
       }
+
       this.dialog = false;
     },
     close() {
       this.dialog = false;
+    },
+    alert() {
+      this.coloralert = "red";
+      (this.alertstatus = true),
+        (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
     }
   }
 };
 </script>
 
-<style></style>
+<style>
+div.vth-addr-label {
+  font-family: "Kanit";
+}
+input.vth-addr-input.vth-addr-input-size-default {
+  font-family: "Kanit";
+}
+
+/* span.item-first {
+  font-family: "Kanit";
+} */
+span.vth-addr-font-weight-bold {
+  font-family: "Kanit";
+}
+/* span.vth-addr-item-second {
+  font-family: "Kanit";
+} */
+span.item-first,
+span.vth-addr-item-second,
+span.vth-addr-item-third {
+  font-family: "Kanit";
+}
+</style>

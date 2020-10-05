@@ -95,7 +95,7 @@ export default {
         (this.alertstatus = true),
           (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
       } else {
-        this.coloralert = "red";
+        this.coloralert = "green";
         (this.alertstatus = true), (this.alertMessage = "เพิ่มข้อมูลถูกต้อง");
         this.close();
       }

@@ -14,7 +14,8 @@
         <div class="right-user">
           <v-btn text @click="gotoprofile()">
             <v-icon size="20px">mdi-account</v-icon>
-            {{ $auth.user[0].email }}
+            <!-- {{ $auth.user[0].email }} -->
+            โปรไฟล์ของท่าน
           </v-btn>
           <!-- แสดงค่าชื่อของคนที่ลูกค้าuser -->
           <v-dialog v-model="dialog" persistent max-width="350">
@@ -122,7 +123,7 @@ import quotation from "../quotation/quotation";
 export default {
   components: {
     cart,
-    quotation,
+    quotation
   },
   data() {
     return {
@@ -137,12 +138,12 @@ export default {
         { title: "วิธีการสั่งซื้อ", to: { name: "howto" } },
         { title: "ช่องทางการชำระเงิน", to: { name: "paymentdetail" } },
         { title: "แจ้งชำระเงิน", to: { name: "payment" } },
-        { title: "ติดตามพัสดุ", to: { name: "tracking" } },
+        { title: "ติดตามพัสดุ", to: { name: "tracking" } }
       ],
       itembar: [
         { title: "เข้าสู่ระบบ", to: { name: "users-login" } },
-        { title: "สมัครสมาชิก", to: { name: "users-register" } },
-      ],
+        { title: "สมัครสมาชิก", to: { name: "users-register" } }
+      ]
     };
   },
 
@@ -153,14 +154,14 @@ export default {
       } else {
         this.$router.push({
           name: "users-profile",
-          params: { tabs: 4 },
+          params: { tabs: 4 }
         });
       }
     },
     gotoprofile() {
       this.$router.push({
         name: "users-profile",
-        params: { tabs: 0 },
+        params: { tabs: 0 }
       });
     },
     logout() {
@@ -172,8 +173,8 @@ export default {
       }
       // this.$store.dispatch("resetState");
       // dialog = false;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -16,7 +16,7 @@
                 <v-img
                   max-height="200"
                   max-width="200"
-                  src="https://cdn140.picsart.com/280688579024211.png?type=webp&to=min&r=640"
+                  src="https://www.kasikornbank.com/SiteCollectionDocuments/about/img/logo/logo.png"
                 >
                 </v-img>
               </v-flex>
@@ -32,7 +32,7 @@
                 <v-img
                   max-height="200"
                   max-width="200"
-                  src="https://media.tmbbank.com/uploads/icon/img/s/3362_image_th_160714053532.png"
+                  src="https://iservice.aia.co.th/content/dam/th/th/payment/P4_ATM/1BBL_ATM.png"
                 >
                 </v-img>
               </v-flex>
@@ -40,23 +40,23 @@
             <v-layout row>
               <v-flex xs4 :style="{ color: 'black' }" class="row1">
                 <b
-                  >ชื่อบัญชี : นาย ก<br />
-                  เลขที่บัญชี :<br />
-                  สาขา :</b
+                  >ชื่อบัญชี : บริษัท ผลิตภัณฑ์และวัสดุก่อสร้าง <br />
+                  เลขที่บัญชี : 218-1-100832-9<br />
+                  สาขา : ธนาคารกสิกรไทย สาขานนทบุรี</b
                 >
               </v-flex>
               <v-flex xs4 :style="{ color: 'black' }" class="row1">
                 <b
-                  >ชื่อบัญชี : นาย ก<br />
-                  เลขที่บัญชี :<br />
-                  สาขา :</b
+                  >ชื่อบัญชี : บริษัท ผลิตภัณฑ์และวัสดุก่อสร้าง<br />
+                  เลขที่บัญชี : 020-6-04588-3<br />
+                  สาขา : ธนาคารกรุงไทย สาขา เตาปูน</b
                 >
               </v-flex>
               <v-flex xs4 :style="{ color: 'black' }" class="row1">
                 <b
-                  >ชื่อบัญชี : นาย ก<br />
-                  เลขที่บัญชี :<br />
-                  สาขา :</b
+                  >ชื่อบัญชี : บริษัท ผลิตภัณฑ์และวัสดุก่อสร้าง<br />
+                  เลขที่บัญชี : 127-3-13805-5<br />
+                  สาขา : ธนาคารกรุงเทพ สาขา อารีย์</b
                 >
               </v-flex>
             </v-layout>

@@ -26,7 +26,7 @@
     <v-dialog v-model="dialog2" persistent max-width="400">
       <v-card>
         <v-card-title class="text-center">
-          ท่านต้องการออกใบกำกับภาษีรูปแบบใด ?
+          ท่านต้องการออกใบกำกับภาษีในนามใด ?
           <div :style="{ paddingLeft: '100px' }">
             <v-radio-group v-model="radios" :mandatory="false" row>
               <v-radio label="บุคคล"></v-radio>
@@ -59,33 +59,33 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     pidq: {
       type: String,
-      default: ""
+      default: "",
     },
     pnameq: {
       type: String,
-      default: ""
+      default: "",
     },
     punitq: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   data() {
     return {
       radios: "",
       dialog2: false,
-      form: ""
+      form: "",
     };
   },
   watch: {},
   computed: {
     dialog() {
       return this.toggle;
-    }
+    },
   },
   methods: {
     selecttype() {
@@ -107,8 +107,8 @@ export default {
     without() {
       this.form = 1;
       this.$emit("submited", this.pidq, this.form, this.pnameq, this.punitq);
-    }
-  }
+    },
+  },
 };
 </script>
 

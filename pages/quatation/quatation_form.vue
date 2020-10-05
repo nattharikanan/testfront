@@ -206,13 +206,23 @@
                       placeholder="กรุณากรอกจังหวัด"
                     />
 
-                    <ThailandAutoComplete
-                      v-model="zipcode"
-                      type="zipcode"
-                      @select="select"
-                      color="#85C1E9 "
-                      placeholder="รหัสไปรษณีย์"
-                    />
+                    <div v-if="this.zipcode == null || this.zipcode == ''">
+                      <ThailandAutoComplete
+                        type="zipcode"
+                        v-model="zipcodenull"
+                        color="#85C1E9 "
+                        placeholder="รหัสไปรษณีย์"
+                      />
+                    </div>
+                    <div v-else>
+                      <ThailandAutoComplete
+                        v-model="zipcode"
+                        type="zipcode"
+                        @select="select"
+                        color="#85C1E9 "
+                        placeholder="รหัสไปรษณีย์"
+                      />
+                    </div>
                   </div>
                 </v-container>
               </v-layout>
@@ -228,11 +238,12 @@
                 >
                   <div
                     v-if="
-                      district != '' &&
-                      amphoe != '' &&
-                      province != '' &&
-                      zipcode != '' &&
-                      addressinfo != ''
+                      (district != '' &&
+                        amphoe != '' &&
+                        province != '' &&
+                        zipcode != '' &&
+                        addressinfo != '') ||
+                        zipcodenull != ''
                     "
                   >
                     <v-btn color="primary" @click="(e1 = 3), mergeaddress()"
@@ -392,6 +403,7 @@ export default {
       show: true,
       dis: false,
       lastquaid: 0,
+      zipcodenull: "",
       form: {
         productid: "",
         productname: "",
@@ -404,7 +416,7 @@ export default {
         square: "",
         quantity: "",
         info: "",
-        unit: "",
+        unit: ""
       },
       quantity: "",
       e1: 1,
@@ -413,21 +425,21 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: "ติดต่อขอรับใบเสนอราคา",
           disabled: false,
-          to: "/quatation/quatation_form",
-        },
+          to: "/quatation/quatation_form"
+        }
       ],
       emailRules: [
-        (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-        (v) =>
+        v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+        v =>
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
             v
-          ) || "อีเมล์ของท่านไม่ถูกต้อง",
-      ],
+          ) || "อีเมล์ของท่านไม่ถูกต้อง"
+      ]
     };
   },
   created() {
@@ -438,22 +450,47 @@ export default {
 
   methods: {
     mergeaddress() {
-      this.form.addressd =
-        this.addressinfo +
-        "\xa0\xa0" +
-        "ตำบล/แขวง" +
-        "\xa0\xa0" +
-        this.district +
-        "\xa0\xa0" +
-        "เขต/อำเภอ" +
-        "\xa0\xa0" +
-        this.amphoe +
-        "\xa0\xa0" +
-        "จังหวัด" +
-        "\xa0\xa0" +
-        this.province;
-      "\xa0\xa0" + "รหัสไปรษณีย์" + "\xa0\xa0" + this.zipcode;
-      console.log(this.form.addressd);
+      if (this.zipcodenull == null || this.zipcodenull == "") {
+        this.form.addressd =
+          this.addressinfo +
+          "\xa0\xa0" +
+          "ตำบล/แขวง" +
+          "\xa0\xa0" +
+          this.district +
+          "\xa0\xa0" +
+          "เขต/อำเภอ" +
+          "\xa0\xa0" +
+          this.amphoe +
+          "\xa0\xa0" +
+          "จังหวัด" +
+          "\xa0\xa0" +
+          this.province +
+          "\xa0\xa0" +
+          "รหัสไปรษณีย์" +
+          "\xa0\xa0" +
+          this.zipcode;
+        console.log(this.form.addressd);
+      } else {
+        this.form.addressd =
+          this.addressinfo +
+          "\xa0\xa0" +
+          "ตำบล/แขวง" +
+          "\xa0\xa0" +
+          this.district +
+          "\xa0\xa0" +
+          "เขต/อำเภอ" +
+          "\xa0\xa0" +
+          this.amphoe +
+          "\xa0\xa0" +
+          "จังหวัด" +
+          "\xa0\xa0" +
+          this.province +
+          "\xa0\xa0" +
+          "รหัสไปรษณีย์" +
+          "\xa0\xa0" +
+          this.zipcodenull;
+        console.log(this.form.addressd);
+      }
     },
     alert() {
       this.coloralert = "red";
@@ -461,10 +498,17 @@ export default {
         (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
     },
     select(address) {
-      this.district = address.district;
-      this.amphoe = address.amphoe;
-      this.province = address.province;
-      this.zipcode = address.zipcode;
+      if (address.zipcode === null) {
+        this.district = address.district;
+        this.amphoe = address.amphoe;
+        this.province = address.province;
+        this.zipcode = this.zipcodenull;
+      } else {
+        this.district = address.district;
+        this.amphoe = address.amphoe;
+        this.province = address.province;
+        this.zipcode = address.zipcode;
+      }
     },
     check() {
       this.dialog = true;
@@ -520,8 +564,9 @@ export default {
           qNormalDate: this.q_date,
           qNormalTime: this.q_time,
           qNormalInfo: this.form.info,
-          qNormalStatus: this.status,
+          qNormalStatus: this.status
         });
+        console.log(res);
         if (!res.data.ok) {
           console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
         } else {
@@ -530,7 +575,7 @@ export default {
           this.lastquaid = res.data.lastid[0];
           this.$router.push({
             name: "quatation-detail-quan",
-            params: { quaid: this.lastquaid },
+            params: { quaid: this.lastquaid }
           });
         }
       }
@@ -538,6 +583,9 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       // alert(JSON.stringify(this.form));
+      if (evt.isTrusted) {
+        this.insert();
+      }
       this.dialog = true;
     },
     onReset(evt) {
@@ -558,8 +606,8 @@ export default {
         // 46 is dot
         $event.preventDefault();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

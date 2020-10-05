@@ -397,7 +397,7 @@
                   class="text-right"
                   :style="{ paddingRight: '20px' }"
                 >
-                  <b-button type="submit" @click="insert()" variant="primary"
+                  <b-button type="submit" variant="primary"
                     >ส่งใบเสนอราคา</b-button
                   >
                 </v-flex>
@@ -556,7 +556,9 @@ export default {
           this.coloralert = "red";
           (this.alertstatus = true),
             (this.alertMessage = "กรุณากรอกข้อมูลให้ครบถ้วน");
+          console.log("ไม่บันทึก");
         } else {
+          console.log("การบันทึกข้อมูล");
           this.lastquaid = res.data.lastid[0];
           console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
           this.coloralert = "green";
@@ -631,6 +633,9 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       // alert(JSON.stringify(this.form));
+      if (evt.isTrusted) {
+        this.insert();
+      }
     },
     onReset(evt) {
       evt.preventDefault();

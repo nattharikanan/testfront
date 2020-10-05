@@ -213,10 +213,10 @@
                   <div
                     v-if="
                       district != '' &&
-                        amphoe != '' &&
-                        province != '' &&
-                        zipcode != '' &&
-                        addressinfo != ''
+                      amphoe != '' &&
+                      province != '' &&
+                      zipcode != '' &&
+                      addressinfo != ''
                     "
                   >
                     <v-btn color="primary" @click="(e1 = 3), mergeaddress()"
@@ -422,7 +422,7 @@
                   class="text-right"
                   :style="{ paddingRight: '20px' }"
                 >
-                  <b-button type="submit" variant="primary" @click="insert()"
+                  <b-button type="submit" variant="primary"
                     >ส่งใบเสนอราคา</b-button
                   >
                 </v-flex>
@@ -447,6 +447,7 @@ export default {
   props: ["quatationid"],
   data() {
     return {
+      myemail: "",
       lastquaid: 0,
       checkbox1: false,
       date: parseISO(new Date().toISOString()),
@@ -483,7 +484,7 @@ export default {
         unittype: "",
         productid: "",
         productname: "",
-        unit: ""
+        unit: "",
       },
 
       status: "",
@@ -493,27 +494,28 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/"
+          to: "/",
         },
         {
           text: "ติดต่อขอรับใบเสนอราคา",
           disabled: false,
-          to: "/quatation/quatation_form"
-        }
+          to: "/quatation/quatation_form",
+        },
       ],
       emailRules: [
-        v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-        v =>
+        (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+        (v) =>
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
             v
-          ) || "อีเมล์ของท่านไม่ถูกต้อง"
-      ]
+          ) || "อีเมล์ของท่านไม่ถูกต้อง",
+      ],
     };
   },
   created() {
     this.form.productid = this.$route.params.pidq;
     this.form.productname = this.$route.params.pnameq;
     this.form.unit = this.$route.params.punitq;
+    this.form.email = this.$nuxt.$auth.user[0].email;
   },
   watch: {
     checkbox1: {
@@ -523,8 +525,8 @@ export default {
         } else {
           this.dis = false;
         }
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -626,15 +628,20 @@ export default {
       } else {
         if (this.checkbox1 == true) {
           this.form.addressq = this.form.addressd;
+          console.log("เข้า true");
         }
         if (this.form.unit === "JOB") {
           this.form.unittype = "ตารางเมตร";
+          console.log("เข้า job");
         } else {
           this.form.unittype = this.form.unit;
+          console.log("เข้า unit");
         }
+        console.log("นอกelse");
         this.status = "กำลังดำเนินการ";
         this.q_date = moment(this.date).format("dddd,DD-MMMM-YYYY");
         this.q_time = moment(this.date).format("HH.mm.ss");
+        console.log("นอกelse");
         let res = await this.$http.post("/q_company/insert", {
           qCompanyName: this.form.name,
           qCompanyUserid: this.$nuxt.$auth.user[0].userid,
@@ -653,7 +660,7 @@ export default {
           qCompanySquaremetre: this.form.square,
           qCompanyDate: this.q_date,
           qCompanyTime: this.q_time,
-          qCompanyStatus: this.status
+          qCompanyStatus: this.status,
         });
         if (!res.data.ok) {
           this.alert();
@@ -664,14 +671,17 @@ export default {
             (this.alertMessage = "บันทึกข้อมูลเรียบร้อย");
           this.$router.push({
             name: "quatation-detail-quac",
-            params: { quaid: this.lastquaid }
+            params: { quaid: this.lastquaid },
           });
         }
       }
     },
     onSubmit(evt) {
       evt.preventDefault();
-      alert(JSON.stringify(this.form));
+      // alert(JSON.stringify(this.form));
+      if (evt.isTrusted) {
+        this.insert();
+      }
     },
     onReset(evt) {
       evt.preventDefault();
@@ -691,8 +701,8 @@ export default {
         // 46 is dot
         $event.preventDefault();
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -706,5 +716,26 @@ export default {
 .space {
   padding-top: 15px;
   padding-left: 20px;
+}
+div.vth-addr-label {
+  font-family: "Kanit";
+}
+input.vth-addr-input.vth-addr-input-size-default {
+  font-family: "Kanit";
+}
+
+/* span.item-first {
+  font-family: "Kanit";
+} */
+span.vth-addr-font-weight-bold {
+  font-family: "Kanit";
+}
+/* span.vth-addr-item-second {
+  font-family: "Kanit";
+} */
+span.item-first,
+span.vth-addr-item-second,
+span.vth-addr-item-third {
+  font-family: "Kanit";
 }
 </style>
