@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <v-snackbar
       :color="coloralert"
       v-model="alertstatus"
@@ -377,15 +378,18 @@
 import moment from "moment";
 import "moment/locale/th";
 import { format, parseISO } from "date-fns";
+import loading from "@/components/loading/loading";
 // import ThailandAutoComplete from "vue-thailand-address-autocomplete";
 
 export default {
   components: {
     // ThailandAutoComplete
+    loading
   },
   props: ["quatationid"],
   data() {
     return {
+      loadingme: false,
       coloralert: "",
       alertstatus: false,
       alertMessage: "",
@@ -514,6 +518,7 @@ export default {
       this.dialog = true;
     },
     async insert() {
+      this.loadingme = true;
       if (
         this.form.name == "" ||
         this.form.name == undefined ||
@@ -573,6 +578,7 @@ export default {
           this.lastquaid = res.data.lastid[0];
           console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
           this.lastquaid = res.data.lastid[0];
+          this.loadingme = false;
           this.$router.push({
             name: "quatation-detail-quan",
             params: { quaid: this.lastquaid }
@@ -583,6 +589,7 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       // alert(JSON.stringify(this.form));
+      console.log("info", this.form.info);
       if (evt.isTrusted) {
         this.insert();
       }

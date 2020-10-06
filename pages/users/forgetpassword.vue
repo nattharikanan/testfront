@@ -1,8 +1,13 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
+    <v-snackbar top :color="coloralert" dark v-model="regisstatus">{{
+      alertMessage
+    }}</v-snackbar>
     <v-container class="text-center" fill-height>
       <v-layout row wrap align-center>
-        <v-flex class="text-xs-center">
+        <v-flex xs4> </v-flex>
+        <v-flex xs8 class="text-xs-center">
           <v-card max-width="50%" color="blue lighten-5">
             <v-container>
               <b-form>
@@ -23,15 +28,48 @@
   </div>
 </template>
 <script>
+import loading from "@/components/loading/loading";
 export default {
+  components: {
+    loading
+  },
   data() {
     return {
-      emailforget: ""
+      loadingme: false,
+      emailforget: "",
+      regisstatus: false,
+      alertMessage: "",
+      coloralert: ""
     };
   },
   methods: {
     async send() {
-      let res = await this.$http.post("/users/forgetpassword");
+      this.loadingme = true;
+      if (this.emailforget == "" || this.emailforget == null) {
+        this.regisstatus = true;
+        (this.coloralert = "red lighten-2"),
+          (this.iconalert = "mdi-alert-circle"),
+          (this.alertMessage = "กรุณากรอกอีเมล์ของท่าน");
+      } else {
+        let res = await this.$http.post("/users/forgetpassword", {
+          email: this.emailforget
+        });
+        if (res.data.ok) {
+          this.loadingme = false;
+          this.regisstatus = true;
+          (this.coloralert = "green lighten-2"),
+            (this.iconalert = "mdi mdi-checkbox-marked-circle"),
+            (this.alertMessage =
+              "ส่งข้อความไปยังอีเมล์ของท่านสำเร็จ กรุณาตรวจสอบกล่องข้อความของท่าน");
+        } else {
+          this.loadingme = false;
+          this.regisstatus = true;
+          (this.coloralert = "red lighten-2"),
+            (this.iconalert = "mdi-alert-circle"),
+            (this.alertMessage =
+              "ขอภัยไม่พบอีเมล์ของท่าน กรุณาตรวจสอบอีกครั้ง");
+        }
+      }
     }
   }
 };

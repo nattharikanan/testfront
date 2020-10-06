@@ -32,7 +32,7 @@
                       v-model="password"
                     ></v-text-field>
                     <div class="forgot">
-                      <!-- <nuxt-link to="forgetpassword">ลืมรหัสผ่าน ?</nuxt-link> -->
+                      <nuxt-link to="forgetpassword">ลืมรหัสผ่าน ?</nuxt-link>
                     </div>
                   </v-form>
                 </v-card-text>

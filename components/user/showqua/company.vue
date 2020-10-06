@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <div v-if="open">
       <companydetail :sendvalue="send" />
     </div>
@@ -54,13 +55,16 @@
 
 <script>
 import companydetail from "../quadetail/company_detail";
+import loading from "@/components/loading/loading";
 
 export default {
   components: {
-    companydetail
+    companydetail,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       open: false,
       a: false,
       b: false,
@@ -85,10 +89,14 @@ export default {
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get(
       `q_show/company?userid=${this.$nuxt.$auth.user[0].userid}`
     );
     this.show = res.data.company;
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
   },
   methods: {
     modalToggle(item) {

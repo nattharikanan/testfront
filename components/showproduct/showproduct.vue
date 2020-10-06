@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <editproduct :toggle="a" @close="a = false" :sendvalue="send" />
     <deleteproduct
       :deletetoggle="b"
@@ -77,14 +78,17 @@
 import addproduct from "../../components/addproduct/addproduct";
 import editproduct from "../../components/editproduct/editproduct";
 import deleteproduct from "../../components/deleteproduct/deleteproduct";
+import loading from "@/components/loading/loading";
 export default {
   components: {
     addproduct,
     editproduct,
     deleteproduct,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       checkbox: "",
       menu: "",
       id_delete: 0,
@@ -105,7 +109,7 @@ export default {
           text: "ชื่อสินค้า",
           align: "start",
           sortable: false,
-          value: "productname",
+          value: "productname"
         },
         { text: "รหัสสินค้า", value: "productid" },
         { text: "ประเภทสินค้า", value: "categoryname" },
@@ -120,24 +124,25 @@ export default {
         { text: "น้ำหนัก", value: "weight" },
         { text: "หน่วย", value: "unit" },
         { text: "ขอใบเสนอราคา", value: "quotationStatus" },
-        { text: "แก้ไขสินค้า", value: "edit" },
-      ],
+        { text: "แก้ไขสินค้า", value: "edit" }
+      ]
     };
   },
   watch: {
     checkbox: {
       handler() {
         console.log("check", this.checkbox);
-      },
-    },
+      }
+    }
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get("/categories");
     let temp = res.data.categories;
-    this.categories = temp.map((c) => ({
+    this.categories = temp.map(c => ({
       name: c.categoryname,
-      id: c.categoryid,
+      id: c.categoryid
     }));
     this.getProduct();
   },
@@ -154,12 +159,15 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
+        params: { categoryid: this.categoryid }
       });
 
       this.show = res.data.products;
-    },
-  },
+      if (res.data.ok) {
+        this.loadingme = false;
+      }
+    }
+  }
 };
 </script>
 

@@ -1,5 +1,6 @@
 <template>
   <v-container class="content">
+    <loading :toggle="loadingme" />
     <v-card full-height="900px">
       <div class="text-right" :style="{ color: 'blue' }">
         <v-btn @click="savetopdf()"
@@ -56,7 +57,7 @@
           paddingLeft: '70px',
           paddingRight: '70px',
           paddingTop: '20px',
-          color: 'black',
+          color: 'black'
         }"
         class="text-center"
       >
@@ -111,13 +112,18 @@
 <script>
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import loading from "@/components/loading/loading";
 
 export default {
+  components: {
+    loading
+  },
   middleware: "auth",
   name: "users-po",
   props: ["orderq"],
   data() {
     return {
+      loadingme: false,
       orderdate: "",
       ordertime: "",
       fname: "",
@@ -127,11 +133,12 @@ export default {
       product: [],
       totalPrice: "",
       vat7: "",
-      netprice: "",
+      netprice: ""
     };
   },
 
   async created() {
+    this.loadingme = true;
     let res = await this.$http.get(
       `/orders?orderid=${this.$route.params.orderq}`,
       {}
@@ -156,6 +163,9 @@ export default {
       );
       this.product = res.data.carts;
       this.cartTotalPrice();
+      if (res.data.ok) {
+        this.loadingme = false;
+      }
       console.log("testtttt", res.data);
     },
 
@@ -176,8 +186,8 @@ export default {
       document.title = "ใบยืนยันการสั่งสินค้า.pdf";
       window.print();
       document.title = tempTitle;
-    },
-  },
+    }
+  }
 };
 </script>
 

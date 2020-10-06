@@ -1,5 +1,6 @@
 <template>
   <div class="payment" ref="content">
+    <loading :toggle="loadingme" />
     <v-snackbar border="top" :color="coloralert" dark :value="regisstatus">
       {{ alertMessage }}
     </v-snackbar>
@@ -169,8 +170,13 @@
 
 <script>
 import axios from "axios";
+import loading from "@/components/loading/loading";
 export default {
+  components: {
+    loading
+  },
   data: vm => ({
+    loadingme: false,
     total: "",
     value: "",
     formatted: "",
@@ -223,6 +229,7 @@ export default {
     if ($nuxt.$auth.loggedIn == false) {
       this.$router.push("/users/login");
     } else {
+      this.loadingme = true;
       let res = await this.$http.get("/bank_account/showbank");
       this.bank = res.data.bankAccount;
       let userid = this.$nuxt.$auth.user[0].userid;
@@ -231,6 +238,9 @@ export default {
       );
       this.item = resrorderid.data.orderid;
       this.orderid = this.$route.params.orderid;
+      if (resrorderid.data.ok) {
+        this.loadingme = false;
+      }
     }
   },
   computed: {

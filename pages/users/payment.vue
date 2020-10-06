@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <loading :toggle="loadingme" />
     <v-snackbar
       :color="coloralert"
       v-model="alertstatus"
@@ -87,10 +88,16 @@ import "moment/locale/th";
 import { format, parseISO } from "date-fns";
 import CartProvider from "@/resources/cart_provider";
 import CartController from "@/utils/cart_controller";
+
+import loading from "@/components/loading/loading";
 export default {
   middleware: "auth",
+  components: {
+    loading
+  },
   data() {
     return {
+      loadingme: false,
       productidvalue: "",
       lastestordernum: 0,
       ordertime: "",
@@ -114,30 +121,32 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: "รายละเอียดตะกร้าสินค้า",
           disabled: false,
-          to: "/users/cartdetail",
+          to: "/users/cartdetail"
         },
         {
           text: "ชำระเงิน",
           disabled: false,
-          to: "/users/payment",
-        },
-      ],
+          to: "/users/payment"
+        }
+      ]
     };
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let resship = await this.$http.get("/ship_medthod");
     // console.log(res.data);
     let temp = resship.data.ship_medthod;
-    this.ship_medthod = temp.map((c) => ({
+    this.ship_medthod = temp.map(c => ({
       name: c.shmName,
-      id: c.shmId,
+      id: c.shmId
     }));
+    this.loadingme = false;
   },
   async mounted() {
     this.userid = this.$nuxt.$auth.user[0].userid;
@@ -151,6 +160,7 @@ export default {
 
   methods: {
     confirm() {
+      this.loadingme = true;
       if (
         this.$nuxt.$auth.user[0].phone == "" ||
         this.$nuxt.$auth.user[0].phone == null ||
@@ -159,6 +169,7 @@ export default {
         this.$nuxt.$auth.user[0].address == null ||
         this.$nuxt.$auth.user[0].address == undefined
       ) {
+        this.loadingme = false;
         console.log("ยังไม่ได้กรอกที่อยู่ เบอร์โทร");
         this.alertstatus = true;
         (this.coloralert = "red lighten-2"),
@@ -167,6 +178,7 @@ export default {
       } else {
         if (this.shmId == "" || this.shmId == null || this.shmId == undefined) {
           console.log("กรุณาเลือกการจัดส่ง");
+          this.loadingme = false;
           this.alertstatus = true;
           (this.coloralert = "red lighten-2"),
             (this.alertMessage = "กรุณาเลือกการจัดส่ง");
@@ -193,25 +205,28 @@ export default {
         tracking: this.tracking,
         shipMedthod: this.shmId,
         orderAddress: this.address,
-        netprice: this.netprice,
+        netprice: this.netprice
       });
       this.lastestordernum = order.data.lastesordernum[0];
       console.log("test1", this.lastestordernum);
       this.$store.dispatch("resetState");
       this.resetCart(this.productidvalue);
+      this.loadingme = false;
       this.$router.push({
         name: "users-po",
-        params: { orderq: this.lastestordernum },
+        params: { orderq: this.lastestordernum }
       });
     },
     async resetCart(id) {
+      this.loadingme = true;
       let res = await this.$http.post("/carts/delete", {
-        productid: id,
+        productid: id
       });
       if (!res.data.ok) {
         console.log("รีเซ็ทค่า");
       } else {
         console.log("ลบ");
+        this.loadingme = false;
       }
       this.dialog = false;
     },
@@ -228,8 +243,8 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-  },
+    }
+  }
 };
 </script>
 

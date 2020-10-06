@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <askbefore
       :toggle="dialog"
       @close="dialog = false"
@@ -71,8 +72,8 @@
                         :to="{
                           name: 'product_detail-id',
                           params: {
-                            id: p.productid,
-                          },
+                            id: p.productid
+                          }
                         }"
                       >
                         <img
@@ -81,7 +82,7 @@
                             marginTop: '10px',
                             height: '150px',
                             width: '200px',
-                            marginLeft: '10px',
+                            marginLeft: '10px'
                           }"
                         />
                       </nuxt-link>
@@ -89,8 +90,8 @@
                         :to="{
                           name: 'product_detail-id',
                           params: {
-                            id: p.productid,
-                          },
+                            id: p.productid
+                          }
                         }"
                       >
                         <v-list-item-title :style="{ marginLeft: '10px' }">
@@ -101,8 +102,8 @@
                         <div
                           v-if="
                             p.unitprice == 0 ||
-                            p.unitprice == '' ||
-                            p.unitprice == null
+                              p.unitprice == '' ||
+                              p.unitprice == null
                           "
                         >
                           กรุณาขอใบเสนอราคา
@@ -142,8 +143,8 @@
                     <div
                       v-if="
                         p.quotationStatus == 'ขอใบเสนอราคา' ||
-                        p.unit === 'JOB' ||
-                        p.productstatus == 'สินค้าหมดชั่วคราว'
+                          p.unit === 'JOB' ||
+                          p.productstatus == 'สินค้าหมดชั่วคราว'
                       "
                     >
                       <v-btn
@@ -198,12 +199,14 @@ import MoneyFormat from "vue-money-format";
 import CartProvider from "@/resources/cart_provider";
 import CartController from "@/utils/cart_controller";
 import askbefore from "@/components/quatation/askbefore";
+import loading from "@/components/loading/loading";
+
 import { tr } from "date-fns/locale";
 
 const cartService = new CartProvider();
 
-const delay = (timeout) => {
-  return new Promise((resolve) => {
+const delay = timeout => {
+  return new Promise(resolve => {
     setTimeout(resolve, timeout);
   });
 };
@@ -211,11 +214,13 @@ const delay = (timeout) => {
 export default {
   components: {
     askbefore,
+    loading
   },
   name: "product",
   props: ["product"],
   data() {
     return {
+      loadingme: false,
       dialog: false,
       coloralert: "",
       alertstatus: false,
@@ -230,17 +235,18 @@ export default {
       cartLengthTemp: 0,
       getpid: "",
       getpname: "",
-      getpunit: "",
+      getpunit: ""
     };
   },
 
   async created() {
+    this.loadingme = true;
     let res = await this.$http.get("/categories");
     console.log("respond", res.data);
     let temp = res.data.categories;
-    this.categories = temp.map((c) => ({
+    this.categories = temp.map(c => ({
       name: c.categoryname,
-      id: c.categoryid,
+      id: c.categoryid
     }));
     this.getProduct();
   },
@@ -259,17 +265,17 @@ export default {
       if (form == 1) {
         this.$router.push({
           name: "quatation-quatation_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       } else if (form == 2) {
         this.$router.push({
           name: "quatation-personal_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       } else if (form == 3) {
         this.$router.push({
           name: "quatation-company_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       }
     },
@@ -289,10 +295,13 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
+        params: { categoryid: this.categoryid }
       });
       console.log(res.data);
       this.products = res.data.products;
+      if (res.data.ok) {
+        this.loadingme = false;
+      }
     },
     async categorySelect(_id) {
       this.categoryid = _id;
@@ -304,7 +313,7 @@ export default {
     async handleClicked() {
       console.log("FROM ENTER", this.search);
       let res = await this.$http.get("/product/search", {
-        params: { productname: this.search },
+        params: { productname: this.search }
       });
       console.log(res.data);
       this.products = res.data.products;
@@ -314,18 +323,18 @@ export default {
         this.$router.push("/users/login");
       } else {
         let res = await this.$http.get("/product", {
-          params: { productid: id },
+          params: { productid: id }
         });
         let uid = $nuxt.$auth.user[0].userid;
         let resuser = await this.$http.get("/users", {
-          params: { userid: uid },
+          params: { userid: uid }
         });
 
         this.selected = res.data.products;
         let testapi = await CartController.addToCart({
           id,
           quantity: 1,
-          uid,
+          uid
         });
 
         // console.log("test api",testapi)
@@ -353,8 +362,8 @@ export default {
       let uid = this.$nuxt.$auth.user[0].userid;
       let resCart = await CartController.getCartById(uid);
       this.$store.dispatch("setCartLength", cartLength);
-    },
-  },
+    }
+  }
 };
 </script>
 

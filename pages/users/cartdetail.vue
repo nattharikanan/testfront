@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <loading :toggle="loadingme" />
     <v-dialog v-model="dialog" persistent max-width="400px">
       <v-card>
         <v-card-title>กรุณาระบุจำนวนสินค้าให้ถูกต้อง</v-card-title>
@@ -105,15 +106,17 @@
 import CartProvider from "@/resources/cart_provider";
 import CartController from "@/utils/cart_controller";
 import deleteitem from "@/components/cart/deleteitem-cart";
-
+import loading from "@/components/loading/loading";
 const cartService = new CartProvider();
 export default {
   middleware: "auth",
   components: {
     deleteitem,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       dialog: false,
       triggle: false,
       changeproductid: "",
@@ -134,24 +137,25 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: "รายละเอียดตะกร้าสินค้า",
           disabled: false,
-          to: "/users/cartdetail",
-        },
-      ],
+          to: "/users/cartdetail"
+        }
+      ]
     };
   },
   watch: {
     qty: {
       handler() {
         console.log("test qty", this.qty);
-      },
-    },
+      }
+    }
   },
   async created() {
+    this.loadingme = true;
     let uid = this.$nuxt.$auth.user[0].userid;
     let res = await CartController.getCartById(uid);
     let cartLength = await CartController.getCartLength(uid);
@@ -160,6 +164,7 @@ export default {
     this.cartTotalPrice();
     this.still = true;
     this.checknull = this.cartdb.carts.length;
+    this.loadingme = false;
   },
   async mounted() {},
   methods: {
@@ -193,14 +198,17 @@ export default {
       }
       let userid = $nuxt.$auth.user[0].userid;
       console.log(this.changequantity, this.changeproductid, userid);
+      this.loadingme = true;
       let res = await this.$http.post("/carts/updatequantity", {
         productid: this.changeproductid,
         userid: userid,
-        quantity: this.changequantity,
+        quantity: this.changequantity
       });
       if (!res.data.ok) {
+        this.loadingme = false;
         console.log("NO");
       } else {
+        this.loadingme = false;
         console.log("YES");
       }
     },
@@ -233,8 +241,8 @@ export default {
     formatPrice(value) {
       let val = (value / 1).toFixed(2).replace(",", ".");
       return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    },
-  },
+    }
+  }
 };
 </script>
 

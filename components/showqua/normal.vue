@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <normaledit :toggle="a" @close="a = false" :sendvalue="send" />
     <normaldelete
       :deletetoggle="b"
@@ -100,6 +101,7 @@ import deleteorder from "../../components/order/deleteorder";
 import normaldetail from "../../components/showqua/normal_detail";
 import normaledit from "../../components/quaedit/normal";
 import normaldelete from "../../components/quadelete/normal";
+import loading from "@/components/loading/loading";
 export default {
   components: {
     deleteorder,
@@ -107,9 +109,11 @@ export default {
     normaldetail,
     normaledit,
     normaldelete,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       open: false,
       a: false,
       b: false,
@@ -122,22 +126,26 @@ export default {
           text: "หมายเลข",
           align: "start",
           sortable: true,
-          value: "qNormalId",
+          value: "qNormalId"
         },
         { text: "ชื่อผู้สั่ง", value: "qNormalName" },
         { text: "นามสกุล", value: "qNormalLast" },
         { text: "วันที่ขอใบเสนอราคา", value: "qNormalDate" },
         { text: "สถานะ", value: "qNormalStatus" },
         { text: "แก้ไข", value: "edit" },
-        { text: "ตอบกลับ", value: "reply" },
-      ],
+        { text: "ตอบกลับ", value: "reply" }
+      ]
     };
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get("/q_normal");
 
     this.show = res.data.Normal;
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
   },
   methods: {
     modalToggle(item) {
@@ -153,10 +161,10 @@ export default {
       // this.open = true;
       this.$router.push({
         name: "quatation-detail-quan",
-        params: { quaid: item.qNormalId },
+        params: { quaid: item.qNormalId }
       });
-    },
-  },
+    }
+  }
 };
 </script>
 

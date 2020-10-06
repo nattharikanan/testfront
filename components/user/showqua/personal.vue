@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <div v-if="open">
       <personaldetail :sendvalue="send" />
     </div>
@@ -54,13 +55,16 @@
 
 <script>
 import personaldetail from "../quadetail/personal_detail";
+import loading from "@/components/loading/loading";
 
 export default {
   components: {
-    personaldetail
+    personaldetail,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       open: false,
       a: false,
       b: false,
@@ -85,9 +89,13 @@ export default {
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get(
       `q_show/personal?userid=${this.$nuxt.$auth.user[0].userid}`
     );
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
     this.show = res.data.personal;
   },
   methods: {

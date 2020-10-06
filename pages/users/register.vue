@@ -7,7 +7,7 @@
         defer
       ></script>
       <v-container>
-        <v-alert border="top" :color="coloralert" dark :value="regisstatus">{{
+        <v-alert border="top" :color="coloralert" dark v-model="regisstatus">{{
           alertMessage
         }}</v-alert>
         <v-row align="center" justify="center">

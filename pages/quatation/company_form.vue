@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <v-snackbar
       :color="coloralert"
       v-model="alertstatus"
@@ -213,10 +214,10 @@
                   <div
                     v-if="
                       district != '' &&
-                      amphoe != '' &&
-                      province != '' &&
-                      zipcode != '' &&
-                      addressinfo != ''
+                        amphoe != '' &&
+                        province != '' &&
+                        zipcode != '' &&
+                        addressinfo != ''
                     "
                   >
                     <v-btn color="primary" @click="(e1 = 3), mergeaddress()"
@@ -440,13 +441,16 @@ import moment from "moment";
 import "moment/locale/th";
 import { format, parseISO } from "date-fns";
 // import ThailandAutoComplete from "vue-thailand-address-autocomplete";
+import loading from "@/components/loading/loading";
 export default {
   components: {
     // ThailandAutoComplete
+    loading
   },
   props: ["quatationid"],
   data() {
     return {
+      loadingme: false,
       myemail: "",
       lastquaid: 0,
       checkbox1: false,
@@ -484,7 +488,7 @@ export default {
         unittype: "",
         productid: "",
         productname: "",
-        unit: "",
+        unit: ""
       },
 
       status: "",
@@ -494,21 +498,21 @@ export default {
         {
           text: "หน้าหลัก",
           disabled: false,
-          to: "/",
+          to: "/"
         },
         {
           text: "ติดต่อขอรับใบเสนอราคา",
           disabled: false,
-          to: "/quatation/quatation_form",
-        },
+          to: "/quatation/quatation_form"
+        }
       ],
       emailRules: [
-        (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-        (v) =>
+        v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+        v =>
           /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
             v
-          ) || "อีเมล์ของท่านไม่ถูกต้อง",
-      ],
+          ) || "อีเมล์ของท่านไม่ถูกต้อง"
+      ]
     };
   },
   created() {
@@ -525,8 +529,8 @@ export default {
         } else {
           this.dis = false;
         }
-      },
-    },
+      }
+    }
   },
 
   methods: {
@@ -589,6 +593,7 @@ export default {
       }
     },
     async insert() {
+      this.loadingme = true;
       if (
         this.form.name == "" ||
         this.form.name == undefined ||
@@ -660,7 +665,7 @@ export default {
           qCompanySquaremetre: this.form.square,
           qCompanyDate: this.q_date,
           qCompanyTime: this.q_time,
-          qCompanyStatus: this.status,
+          qCompanyStatus: this.status
         });
         if (!res.data.ok) {
           this.alert();
@@ -669,9 +674,10 @@ export default {
           this.coloralert = "green";
           (this.alertstatus = true),
             (this.alertMessage = "บันทึกข้อมูลเรียบร้อย");
+          this.loadingme = false;
           this.$router.push({
             name: "quatation-detail-quac",
-            params: { quaid: this.lastquaid },
+            params: { quaid: this.lastquaid }
           });
         }
       }
@@ -701,8 +707,8 @@ export default {
         // 46 is dot
         $event.preventDefault();
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

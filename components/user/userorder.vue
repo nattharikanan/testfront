@@ -1,5 +1,6 @@
 <template>
   <v-flex>
+    <loading :toggle="loadingme" />
     <v-card width="90%">
       <!-- <div class="overline mb-4">ข้อมูลของฉัน</div> -->
       <v-container>
@@ -14,6 +15,7 @@
         <v-card-title>
           ข้อมูลการสั่งซื้อสินค้า
           <v-divider class="mx-4" inset vertical></v-divider>
+
           <v-text-field
             v-model="search"
             append-icon="mdi-magnify"
@@ -84,9 +86,14 @@
 </template>
 
 <script>
+import loading from "../loading/loading";
 export default {
+  components: {
+    loading
+  },
   data() {
     return {
+      loadingme: false,
       a: false,
       b: false,
       id_delete: 0,
@@ -111,12 +118,15 @@ export default {
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     this.userid = this.$nuxt.$auth.user[0].userid;
-    console.log("user", this.userid);
     let res = await this.$http.get(`orders/me?userid=${this.userid}`);
     this.show = res.data.carts;
-    console.log("show", this.show);
-    // this.getProduct();
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
+
+    console.log("loading...", this.loadingme);
   },
   methods: {
     modalToggle(item) {
