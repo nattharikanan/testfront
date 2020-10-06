@@ -1,6 +1,8 @@
 <template>
   <v-app class="bg">
-    <v-alert border="top" :color="coloralert" dark :value="regisstatus">{{ alertMessage }}</v-alert>
+    <v-alert border="top" :color="coloralert" dark :value="regisstatus">{{
+      alertMessage
+    }}</v-alert>
     <v-layout row>
       <v-flex xs12>
         <v-container class="fill-height" fluid>
@@ -11,15 +13,27 @@
                   flat
                   color="cyan"
                   height="80px"
-                  :style="{ color: 'white'}"
-                >* เข้าสู่ระบบ *</v-toolbar>
+                  :style="{ color: 'white' }"
+                  >* เข้าสู่ระบบ *</v-toolbar
+                >
 
                 <v-card-text>
                   <v-form class="form">
-                    <v-text-field label="อีเมล์" type="text" v-model="email"></v-text-field>
+                    <v-text-field
+                      label="อีเมล์"
+                      type="text"
+                      v-model="email"
+                    ></v-text-field>
 
-                    <v-text-field id="password" label="รหัสผ่าน" type="password" v-model="password"></v-text-field>
-                    <div class="forgot">ลืมรหัสผ่าน ?</div>
+                    <v-text-field
+                      id="password"
+                      label="รหัสผ่าน"
+                      type="password"
+                      v-model="password"
+                    ></v-text-field>
+                    <div class="forgot">
+                      <nuxt-link to="forgetpassword">ลืมรหัสผ่าน ?</nuxt-link>
+                    </div>
                   </v-form>
                 </v-card-text>
 
@@ -30,7 +44,8 @@
                     width="200px"
                     :style="{ color: 'white' }"
                     @click="LoginSubmit"
-                  >เข้าสู่ระบบ</v-btn>
+                    >เข้าสู่ระบบ</v-btn
+                  >
                 </v-flex>
 
                 <v-divider class="mx-10"></v-divider>
@@ -57,14 +72,14 @@ export default {
       coloralert: "",
       iconalert: "",
       email: "",
-      password: "",
+      password: ""
     };
   },
   methods: {
     async LoginSubmit() {
       try {
         const response = await this.$auth.loginWith("local", {
-          data: { email: this.email, password: this.password },
+          data: { email: this.email, password: this.password }
         });
         console.log(response);
         console.log("เพิ่มข้อมูลสมาชิกสำเร็จ");
@@ -82,8 +97,8 @@ export default {
             "เข้าสู่ระบบไม่สำเร็จ กรุณาตรวจสอบความถูกต้องอีกครั้ง"),
           window.scrollTo(0, 0);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
