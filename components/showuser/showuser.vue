@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <edituser :toggle="a" @close="a = false" :sendvalue="send" />
     <v-card class="color">
       <v-card-title>
@@ -44,14 +45,17 @@
 
 <script>
 import edituser from "../showuser/edituser";
+import loading from "@/components/loading/loading";
 export default {
   components: {
     // deleteorder,
     // editorder,
-    edituser
+    edituser,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       a: false,
       b: false,
       id_delete: 0,
@@ -75,8 +79,12 @@ export default {
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get("/users");
     this.show = res.data.users;
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
   },
   methods: {
     modalToggle(item) {

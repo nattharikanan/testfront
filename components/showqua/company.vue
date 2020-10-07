@@ -13,7 +13,7 @@
     <div v-else>
       <v-card class="color">
         <v-card-title>
-          ขอเสนอนิติบุคล
+          แบบบริษัท
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-text-field
             v-model="search"

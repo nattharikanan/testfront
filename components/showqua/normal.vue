@@ -96,16 +96,12 @@
 </template>
 
 <script>
-import editorder from "../../components/order/editorder";
-import deleteorder from "../../components/order/deleteorder";
 import normaldetail from "../../components/showqua/normal_detail";
 import normaledit from "../../components/quaedit/normal";
 import normaldelete from "../../components/quadelete/normal";
 import loading from "@/components/loading/loading";
 export default {
   components: {
-    deleteorder,
-    editorder,
     normaldetail,
     normaledit,
     normaldelete,
@@ -157,8 +153,6 @@ export default {
       this.b = true;
     },
     ToggleDetail(item) {
-      // this.send = item;
-      // this.open = true;
       this.$router.push({
         name: "quatation-detail-quan",
         params: { quaid: item.qNormalId }

@@ -1,5 +1,6 @@
 <template>
   <v-layout class="details">
+    <loading :toggle="loadingme" />
     <askbefore
       :toggle="dialog"
       @close="dialog = false"
@@ -34,8 +35,8 @@
               <div
                 v-if="
                   dt.unitprice == 0 ||
-                  dt.unitprice == '' ||
-                  dt.unitprice == null
+                    dt.unitprice == '' ||
+                    dt.unitprice == null
                 "
               >
                 กรุณาขอใบเสนอราคา
@@ -59,8 +60,8 @@
               <div
                 v-if="
                   dt.quotationStatus == 'ขอใบเสนอราคา' ||
-                  dt.unit === 'JOB' ||
-                  dt.productstatus == 'สินค้าหมดชั่วคราว'
+                    dt.unit === 'JOB' ||
+                    dt.productstatus == 'สินค้าหมดชั่วคราว'
                 "
               >
                 <v-btn
@@ -101,17 +102,20 @@
 <script>
 import CartController from "@/utils/cart_controller";
 import askbefore from "@/components/quatation/askbefore";
+import loading from "@/components/loading/loading";
 export default {
   components: {
     askbefore,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       dialog: false,
       product: [{ to: "/product" }],
       getpid: "",
       getpname: "",
-      getpunit: "",
+      getpunit: ""
     };
   },
   validate({ params }) {
@@ -122,28 +126,29 @@ export default {
   computed: {
     productg() {
       return this.$store.state.productg;
-      console.log("test", this.$store.state.productg);
-    },
+    }
   },
   mounted() {
+    this.loadingme = true;
     this.$store.dispatch("getProduct", this.$route.params.id);
+    this.loadingme = false;
   },
   methods: {
     gotopage(pid, form, pname, punit) {
       if (form == 1) {
         this.$router.push({
           name: "quatation-quatation_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       } else if (form == 2) {
         this.$router.push({
           name: "quatation-personal_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       } else if (form == 3) {
         this.$router.push({
           name: "quatation-company_form",
-          params: { pidq: pid, pnameq: pname, punitq: punit },
+          params: { pidq: pid, pnameq: pname, punitq: punit }
         });
       }
     },
@@ -166,18 +171,18 @@ export default {
         this.$router.push("/users/login");
       } else {
         let res = await this.$http.get("/product", {
-          params: { productid: id },
+          params: { productid: id }
         });
         let uid = $nuxt.$auth.user[0].userid;
         let resuser = await this.$http.get("/users", {
-          params: { userid: uid },
+          params: { userid: uid }
         });
 
         this.selected = res.data.products;
         let testapi = await CartController.addToCart({
           id,
           quantity: 1,
-          uid,
+          uid
         });
         // console.log("test api",testapi)
         // let cartLength = await CartController.getCartLength(this.$nuxt.$auth.user[0].userid);
@@ -193,8 +198,8 @@ export default {
         // let cartlength = await cartService.getCartLength(this.$nuxt.$auth.user[0].userid)
         // this.$store.dispatch("setCartLength", cartlength.carts[0].length);
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

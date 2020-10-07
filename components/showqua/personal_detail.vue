@@ -35,7 +35,8 @@
           <v-flex xs8 :style="{ paddingLeft: '30px' }">
             <v-container>
               <b>ชื่อผู้ขอ :</b>
-              {{ this.sendvalue.qPersonalName }}{{ this.sendvalue.qPersonalLast }}
+              {{ this.sendvalue.qPersonalName
+              }}{{ this.sendvalue.qPersonalLast }}
               <br />
               <b>ที่อยู่ในการจัดส่ง :</b>
               {{ this.sendvalue.qPersonalAddressDelivery }}
@@ -53,7 +54,7 @@
               {{ this.sendvalue.qPersonalId }}
               <br />
               <b>วันที่สั่งซื้อ :</b>
-              {{this.sendvalue.qPersonalDate}}
+              {{ this.sendvalue.qPersonalDate }}
               <br />
               <b>เวลา :</b>
               {{ this.sendvalue.qPersonalTime }}
@@ -67,18 +68,18 @@
         <v-flex
           xs12
           :style="{
-          paddingLeft: '70px',
-          paddingRight: '70px',
-          paddingTop: '20px',
-          color: 'black'
-        }"
+            paddingLeft: '70px',
+            paddingRight: '70px',
+            paddingTop: '20px',
+            color: 'black'
+          }"
           class="text-center"
         >
-          <table :style="{ width: '100%', height: '50%'}">
+          <table :style="{ width: '100%', height: '50%' }">
             <tr>
-              <th :style="{background:'cyan' }">สินค้า</th>
+              <th :style="{ background: 'cyan' }">สินค้า</th>
               <!-- <th>รูปสินค้า</th> -->
-              <th :style="{background:'cyan' }">จำนวน</th>
+              <th :style="{ background: 'cyan' }">จำนวน</th>
             </tr>
             <tr>
               <td>{{ this.sendvalue.qPersonalProductname }}</td>
@@ -109,19 +110,19 @@ export default {
   data() {
     return {
       form: {},
-      cartdetail: [{ to: "/admin/insertp" }],
+      cartdetail: [{ to: "/admin/insertp" }]
     };
   },
   props: {
     sendvalue: {
       type: Object,
-      default: () => {},
-    },
+      default: () => {}
+    }
   },
   watch: {
     show() {
       this.form = this.sendvalue;
-    },
+    }
   },
   methods: {
     refreshpage() {
@@ -129,8 +130,8 @@ export default {
         window.location.pathname +
         window.location.search +
         window.location.hash;
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -161,9 +161,18 @@ export default {
   },
   methods: {
     back() {
-      this.$router.push({
-        name: "index"
-      });
+      if ($nuxt.$auth.user[0].status == "user") {
+        this.$router.push({
+          name: "users-profile",
+          params: {
+            m: 2
+          }
+        });
+      } else {
+        this.$router.push({
+          name: "admin-insertp"
+        });
+      }
     },
     refreshpage() {
       window.location.href =

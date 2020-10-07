@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <v-snackbar
       :color="coloralert"
       v-model="alertstatus"
@@ -173,15 +174,20 @@
 </template>
 
 <script>
+import loading from "@/components/loading/loading";
 export default {
+  components: {
+    loading
+  },
   props: {
     label: {
       type: String,
-      default: "Label",
-    },
+      default: "Label"
+    }
   },
   data() {
     return {
+      loadingme: false,
       coloralert: "",
       alertstatus: false,
       alertMessage: "",
@@ -206,32 +212,33 @@ export default {
       q: ["ขอใบเสนอราคา", "ไม่มี"],
       noimage:
         "https://www.img.in.th/images/13d03dc7c98b2cc7c207a41775ec44dd.jpg",
-      item: ["PC", "UT", "ST", "JOB"],
+      item: ["PC", "UT", "ST", "JOB"]
     };
   },
   watch: {
     categoryid: {
       handler() {
         console.log("cateID", this.categoryid);
-      },
+      }
     },
     quotationstatus: {
       handler() {
         if (this.quotationstatus == "ขอใบเสนอราคา") {
           this.unitprice = 0;
         }
-      },
-    },
+      }
+    }
   },
 
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get("/categories");
     // console.log(res.data);
     let temp = res.data.categories;
-    this.categories = temp.map((c) => ({
+    this.categories = temp.map(c => ({
       name: c.categoryname,
-      id: c.categoryid,
+      id: c.categoryid
     }));
     this.getProduct();
   },
@@ -256,10 +263,10 @@ export default {
         .post("https://api.imgur.com/3/image", formData, {
           headers: {
             Authorization: "Client-ID e93753161349d59",
-            Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c",
-          },
+            Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c"
+          }
         })
-        .then((res) => {
+        .then(res => {
           this.imagelink = res.data.data.link;
         });
       console.log("res", this.imagelink);
@@ -292,7 +299,7 @@ export default {
           weight: this.weight,
           length: this.length,
           width: this.width,
-          unit: this.unit,
+          unit: this.unit
         });
         if (!res.data.ok) {
           this.coloralert = "red";
@@ -308,9 +315,13 @@ export default {
     },
     async getProduct() {
       let res = await this.$http.get("/product", {
-        params: { categoryid: this.categoryid },
+        params: { categoryid: this.categoryid }
       });
       this.show = res.data.products;
+      if (res.data.ok) {
+        this.loadingme = false;
+      }
+
       //   console.log("test ", this.show);
     },
     close() {
@@ -344,7 +355,7 @@ export default {
           weight: this.weight,
           length: this.length,
           width: this.width,
-          unit: this.unit,
+          unit: this.unit
         });
         if (!res.data.ok) {
           this.coloralert = "red";
@@ -357,8 +368,8 @@ export default {
           this.close();
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

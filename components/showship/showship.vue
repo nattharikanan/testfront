@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <editship :toggle="a" @close="a = false" :sendvalue="send" />
     <delship :deletetoggle="b" @closed="b = false" :delete_id="id_delete" />
     <v-card class="color">
@@ -45,16 +46,19 @@
 import add from "../showship/add";
 import delship from "../showship/delete";
 import editship from "../showship/edit";
+import loading from "@/components/loading/loading";
 export default {
   components: {
     // deleteorder,
     // editorder,
     add,
     delship,
-    editship
+    editship,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       a: false,
       b: false,
       id_delete: 0,
@@ -75,9 +79,12 @@ export default {
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get("/ship_medthod/");
     this.show = res.data.ship_medthod;
-    console.log("show", res.data.ship_medthod);
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
   },
   methods: {
     modalToggle(item) {

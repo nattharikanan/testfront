@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <update :toggle="a" @close="a = false" :sendvalue="send" />
     <!-- <deleteproduct :deletetoggle="b" @closed="b=false" :delete_id="id_delete" /> -->
     <v-card>
@@ -18,7 +19,12 @@
         <insert />
       </v-card-title>
 
-      <v-data-table :headers="headers" :search="search" :items="show" class="elevation-1">
+      <v-data-table
+        :headers="headers"
+        :search="search"
+        :items="show"
+        class="elevation-1"
+      >
         <template v-slot:item.edit="{ item }">
           <v-btn @click="modalToggle(item)" class="center">
             <v-icon>mdi-pencil</v-icon>
@@ -32,14 +38,17 @@
 <script>
 import insert from "../category/insert";
 import update from "../category/update";
+import loading from "@/components/loading/loading";
 
 export default {
   components: {
     insert,
     update,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       menu: "",
       id_delete: 0,
       send: {},
@@ -54,11 +63,11 @@ export default {
           text: "หมายเลข",
           align: "start",
           sortable: false,
-          value: "categoryid",
+          value: "categoryid"
         },
         { text: "ชื่อประเภทสินค้า", value: "categoryname" },
-        { text: "แก้ไข", value: "edit" },
-      ],
+        { text: "แก้ไข", value: "edit" }
+      ]
     };
   },
 
@@ -66,6 +75,7 @@ export default {
     //ปกป้องเสริมส่วนนี้มาให้
     // let res = await this.$http.get("/categories");
     // console.log("ประเภทสินค้า", res.data);
+
     this.getcategory();
   },
 
@@ -81,12 +91,14 @@ export default {
       console.log("hi", this.id_delete);
     },
     async getcategory() {
+      this.loadingme = true;
       let res = await this.$http.get("/categories", {});
-
       this.show = res.data.categories;
-      console.log("ประเภทสินค้า", this.show);
-    },
-  },
+      if (res.data.ok) {
+        this.loadingme = false;
+      }
+    }
+  }
 };
 </script>
 

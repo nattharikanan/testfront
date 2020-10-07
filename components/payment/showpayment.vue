@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading :toggle="loadingme" />
     <updatepayment :toggle="a" @close="a = false" :sendvalue="send" />
     <!-- <deleteorder :deletetoggle="b" @closed="b=false" :delete_id="id_delete" /> -->
     <v-card class="color">
@@ -61,12 +62,15 @@
 
 <script>
 import updatepayment from "../../components/payment/updatepayment";
+import loading from "@/components/loading/loading";
 export default {
   components: {
-    updatepayment
+    updatepayment,
+    loading
   },
   data() {
     return {
+      loadingme: false,
       a: false,
       b: false,
       id_delete: 0,
@@ -94,9 +98,13 @@ export default {
   },
   async created() {
     //ปกป้องเสริมส่วนนี้มาให้
+    this.loadingme = true;
     let res = await this.$http.get("/payments/showpayment");
     this.show = res.data.payments;
-    console.log("show", res.data.payments);
+    if (res.data.ok) {
+      this.loadingme = false;
+    }
+
     // this.getProduct();
   },
   methods: {
