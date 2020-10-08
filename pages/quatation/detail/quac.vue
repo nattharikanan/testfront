@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loading :toggle="loadingme" />
+    <loading :toggle="loadingme" /> /
     <v-card full-height="900px">
       <div class="text-right" :style="{ color: 'blue', paddingBottom: '5px' }">
         <v-btn class="back" @click="back()">ย้อนกลับ</v-btn>
