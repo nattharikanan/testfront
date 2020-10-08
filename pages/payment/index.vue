@@ -286,11 +286,13 @@ export default {
       console.log(" this.FILE", this.FILE);
     },
     async onSubmit() {
+      this.loadingme = true;
       let check = await this.$http.post(
         `/orders/check?orderid=${this.orderid}`
       );
       console.log("checkpayment", check.data.ok);
       if (check.data.ok == false) {
+        this.loadingme = false;
         this.regisstatus = true;
         (this.coloralert = "red lighten-2"),
           (this.iconalert = "mdi-alert-circle"),
@@ -301,6 +303,7 @@ export default {
         this.radios == "" ||
         this.image == ""
       ) {
+        this.loadingme = false;
         this.regisstatus = true;
         (this.coloralert = "red lighten-2"),
           (this.iconalert = "mdi-alert-circle"),
@@ -308,7 +311,12 @@ export default {
       } else {
         // upload file
         if (this.image.length == 0) {
-          this.insertpaymentwithoutimage();
+          // this.insertpaymentwithoutimage();
+          this.loadingme = false;
+          this.regisstatus = true;
+          (this.coloralert = "red lighten-2"),
+            (this.iconalert = "mdi-alert-circle"),
+            (this.alertMessage = "ไม่พบหมายเลขคำสั่งซื้อ กรุณาตรวจสอบอีกครั้ง");
         } else {
           const formData = new FormData();
           formData.append("image", this.FILE, this.FILE.name);
@@ -339,11 +347,13 @@ export default {
       });
       if (!respayment.data.ok) {
         console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
+        this.loadingme = false;
         this.regisstatus = true;
         (this.coloralert = "red lighten-2"),
           (this.iconalert = "mdi-alert-circle"),
           (this.alertMessage = "ไม่สำเร็จ ");
       } else {
+        this.loadingme = false;
         console.log("เพิ่มข้อมูลสินค้าสำเร็จ");
         this.regisstatus = true;
         (this.coloralert = "green lighten-2"),
