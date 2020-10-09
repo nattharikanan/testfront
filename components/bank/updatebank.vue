@@ -25,6 +25,9 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="6" md="6">
+                <v-text-field label="สาขา" v-model="form.branch"></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="6">
                 <v-text-field
                   label="หมายเลขบัญชี"
                   v-model="form.bankAcc"
@@ -72,12 +75,12 @@ export default {
   props: {
     toggle: {
       type: Boolean,
-      default: false
+      default: false,
     },
     sendvalue: {
       type: Object,
-      default: () => {}
-    }
+      default: () => {},
+    },
   },
   data() {
     return {
@@ -91,21 +94,21 @@ export default {
         bankName: "",
         bankAcc: "",
         owner: "",
-        bankstatus: ""
+        bankstatus: "",
       },
 
-      status: ["active", "inactive"]
+      status: ["active", "inactive"],
     };
   },
   watch: {
     show() {
       this.form = this.sendvalue;
-    }
+    },
   },
   computed: {
     show() {
       return this.toggle;
-    }
+    },
   },
 
   methods: {
@@ -119,7 +122,8 @@ export default {
         bankName: this.form.bankName,
         bankAcc: this.form.bankAcc,
         owner: this.form.owner,
-        bankstatus: this.form.bankstatus
+        branch: this.form.branch,
+        bankstatus: this.form.bankstatus,
       });
       if (!res.data.ok) {
         this.coloralert = "red";
@@ -133,8 +137,8 @@ export default {
     },
     close() {
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 

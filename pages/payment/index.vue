@@ -51,21 +51,35 @@
 
     <v-container>
       <v-layout :style="{ marginLeft: '30%' }">
-        <u :style="{ color: '#3498DB ' }">
-          <h5>ธนาคารที่โอนเข้า</h5>
-        </u>
-        <v-col class="text-center">
+        <u :style="{ color: '#3498DB ' }"> <h5>ธนาคารที่โอนเข้า</h5> </u><br />
+        <!-- <div v-for="(item, idx) in bank" :key="idx">นุปภาพ</div> -->
+        <v-flex xs2>
+          <v-container v-for="(item, idx) in bank" :key="idx">
+            <v-img
+              :style="{ marginTop: '18%' }"
+              max-height="70"
+              max-width="70"
+              :src="item.image"
+            />
+          </v-container>
+        </v-flex>
+
+        <v-flex xs6>
           <v-radio-group
+            :style="{ textAlign: 'left' }"
             v-for="(item, idx) in bank"
             :key="idx"
             v-model="radios"
             :mandatory="false"
           >
-            <h6>ธนาคาร{{ item.bankName }} ชื่อบัญชี{{ item.owner }}</h6>
+            <h6>
+              ธนาคาร{{ item.bankName }} สาขา{{ item.branch }} <br />
+              ชื่อบัญชี{{ item.owner }}
+            </h6>
 
             <v-radio :label="item.bankAcc" :value="item.bankNum"></v-radio>
           </v-radio-group>
-        </v-col>
+        </v-flex>
       </v-layout>
     </v-container>
     <v-container>
@@ -173,10 +187,21 @@ import axios from "axios";
 import loading from "@/components/loading/loading";
 export default {
   components: {
-    loading
+    loading,
   },
-  data: vm => ({
+  data: (vm) => ({
     loadingme: false,
+    items: [
+      {
+        isActive: true,
+        age: 40,
+        first_name: "Dickerson",
+        last_name: "Macdonald",
+      },
+      { isActive: false, age: 21, first_name: "Larsen", last_name: "Shaw" },
+      { isActive: false, age: 89, first_name: "Geneva", last_name: "Wilson" },
+      { isActive: true, age: 38, first_name: "Jami", last_name: "Carney" },
+    ],
     total: "",
     value: "",
     formatted: "",
@@ -197,12 +222,12 @@ export default {
         labelResetButton: "ลบ",
         labelNowButton: "เวลาตอนนี้",
         labelNoTimeSelected: "กรุณาเลือกเวลาที่โอน",
-        labelCloseButton: "ปิด"
-      }
+        labelCloseButton: "ปิด",
+      },
     },
     nameRules: [
-      v => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
-      v => (v && v.length <= 200) || "Name must be less than 200 characters"
+      (v) => !!v || "กรุณากรอกข้อมูลให้กรบถ้วน",
+      (v) => (v && v.length <= 200) || "Name must be less than 200 characters",
     ],
     regisstatus: false,
     alertMessage: "",
@@ -222,7 +247,7 @@ export default {
     y: "top",
     noimage:
       "https://www.img.in.th/images/13d03dc7c98b2cc7c207a41775ec44dd.jpg",
-    item: []
+    item: [],
   }),
   create() {},
   async mounted() {
@@ -246,7 +271,7 @@ export default {
   computed: {
     computedDateFormatted() {
       return this.formatDate(this.date);
-    }
+    },
   },
 
   watch: {
@@ -257,13 +282,13 @@ export default {
     radios: {
       handler() {
         console.log("radio", this.radios);
-      }
+      },
     },
     orderid: {
       handler() {
         this.checkorderid();
-      }
-    }
+      },
+    },
   },
   methods: {
     async checkorderid() {
@@ -323,11 +348,11 @@ export default {
           await axios
             .post("https://api.imgur.com/3/image", formData, {
               headers: {
-                Authorization: "Client-ID e93753161349d59"
+                Authorization: "Client-ID e93753161349d59",
                 // Authorization: "Bearer 24719a1e404ac3d8cf8e93672a278fcd35981a3c",
-              }
+              },
             })
-            .then(res => {
+            .then((res) => {
               this.imagelink = res.data.data.link;
             });
 
@@ -343,7 +368,7 @@ export default {
         totalprice: this.priceint,
         paymentDate: this.dateFormatted,
         paymentTime: this.time,
-        paymentImage: this.imagelink
+        paymentImage: this.imagelink,
       });
       if (!respayment.data.ok) {
         console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
@@ -370,7 +395,7 @@ export default {
         totalprice: this.priceint,
         paymentDate: this.dateFormatted,
         paymentTime: this.time,
-        paymentImage: this.noimage
+        paymentImage: this.noimage,
       });
       if (!respayment.data.ok) {
         console.log("เพิ่มข้อมูลสินค้าไม่สำเร็จ");
@@ -411,8 +436,8 @@ export default {
       // let sum = val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       console.log("format", sum);
       return (this.total = sum);
-    }
-  }
+    },
+  },
 };
 </script>
 <style>

@@ -61,7 +61,7 @@ export default {
   components: {
     inserbank,
     updatebank,
-    loading
+    loading,
   },
   data() {
     return {
@@ -77,14 +77,15 @@ export default {
           text: "ลำดับ",
           align: "start",
           sortable: true,
-          value: "bankNum"
+          value: "bankNum",
         },
         { text: "ชื่อธนาคาร", value: "bankName" },
         { text: "เลขบัญชี", value: "bankAcc" },
+        { text: "สาขา", value: "branch" },
         { text: "ชื่อเจ้าของบัญชี", value: "owner" },
         { text: "สถานะบัญชี", value: "bankstatus" },
-        { text: "แก้ไข", value: "edit" }
-      ]
+        { text: "แก้ไข", value: "edit" },
+      ],
     };
   },
   async created() {
@@ -108,8 +109,8 @@ export default {
       this.id_delete = pid.orderid;
       this.b = true;
       console.log("hi", this.id_delete);
-    }
-  }
+    },
+  },
 };
 </script>
 

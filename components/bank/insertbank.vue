@@ -22,17 +22,32 @@
             เพิ่มบัญชีธนาคาร
             <v-row>
               <v-col cols="12" sm="4" md="12">
-                <v-text-field
+                <v-select
                   v-model="bankName"
+                  item-text="itemname"
+                  item-value="itemid"
+                  :items="bankitem"
+                  label="เลือกธนาคาร"
+                >
+                  <template v-slot:item="{ item }">
+                    <img width="20px" height="20px" :src="item.itemimage" />
+                    &nbsp; &nbsp; <span>{{ item.itemname }}</span>
+                  </template>
+                </v-select>
+              </v-col>
+              <v-col cols="12" sm="4" md="12">
+                <v-text-field
+                  v-model="bankBranch"
                   required
-                  label="ชื่อธนาคาร"
+                  label="สาขา"
                 ></v-text-field>
               </v-col>
+
               <v-col cols="12" sm="4" md="12">
                 <v-text-field
                   v-model="bankAcc"
                   required
-                  label="เลขที่บัญชี"
+                  label="เลขที่บัญชี(กรุณาใส่ขีดคั่น)"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" sm="4" md="12">
@@ -48,7 +63,9 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="save">บันทึก</v-btn>
+          <v-btn color="blue darken-1" text @click="getNameandImage()"
+            >บันทึก</v-btn
+          >
           <v-btn
             color="blue darken-1"
             rounded
@@ -67,11 +84,14 @@ export default {
   props: {
     label: {
       type: String,
-      default: "Label"
-    }
+      default: "Label",
+    },
   },
   data() {
     return {
+      b_name: "",
+      b_image: "",
+      bankitem: [],
       coloralert: "",
       alertstatus: false,
       alertMessage: "",
@@ -79,16 +99,39 @@ export default {
       dialog: false,
       bankName: "",
       bankAcc: "",
-      owner: ""
+      owner: "",
+      option: [],
+      bankBranch: "",
     };
   },
+
+  async created() {
+    let res = await this.$http.get("/bank_account/getitem");
+    this.bankitem = res.data.bankItems;
+  },
   methods: {
+    async getNameandImage() {
+      let res = await this.$http.post("/bank_account/getforinsert", {
+        itemid: this.bankName,
+      });
+      if (res.data.ok) {
+        (this.b_name = res.data.bankItems[0].itemname),
+          (this.b_image = res.data.bankItems[0].itemimage);
+        this.save();
+      } else {
+        this.coloralert = "red";
+        (this.alertstatus = true),
+          (this.alertMessage = "ข้อมูลผิดพลาดกรุณาตรวจสอบอีกครั้ง");
+      }
+    },
     async save() {
       this.dialog = true;
       let res = await this.$http.post("/bank_account/insert", {
-        bankName: this.bankName,
+        bankName: this.b_name,
         bankAcc: this.bankAcc,
-        owner: this.owner
+        branch: this.bankBranch,
+        owner: this.owner,
+        image: this.b_image,
       });
       if (!res.data.ok) {
         this.coloralert = "red";
@@ -102,8 +145,8 @@ export default {
     },
     close() {
       this.dialog = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
