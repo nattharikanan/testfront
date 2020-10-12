@@ -2,28 +2,42 @@
   <v-container class="content">
     <loading :toggle="loadingme" />
     <v-card full-height="900px">
-      <div class="text-right" :style="{ color: 'blue' }">
+      <div class="text-right" :style="{ color: 'blue',paddingBottom: '5px' }">
         <v-btn @click="savetopdf()"
           ><v-icon>mdi-printer-check</v-icon>พิมพ์ใบสั่งซื้อที่นี่</v-btn
         >
       </div>
 
-      <div class="text-center">
-        <h4 :style="{ paddingTop: '20px' }">
-          <b>บริษัท ผลิตภัณฑ์และวัตถุก่อสร้าง จำกัด</b>
-        </h4>
+      <v-layout row>
+        <v-flex xs2>
+          <v-container>
+            <v-img
+              src="https://www.img.in.th/images/f82231453d35773023b85c11dc4e0658.jpg"
+            />
+          </v-container>
+        </v-flex>
+        <v-flex xs8>
+          <div class="text-center">
+            <h4 :style="{ paddingTop: '20px' }">
+              <b>บริษัท ผลิตภัณฑ์และวัตถุก่อสร้าง จำกัด</b>
+            </h4>
 
-        <div>
-          1516 ถ.ประชาราษฎร์ 1 แขวงวงศ์สว่าง เขตบางซื่อ กรุงเทพฯ 10800
-          <br />โทร.02-555-5000 CPAC CALL CENTER 02-555-5555 Email:
-          cpacinside@scg.com
-        </div>
-      </div>
-      <!-- <div class="time">
-        วันที่สั่งซื้อ : {{orderdate}}
-        <br />
-        เวลาที่สั่งซื้อ : {{ordertime}} นาที
-      </div>-->
+            <div>
+              1516 ถ.ประชาราษฎร์ 1 แขวงวงศ์สว่าง เขตบางซื่อ กรุงเทพฯ 10800
+              <br />โทร.02-555-5000 CPAC CALL CENTER 02-555-5555 Email:
+              cpacinside@scg.com
+            </div>
+          </div>
+        </v-flex>
+        <v-flex xs2>
+          <v-container>
+            <v-img
+              src="https://www.img.in.th/images/3106c042189c657d833bbf68a9783e6c.jpg"
+            />
+          </v-container>
+        </v-flex>
+      </v-layout>
+
 
       <div class="text-center">
         <h5 :style="{ paddingTop: '20px' }">

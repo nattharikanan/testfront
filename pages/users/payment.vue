@@ -47,7 +47,7 @@
             <tr v-for="(item, idx) in cartdb.carts" :key="idx">
               <td>{{ item.productname }}</td>
               <td>
-                <img :src="item.productimage" />
+                <img height="150px" width="280px" :src="item.productimage" />
               </td>
               <td>{{ item.quantity }}</td>
               <td>{{ item.unitprice }}</td>
@@ -210,7 +210,7 @@ export default {
       this.lastestordernum = order.data.lastesordernum[0];
       console.log("test1", this.lastestordernum);
       this.$store.dispatch("resetState");
-      this.resetCart(this.productidvalue);
+      this.resetCart(this.userid);
       this.loadingme = false;
       this.$router.push({
         name: "users-po",
@@ -219,8 +219,8 @@ export default {
     },
     async resetCart(id) {
       this.loadingme = true;
-      let res = await this.$http.post("/carts/delete", {
-        productid: id
+      let res = await this.$http.post("/carts/clearcart", {
+        userid: id
       });
       if (!res.data.ok) {
         console.log("รีเซ็ทค่า");
