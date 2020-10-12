@@ -55,8 +55,8 @@
                     ></v-text-field>
                   </div>
 
-                  <b-row>
-                    <b-col>
+                  <b-row >
+                    <b-col >
                       <v-text-field
                         class="รหัสผ่าน"
                         v-model="password"
@@ -73,41 +73,24 @@
                       ></v-text-field>
                     </b-col>
                   </b-row>
-                  <!-- <b-row>
-                      <b-col>
-                        <v-select
-                          class="gender"
-                          v-model="gender"
-                          :items="genders"
-                          label="เพศ"
-                          outlined
-                        ></v-select>
-                      </b-col>
 
-                      <b-col>
-                        <v-text-field v-model="age" type="number" min="0" label="อายุ" outlined></v-text-field>
+                  <b-row class="text-center" >
+                      <b-col >
                       </b-col>
-                    </b-row>
-                    <b-row>
-                      <b-col>
-                        <VuePhoneNumberInput v-model="phone" clearable required />
-                      </b-col>
-                  </b-row>-->
-                  <v-layout row>
-                    <v-flex xs12 :style="{ paddingLeft: '25%' }">
+               <b-col  >
+                  
                       <VueRecaptcha
                         sitekey="6LfdMMwZAAAAAFLzRip24CL5f9-s7E1oovlHjeGT"
                         @verify="checkCaptcha"
                         :loadRecaptchaScript="true"
                       />
-                      <!-- <recaptcha:RecaptchaControl
-                        ID="recaptcha"
-                        runat="server"
-                        PublicKey="6LfdMMwZAAAAAFLzRip24CL5f9-s7E1oovlHjeGT"
-                        PrivateKey="6LfdMMwZAAAAAKGACgJ-I8MEgQalR912xdp4VR7e"
-                      /> -->
-                    </v-flex>
-                  </v-layout>
+                  
+               </b-col>
+              <b-col >
+                      </b-col>
+                     
+                  </b-row>
+   
                   <v-layout row :style="{ paddingTop: '20px' }">
                     <v-flex xs6 class="text-center">
                       <v-btn
@@ -229,9 +212,9 @@ export default {
           this.regisstatus = true;
           (this.coloralert = "green lighten-2"),
             (this.iconalert = "mdi mdi-checkbox-marked-circle"),
-            (this.alertMessage = "สมัครสมาชิกสำเร็จ"),
+            (this.alertMessage = "กรุณายืนยันอีเมล์ของท่านก่อนเข้าสู่ระบบ"),
             window.scrollTo(0, 0);
-          setTimeout(() => this.$router.push("login"), 600);
+          setTimeout(() => this.$router.push("login"), 5000);
         } else {
           console.log("เพิ่มข้อมูลสมาชิกไม่สำเร็จ");
           this.regisstatus = true;
