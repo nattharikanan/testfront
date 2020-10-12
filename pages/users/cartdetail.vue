@@ -42,7 +42,7 @@
           <tr v-for="(item, idx) in cartdb.carts" :key="idx">
             <td>{{ item.productname }}</td>
             <td>
-              <img :src="item.productimage" />
+              <img height="150px" width="200px" :src="item.productimage" />
             </td>
             <td>
               <v-container>
@@ -67,7 +67,7 @@
           </tr>
           <tr class="head">
             <th>รวม</th>
-            <th colspan="5">{{ formatPrice(totalPrice) }} บาท</th>
+            <th colspan="6">{{ formatPrice(totalPrice) }} บาท</th>
           </tr>
         </table>
       </div>
