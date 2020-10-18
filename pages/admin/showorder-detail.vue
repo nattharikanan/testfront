@@ -123,7 +123,8 @@
         <v-flex> </v-flex>
       </v-layout>
       <div :style="{ padding: '10px', float: 'left' }" class="back">
-        <v-btn
+ <div v-if ="$nuxt.$auth.user[0].status == 'user'">
+       <v-btn
           rounded
           color="green"
           :to="{
@@ -135,6 +136,20 @@
         >
           <v-icon color="white">mdi-arrow-left</v-icon>
         </v-btn>
+ </div>
+  <div v-if ="$nuxt.$auth.user[0].status =='admin'">
+       <v-btn
+          rounded
+          color="green"
+          :to="{
+            name: 'admin-insertp',
+          
+          }"
+        >
+          <v-icon color="white">mdi-arrow-left</v-icon>
+        </v-btn>
+ </div>
+    
       </div>
       <v-flex xs4></v-flex>
     </v-card>
