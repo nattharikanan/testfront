@@ -285,7 +285,7 @@ export default {
   .login-admin {
     position: relative;
     text-decoration: none;
-    margin-left: 800px;
+    margin-left: 750px;
     padding: 10px;
   }
   .header {
