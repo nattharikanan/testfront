@@ -1,6 +1,9 @@
 <template>
+
   <v-card class="header">
+   
     <v-toolbar color="cyan" dark flat>
+           <loading :toggle="loadingme" />
       <div>
         <v-toolbar-title>
           <div class="logo" />
@@ -119,14 +122,17 @@
 <script>
 import cart from "../cart/cart";
 import quotation from "../quotation/quotation";
+import loading from "@/components/loading/loading";
 
 export default {
   components: {
     cart,
-    quotation
+    quotation,
+        loading
   },
   data() {
     return {
+       loadingme: false,
       confirm: true,
       dialog: false,
       tab: null,
@@ -165,9 +171,12 @@ export default {
       });
     },
     logout() {
+
+       this.loadingme = true;
       this.$store.dispatch("resetState");
 
       this.$auth.logout();
+           this.loadingme = false;
 
       if ($nuxt.$auth.loggedIn == false) {
       }

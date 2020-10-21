@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       tab: null,
-      items: ["ทั่วไป", "นิติบุคคล", "บริษัท"]
+      items: ["ทั่วไป", "บุคคลธรรมดา", "บริษัท"]
     };
   },
   watch: {
