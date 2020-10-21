@@ -1,5 +1,6 @@
 <template>
   <v-app class="bg">
+        <loading :toggle="loadingme" />
     <v-alert border="top" :color="coloralert" dark :value="regisstatus">{{
       alertMessage
     }}</v-alert>
@@ -63,10 +64,16 @@
 </template>
 
 <script>
+import loading from "@/components/loading/loading";
 export default {
+    components: {
+
+    loading
+  },
   layout: "login_layout",
   data() {
     return {
+       loadingme: false,
       regisstatus: false,
       alertMessage: "",
       coloralert: "",
@@ -77,19 +84,19 @@ export default {
   },
   methods: {
     async LoginSubmit() {
+       this.loadingme = true;
       try {
         const response = await this.$auth.loginWith("local", {
           data: { email: this.email, password: this.password }
         });
         console.log(response);
-        console.log("เพิ่มข้อมูลสมาชิกสำเร็จ");
+        this.loadingme = false;
         this.regisstatus = true;
         (this.coloralert = "green lighten-2"),
           (this.iconalert = "mdi mdi-checkbox-marked-circle"),
           (this.alertMessage = "เข้าสู่ระบบสำเร็จ");
       } catch (err) {
-        console.log(err);
-        console.log("เข้าสู่ระบบไม่สำเร็จ");
+           this.loadingme = false;
         this.regisstatus = true;
         (this.coloralert = "red lighten-2"),
           (this.iconalert = "mdi-alert-circle"),

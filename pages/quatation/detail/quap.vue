@@ -41,7 +41,7 @@
 
       <div class="text-center">
         <h5 :style="{ paddingTop: '20px' }">
-          <b>ใบขอเสนอราคานิติบุคลเลขที่ {{ this.$route.params.quaid }}</b>
+          <b>ใบขอเสนอราคานามบุคคลธรรมดาเลขที่ {{ this.$route.params.quaid }}</b>
         </h5>
       </div>
       <v-layout row>

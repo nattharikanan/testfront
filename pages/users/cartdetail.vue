@@ -36,7 +36,7 @@
             <th>จำนวน</th>
             <th>ราคาต่อชิ้น</th>
             <th>ราคารวม</th>
-            <th>น้ำหนักต่อชิ้น</th>
+            <!-- <th>น้ำหนักต่อชิ้น</th> -->
             <th>แอคชั่น</th>
           </tr>
           <tr v-for="(item, idx) in cartdb.carts" :key="idx">
@@ -60,14 +60,14 @@
             </td>
             <td>{{ item.unitprice }}</td>
             <td>฿{{ formatPrice(item.quantity * item.unitprice) }}</td>
-            <td>{{ item.unit }}</td>
+            <!-- <td>{{ item.unit }}</td> -->
             <td>
               <a @click="ToggleDelete(item.productid)">ลบ</a>
             </td>
           </tr>
           <tr class="head">
             <th>รวม</th>
-            <th colspan="6">{{ formatPrice(totalPrice) }} บาท</th>
+            <th colspan="5">{{ formatPrice(totalPrice) }} บาท</th>
           </tr>
         </table>
       </div>
