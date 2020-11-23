@@ -182,12 +182,12 @@ export default {
         });
       }
     },
-    refreshpage() {
-      window.location.href =
-        window.location.pathname +
-        window.location.search +
-        window.location.hash;
-    },
+    // refreshpage() {
+    //   window.location.href =
+    //     window.location.pathname +
+    //     window.location.search +
+    //     window.location.hash;
+    // },
     savetopdf() {
       var tempTitle = document.title;
       document.title = "ใบเสนอราคา.pdf";
