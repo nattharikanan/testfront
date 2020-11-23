@@ -168,8 +168,8 @@ export default {
         this.alertstatus = true;
         (this.coloralert = "green lighten-2"),
           (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
-        // window.location.reload(true);
-      location.reload();
+   
+
       }
       this.dialog = false;
     },
