@@ -116,7 +116,7 @@
                 <img :src="item.productimage" />
             </td>-->
             <td>
-              <div v-if="this.sendvalue.qCompanyQuantity === 0">
+              <div v-if="this.sendvalue.qCompanyQuantity === 0  ||this.sendvalue.qCompanyQuantity === null ||this.sendvalue.qCompanyQuantity ==='' ">
                 {{ this.sendvalue.qCompanySquaremetre }}
               </div>
               <div v-else>

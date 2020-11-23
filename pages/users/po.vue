@@ -1,7 +1,7 @@
 <template>
-  <v-container class="content">
+  <div class="container">
     <loading :toggle="loadingme" />
-    <v-card full-height="900px">
+    <v-card max-height="900px">
       <div class="text-right" :style="{ color: 'blue',paddingBottom: '5px' }">
         <v-btn @click="savetopdf()"
           ><v-icon>mdi-printer-check</v-icon>พิมพ์ใบสั่งซื้อที่นี่</v-btn
@@ -120,7 +120,7 @@
         <v-flex> </v-flex>
       </v-layout>
     </v-card>
-  </v-container>
+  </div>
 </template>
 
 <script>
