@@ -301,6 +301,7 @@ export default {
           this.alertstatus = true;
           (this.coloralert = "green lighten-2"),
             (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
+            location.href = location.href;
        
         }
       }
