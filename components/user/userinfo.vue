@@ -138,9 +138,9 @@ export default {
     };
   },
   created() {
-    if (typeof window === "undefined") {
-      global.window = {};
-    }
+    // if (typeof window === "undefined") {
+    //   global.window = {};
+    // }
   },
   mounted() {
     this.email = $nuxt.$auth.user[0].email;
