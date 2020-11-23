@@ -1,7 +1,7 @@
 <template>
-  <div class="container">
+  <div>
     <loading :toggle="loadingme" />
-    <v-card max-height="900px">
+    <v-card >
       <div class="text-right" :style="{ color: 'blue',paddingBottom: '5px' }">
         <v-btn @click="savetopdf()"
           ><v-icon>mdi-printer-check</v-icon>พิมพ์ใบสั่งซื้อที่นี่</v-btn
@@ -9,9 +9,9 @@
       </div>
 
       <v-layout row>
-        <v-flex xs2>
+        <v-flex xs2 class="setright">
           <v-container>
-            <v-img
+            <v-img width="150"
               src="https://www.img.in.th/images/f82231453d35773023b85c11dc4e0658.jpg"
             />
           </v-container>
@@ -29,9 +29,9 @@
             </div>
           </div>
         </v-flex>
-        <v-flex xs2>
+        <v-flex xs2 class="setleft">
           <v-container>
-            <v-img
+            <v-img width="150"
               src="https://www.img.in.th/images/3106c042189c657d833bbf68a9783e6c.jpg"
             />
           </v-container>
@@ -226,5 +226,11 @@ export default {
 }
 .head {
   padding-left: 40%;
+}
+.setleft {
+  justify-content: left;
+}
+.setright {
+  justify-content: right;
 }
 </style>
