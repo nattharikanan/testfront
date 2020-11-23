@@ -169,6 +169,7 @@ export default {
         (this.coloralert = "green lighten-2"),
           (this.alertMessage = "แก้ไขข้อมูลสำเร็จ");
         // window.location.reload(true);
+        location.reload.call(undefined);
       }
       this.dialog = false;
     },
