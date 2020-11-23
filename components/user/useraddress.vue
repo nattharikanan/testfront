@@ -165,9 +165,9 @@ export default {
     };
   },
   mounted() {
-    if (typeof window === "undefined") {
-      global.window = {};
-    }
+    // if (typeof window === "undefined") {
+    //   global.window = {};
+    // }
     this.email = $nuxt.$auth.user[0].email;
     this.firstname = $nuxt.$auth.user[0].firstname;
     this.lastname = $nuxt.$auth.user[0].lastname;
