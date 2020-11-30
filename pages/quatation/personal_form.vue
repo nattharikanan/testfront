@@ -496,6 +496,8 @@ export default {
     this.form.productid = this.$route.params.pidq;
     this.form.productname = this.$route.params.pnameq;
     this.form.unit = this.$route.params.punitq;
+    this.form.email = this.$nuxt.$auth.user[0].email;
+     this.form.phone = this.$nuxt.$auth.user[0].phone;
   },
   methods: {
     async insert() {
