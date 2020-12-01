@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loading :toggle="loadingme" /> /
+    <loading :toggle="loadingme" /> 
     <v-card full-height="900px">
       <div class="text-right" :style="{ color: 'blue', paddingBottom: '5px' }">
         <v-btn class="back" @click="back()">ย้อนกลับ</v-btn>
@@ -116,7 +116,7 @@
                 <img :src="item.productimage" />
             </td>-->
             <td>
-              <div v-if="this.sendvalue.qCompanyQuantity === 0  ||q.qCompanyQuantity === null ||q.qCompanyQuantity ==='' ">
+              <div v-if="this.sendvalue.qCompanyQuantity === 0">
                 {{ this.sendvalue.qCompanySquaremetre }}
               </div>
               <div v-else>
