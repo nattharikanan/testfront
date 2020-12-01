@@ -9,6 +9,18 @@
     >
       {{ alertMessage }}
     </v-snackbar>
+        <v-dialog v-model="dialog" persistent max-width="400px">
+      <v-card>
+        <v-card-title>ยืนยันการส่งข้อมูล ?</v-card-title>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="green darken-1" text @click="insert()">ใช่</v-btn>
+          <v-btn color="red darken-1" text @click="dialog = false"
+            >ไม่ใช่</v-btn
+          >
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-breadcrumbs :items="items">
       <template v-slot:item="{ item }">
         <v-breadcrumbs-item :to="item.to" :disabled="item.disabled">
@@ -457,6 +469,7 @@ export default {
       date: parseISO(new Date().toISOString()),
       q_date: "",
       q_time: "",
+      dialog: false,
       show: true,
       dis: false,
       coloralert: "",
@@ -686,8 +699,9 @@ export default {
     onSubmit(evt) {
       evt.preventDefault();
       // alert(JSON.stringify(this.form));
-      if (evt.isTrusted) {
-        this.insert();
+   if (evt.isTrusted) {
+      this.dialog = true;
+        //this.insert();
       }
     },
     onReset(evt) {

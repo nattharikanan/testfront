@@ -593,9 +593,9 @@ export default {
       // alert(JSON.stringify(this.form));
       console.log("info", this.form.info);
       if (evt.isTrusted) {
-        this.insert();
-      }
       this.dialog = true;
+        //this.insert();
+      }
     },
     onReset(evt) {
       evt.preventDefault();
