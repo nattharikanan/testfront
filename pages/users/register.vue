@@ -79,11 +79,11 @@
                       </b-col>
                <b-col  >
                   
-                      <VueRecaptcha
+                      <!-- <VueRecaptcha
                         sitekey="6LfdMMwZAAAAAFLzRip24CL5f9-s7E1oovlHjeGT"
                         @verify="checkCaptcha"
                         :loadRecaptchaScript="true"
-                      />
+                      /> -->
                   
                </b-col>
               <b-col >
@@ -141,7 +141,7 @@ export default {
     VueRecaptcha
   },
   data: () => ({
-    captchadata: false,
+    //captchadata: false,
     firstname: "",
     lastname: "",
     email: "",
@@ -180,25 +180,25 @@ export default {
   }),
 
   methods: {
-    checkCaptcha(captcha) {
-      if (captcha === event) {
-        console.log("please enter captcha", captcha);
-      } else {
-        this.captchadata = true;
-        console.log("show captcha", this.captchadata);
-      }
-    },
+    // checkCaptcha(captcha) {
+    //   if (captcha === event) {
+    //     console.log("please enter captcha", captcha);
+    //   } else {
+    //     this.captchadata = true;
+    //     console.log("show captcha", this.captchadata);
+    //   }
+    // },
 
     async register() {
-      console.log("have captcha", this.captchadata);
-      if (this.captchadata === false) {
-        console.log("cant regis");
-        this.regisstatus = true;
-        (this.coloralert = "red lighten-2"),
-          (this.iconalert = "mdi-alert-circle"),
-          (this.alertMessage = "สมัครสมาชิกไม่สำเร็จ "),
-          window.scrollTo(0, 0);
-      } else {
+      // console.log("have captcha", this.captchadata);
+      // if (this.captchadata === false) {
+      //   console.log("cant regis");
+      //   this.regisstatus = true;
+      //   (this.coloralert = "red lighten-2"),
+      //     (this.iconalert = "mdi-alert-circle"),
+      //     (this.alertMessage = "สมัครสมาชิกไม่สำเร็จ "),
+      //     window.scrollTo(0, 0);
+      // } 
         let res = await this.$http.post("/users/register", {
           userid: this.$route.query.userid,
           firstname: this.firstname,
@@ -224,7 +224,7 @@ export default {
               "สมัครสมาชิกไม่สำเร็จ กรุณากรอกข้อมูลให้ครอบถ้วน หรือ อีเมล์ของท่านมีการลงทะเบียนแล้ว"),
             window.scrollTo(0, 0);
         }
-      }
+      
     }
   }
 };
